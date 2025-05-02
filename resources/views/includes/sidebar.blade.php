@@ -3,8 +3,8 @@
         <img src="{{ asset('public/assets/images/logo-icon.png') }}" class="logo-icon" alt="logo icon">
     </div>
     <div>
-        <h4 class="logo-text">MAIN</h4>
-        <h6 class="logo-subtitle">Template System</h6>
+        <h4 class="logo-text">WROOMV2</h4>
+        <h6 class="logo-subtitle">War Room 2.0</h6>
     </div>
     <div class="toggle-icon ms-auto" id="toggle-icon"><i class='bx bx-arrow-to-left'></i></div>
 </div>

@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('hazimah123'),
                 'position_id' => 1,
                 'campus_id' => 2,
+                'department_id' => 12,
                 'office_phone_no' => '082111111',
                 'publish_status' => true,
                 'email_verified_at' => now(), 

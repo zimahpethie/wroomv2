@@ -28,6 +28,7 @@ class User extends Authenticatable
         'email', 
         'password',
         'position_id',
+        'department_id',
         'campus_id',
         'office_phone_no',
         'publish_status'
@@ -59,6 +60,11 @@ class User extends Authenticatable
     public function campus()
     {
         return $this->belongsTo(Campus::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function position()

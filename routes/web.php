@@ -35,6 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::get('campus/view/{id}', 'CampusController@show')->name('campus.show');
     Route::get('/campus/search', 'CampusController@search')->name('campus.search');
 
+    //Department
+    Route::get('department', 'DepartmentController@index')->name('department');
+    Route::get('department/view/{id}', 'DepartmentController@show')->name('department.show');
+    Route::get('/department/search', 'DepartmentController@search')->name('department.search');
+
     //Position
     Route::get('position', 'PositionController@index')->name('position');
     Route::get('position/view/{id}', 'PositionController@show')->name('position.show');
@@ -89,6 +94,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/campus/trash', 'CampusController@trashList')->name('campus.trash');
     Route::get('/campus/{id}/restore', 'CampusController@restore')->name('campus.restore');
     Route::delete('/campus/{id}/force-delete', 'CampusController@forceDelete')->name('campus.forceDelete');
+
+    //Department
+    Route::get('department/create', 'DepartmentController@create')->name('department.create');
+    Route::post('department/store', 'DepartmentController@store')->name('department.store');
+    Route::get('department/{id}/edit', 'DepartmentController@edit')->name('department.edit');
+    Route::post('department/{id}', 'DepartmentController@update')->name('department.update');
+    Route::delete('department/{id}', 'DepartmentController@destroy')->name('department.destroy');
+    Route::get('/department/trash', 'DepartmentController@trashList')->name('department.trash');
+    Route::get('/department/{id}/restore', 'DepartmentController@restore')->name('department.restore');
+    Route::delete('/department/{id}/force-delete', 'DepartmentController@forceDelete')->name('department.forceDelete');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');

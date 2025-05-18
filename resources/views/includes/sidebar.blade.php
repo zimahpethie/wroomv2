@@ -57,7 +57,7 @@
         </ul>
     </li>
 
-    <li class="{{ Request::is('position*') ? 'mm-active' : '' }}">
+    <li class="{{ Request::is('position*') && !Request::is('department*') ? 'mm-active' : '' }}">
         <a class="has-arrow" href="#">
             <div class="parent-icon"><i class="bx bx-cog"></i></div>
             <div class="menu-title">Tetapan Umum</div>
@@ -65,6 +65,11 @@
         <ul>
             <li class="{{ Request::is('position*') ? 'mm-active' : '' }}">
                 <a href="{{ route('position') }}"><i class="bx bx-right-arrow-alt"></i>Jawatan</a>
+            </li>
+        </ul>
+        <ul>
+            <li class="{{ Request::is('department*') ? 'mm-active' : '' }}">
+                <a href="{{ route('department') }}"><i class="bx bx-right-arrow-alt"></i>Bahagian/Unit</a>
             </li>
         </ul>
     </li>

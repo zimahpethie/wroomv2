@@ -54,6 +54,7 @@
                         <th>#</th>
                         <th>Nama</th>
                         <th>No. Staf</th>
+                        <th>Bahagian / Unit</th>
                         <th>Kampus</th>
                         <th>Peranan</th>
                         <th>Status</th>
@@ -67,6 +68,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ ucfirst($user->name) }}</td>
                         <td>{{ $user->staff_id }}</td>
+                        <td>{{ $user->department->name }}</td>
                         <td>{{ $user->campus->name }}</td>
                         <td>
                             @if ($user->roles->count() === 1)

@@ -99,6 +99,26 @@
             </div>
 
             <div class="mb-3">
+                <label for="department_id" class="form-label">Bahagian / Unit</label>
+                <select class="form-select {{ $errors->has('department_id') ? 'is-invalid' : '' }}" id="department_id"
+                    name="department_id">
+                    <option value="" disabled selected>Pilih Bahagian / Unit</option>
+                    @foreach ($departmentList as $department)
+                    <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                        {{ $department->name }}
+                    </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('department'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('department') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <div class="mb-3">
                 <label for="campus_id" class="form-label">Kampus</label>
                 <select class="form-select {{ $errors->has('campus_id') ? 'is-invalid' : '' }}" id="campus_id"
                     name="campus_id">

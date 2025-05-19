@@ -164,6 +164,26 @@
                                 @endif
                             </div>
 
+                            <!-- Department Field -->
+                            <div class="mb-3">
+                                <label for="department_id" class="form-label">Bahagian / Unit</label>
+                                <select class="form-select {{ $errors->has('department_id') ? 'is-invalid' : '' }}" id="department_id" name="department_id">
+                                    @foreach ($departmentList as $department)
+                                    <option value="{{ $department->id }}"
+                                        {{ old('department_id') == $department->id || ($user->department_id ?? '') == $department->id ? 'selected' : '' }}>
+                                        {{ $department->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('department_id'))
+                                <div class="invalid-feedback">
+                                    @foreach ($errors->get('department_id') as $error)
+                                    {{ $error }}
+                                    @endforeach
+                                </div>
+                                @endif
+                            </div>
+
                             <!-- Campus Field -->
                             <div class="mb-3">
                                 <label for="campus_id" class="form-label">Kampus</label>

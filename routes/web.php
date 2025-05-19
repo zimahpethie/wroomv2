@@ -11,6 +11,7 @@
 |
 */
 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,6 +30,19 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
 Route::middleware('auth')->group(function () {
+
+// routes/web.php
+Route::get('/test-email', function () {
+    try {
+        Mail::raw('Email ujian dari sistem (melalui browser)', function ($m) {
+            $m->to('meroumanih@gmail.com')->subject('Email Ujian Berjaya');
+        });
+        return 'Email dihantar!';
+    } catch (\Exception $e) {
+        return 'Ralat: ' . $e->getMessage();
+    }
+});
+
 
     //Campus
     Route::get('campus', 'CampusController@index')->name('campus');

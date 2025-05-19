@@ -26,8 +26,7 @@
                         <tr>
                             <th>Nama</th>
                             <th>No. Pekerja</th>
-                            <th>Alamat Emel</th>
-                            <th>Jawatan</th>
+                            <th>Bahagian / Unit</th>
                             <th>Kampus</th>
                             <th>Peranan</th>
                             <th>Tindakan</th>
@@ -39,8 +38,7 @@
                                 <tr>
                                     <td>{{ ucfirst($user->name) }}</td>
                                     <td>{{ $user->staff_id }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->position->title }} ({{ $user->position->grade }})</td>
+                                    <td>{{ $user->department->name }}</td>
                                     <td>{{ $user->campus->name }}</td>
                                     <td>
                                         @if ($user->roles->count() === 1)

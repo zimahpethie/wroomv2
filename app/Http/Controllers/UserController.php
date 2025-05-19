@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campus;
+use App\Models\Department;
 use App\Models\Position;
 use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
@@ -41,6 +42,7 @@ class UserController extends Controller
      */
     public function create()
     {
+        $departmentList = Department::where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
         $positionList = Position::where('publish_status', 1)->get();
         $roles = Role::where('publish_status', 1)->get();
@@ -48,6 +50,7 @@ class UserController extends Controller
         return view('pages.user.create', [
             'save_route' => route('user.store'),
             'str_mode' => 'Tambah',
+            'departmentList' => $departmentList,
             'campusList' => $campusList,
             'positionList' => $positionList,
             'roles' => $roles,
@@ -69,6 +72,7 @@ class UserController extends Controller
             'position_id' => 'required',
             'roles'    => 'required|array|exists:roles,name',
             'campus_id' => 'required|exists:campuses,id',
+            'department_id' => 'required|exists:departments,id',
             'office_phone_no' => 'nullable|string',
             'publish_status' => 'required|in:1,0',
         ],[
@@ -80,13 +84,14 @@ class UserController extends Controller
             'position_id.required' => 'Sila isi jawatan pengguna',
             'roles.required'    => 'Sila isi peranan pengguna',
             'campus_id.required' => 'Sila isi kampus pengguna',
+            'department_id.required' => 'Sila isi bahagian/unit pengguna',
             'publish_status.required' => 'Sila isi status pengguna',
         ]);
     
         $user = new User();
         $user->fill($request->except('roles'));
-        $user->password = null; // Password will be set later via email link
-        $user->email_verified_at = null; // Email verification pending
+        $user->password = null; 
+        $user->email_verified_at = null; 
         $user->save();
     
         // Assign roles to the user
@@ -129,6 +134,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $roles = Role::where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
+        $departmentList = Department::where('publish_status', 1)->get();
         $positionList = Position::where('publish_status', 1)->get();
 
         return view('pages.user.edit', [
@@ -137,6 +143,7 @@ class UserController extends Controller
             'roles' => $roles,
             'user' => $user,
             'campusList' => $campusList,
+            'departmentList' => $departmentList,
             'positionList' => $positionList,
         ]);
     }
@@ -150,6 +157,7 @@ class UserController extends Controller
             'position_id' => 'required|exists:positions,id',
             'roles'      => 'required|array|exists:roles,name',
             'campus_id'  => 'required|exists:campuses,id',
+            'department_id'  => 'required|exists:departments,id',
             'office_phone_number' => 'nullable|string',
             'publish_status' => 'required|in:1,0',
         ],[
@@ -161,6 +169,7 @@ class UserController extends Controller
             'position_id.required' => 'Sila isi jawatan pengguna',
             'roles.required'    => 'Sila isi peranan pengguna',
             'campus_id.required' => 'Sila isi kampus pengguna',
+            'department_id.required' => 'Sila isi Bahagian/Unit pengguna',
             'publish_status.required' => 'Sila isi status pengguna',
         ]);
 

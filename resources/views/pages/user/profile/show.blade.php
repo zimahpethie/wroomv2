@@ -59,6 +59,10 @@
                                 <td>{{ $user->staff_id ?? '-' }}</td>
                             </tr>
                             <tr class="border-bottom">
+                                <th>Bahagian / Unit</th>
+                                <td>{{ $user->department->name }}</td>
+                            </tr>
+                            <tr class="border-bottom">
                                 <th>Kampus</th>
                                 <td>{{ $user->campus->name }}</td>
                             </tr>

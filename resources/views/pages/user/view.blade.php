@@ -51,6 +51,10 @@
                         <td>{{ $user->office_phone_no }}</td>
                     </tr>
                     <tr>
+                        <th>Bahagian / Unit</th>
+                        <td>{{ $user->department->name }}</td>
+                    </tr>
+                    <tr>
                         <th>Kampus</th>
                         <td>{{ $user->campus->name }}</td>
                     </tr>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Campus;
+use App\Models\Department;
 use App\Models\Position;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,6 +23,7 @@ class UserProfileController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
+        $departmentList = Department::where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
         $positionList = Position::where('publish_status', 1)->get();
 
@@ -29,6 +31,7 @@ class UserProfileController extends Controller
             'save_route' => route('profile.update', $id),
             'str_mode' => 'Kemas Kini',
             'user' => $user,
+            'departmentList' => $departmentList,
             'campusList' => $campusList,
             'positionList' => $positionList,
         ]);
@@ -43,6 +46,7 @@ class UserProfileController extends Controller
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'position_id' => 'required|exists:positions,id',
             'campus_id'  => 'required|exists:campuses,id',
+            'department_id'  => 'required|exists:departments,id',
             'office_phone_no' => 'nullable|string',
         ], [
             'name.required'     => 'Sila isi nama pengguna',
@@ -52,6 +56,7 @@ class UserProfileController extends Controller
             'email.unique'    => 'Emel telah wujud',
             'position_id.required' => 'Sila isi jawatan pengguna',
             'campus_id.required' => 'Sila isi kampus pengguna',
+            'department_id.required' => 'Sila isi bahagian/unit pengguna',
         ]);
 
         $user = User::findOrFail($id);

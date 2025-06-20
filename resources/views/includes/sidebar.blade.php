@@ -72,6 +72,11 @@
                 <a href="{{ route('department') }}"><i class="bx bx-right-arrow-alt"></i>Bahagian/Unit</a>
             </li>
         </ul>
+        <ul>
+            <li class="{{ Request::is('subunit*') ? 'mm-active' : '' }}">
+                <a href="{{ route('subunit') }}"><i class="bx bx-right-arrow-alt"></i>Sub Unit</a>
+            </li>
+        </ul>
     </li>
 
     <li class="{{ Request::routeIs('logs.debug') ? 'mm-active' : '' }}">

@@ -31,19 +31,6 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 
 Route::middleware('auth')->group(function () {
 
-// routes/web.php
-Route::get('/test-email', function () {
-    try {
-        Mail::raw('Email ujian dari sistem (melalui browser)', function ($m) {
-            $m->to('meroumanih@gmail.com')->subject('Email Ujian Berjaya');
-        });
-        return 'Email dihantar!';
-    } catch (\Exception $e) {
-        return 'Ralat: ' . $e->getMessage();
-    }
-});
-
-
     //Campus
     Route::get('campus', 'CampusController@index')->name('campus');
     Route::get('campus/view/{id}', 'CampusController@show')->name('campus.show');
@@ -53,6 +40,11 @@ Route::get('/test-email', function () {
     Route::get('department', 'DepartmentController@index')->name('department');
     Route::get('department/view/{id}', 'DepartmentController@show')->name('department.show');
     Route::get('/department/search', 'DepartmentController@search')->name('department.search');
+
+    //Sub Unit
+    Route::get('subunit', 'SubUnitController@index')->name('subunit');
+    Route::get('subunit/view/{id}', 'SubUnitController@show')->name('subunit.show');
+    Route::get('/subunit/search', 'SubUnitController@search')->name('subunit.search');
 
     //Position
     Route::get('position', 'PositionController@index')->name('position');
@@ -118,6 +110,16 @@ Route::get('/test-email', function () {
     Route::get('/department/trash', 'DepartmentController@trashList')->name('department.trash');
     Route::get('/department/{id}/restore', 'DepartmentController@restore')->name('department.restore');
     Route::delete('/department/{id}/force-delete', 'DepartmentController@forceDelete')->name('department.forceDelete');
+
+    //Sub Unit
+    Route::get('subunit/create', 'SubUnitController@create')->name('subunit.create');
+    Route::post('subunit/store', 'SubUnitController@store')->name('subunit.store');
+    Route::get('subunit/{id}/edit', 'SubUnitController@edit')->name('subunit.edit');
+    Route::post('subunit/{id}', 'SubUnitController@update')->name('subunit.update');
+    Route::delete('subunit/{id}', 'SubUnitController@destroy')->name('subunit.destroy');
+    Route::get('/subunit/trash', 'SubUnitController@trashList')->name('subunit.trash');
+    Route::get('/subunit/{id}/restore', 'SubUnitController@restore')->name('subunit.restore');
+    Route::delete('/subunit/{id}/force-delete', 'SubUnitController@forceDelete')->name('subunit.forceDelete');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');

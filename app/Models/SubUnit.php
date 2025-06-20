@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Department extends Model
+class SubUnit extends Model
 {
     use LogsActivity;
     use SoftDeletes;
@@ -16,6 +16,7 @@ class Department extends Model
     protected static $logOnlyDirty = true;
 
     protected $fillable = [
+        'department_id',
         'name',
         'publish_status'
     ];
@@ -25,13 +26,8 @@ class Department extends Model
         return $this->attributes['publish_status'] ? 'Aktif' : 'Tidak Aktif';
     }
 
-    public function users()
+    public function department()
     {
-        return $this->hasMany(User::class);
-    }
-
-    public function subunits()
-    {
-        return $this->hasMany(SubUnit::class);
+        return $this->belongsTo(Department::class);
     }
 }

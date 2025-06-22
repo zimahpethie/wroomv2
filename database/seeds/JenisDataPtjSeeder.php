@@ -24,7 +24,13 @@ class JenisDataPtjSeeder extends Seeder
                 'department_id' => 2,
                 'subunit_id' => 1,
                 'publish_status' => true
-            ]
+            ],
+            [
+                'name' => 'Rekod Liputan WiFi',
+                'department_id' => 12,
+                'subunit_id' => null,
+                'publish_status' => true
+            ],
         ]);
     }
 }

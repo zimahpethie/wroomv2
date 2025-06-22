@@ -89,6 +89,36 @@
             </div>
         </div>
     </div>
+
+    <!-- Maklumat Ciptaan dan Kemaskini -->
+    <div class="row mt-1">
+        <div class="col-md-6">
+            <div class="card border-start border-4 border-primary">
+                <div class="card-body">
+                    <h6 class="text-primary mb-3">Data Log</h6>
+                    <table class="table table-borderless">
+                        <tr>
+                            <th style="width: 30%">Dicipta oleh</th>
+                            <td>{{ $datautama->creator->name ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Tarikh Cipta</th>
+                            <td>{{ $datautama->created_at ? $datautama->created_at->format('d/m/Y h:i A') : '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Dikemaskini oleh</th>
+                            <td>{{ $datautama->updater->name ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Tarikh Kemaskini</th>
+                            <td>{{ $datautama->updated_at ? $datautama->updated_at->format('d/m/Y h:i A') : '-' }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- End Campus Information Table -->
     <!-- End Page Wrapper -->
 @endsection

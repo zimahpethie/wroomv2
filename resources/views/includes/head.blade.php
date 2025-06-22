@@ -19,10 +19,13 @@
      rel="stylesheet">
  <link href="{{ asset('public/assets/css/app.css') }}" rel="stylesheet">
  <link href="{{ asset('public/assets/css/icons.css') }}" rel="stylesheet">
+ <!-- Chart.js CDN -->
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
  <!-- Theme Style CSS -->
  <link rel="stylesheet" href="{{ asset('public/assets/css/semi-dark.css') }}" />
  {{-- js --}}
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
  <title>{{ config('app.name') }}</title>
-

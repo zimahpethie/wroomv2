@@ -120,6 +120,8 @@ class DataUtamaController extends Controller
             'pi_no' => $request->is_kpi ? $request->pi_no : null,
             'pi_target' => $request->is_kpi ? $request->pi_target : null,
             'doc_link' => $request->doc_link,
+            'created_by' => auth()->id(),
+            'updated_by' => auth()->id(),
         ]);
 
         // Simpan nilai jumlah ikut tahun
@@ -248,6 +250,7 @@ class DataUtamaController extends Controller
             'pi_no' => $request->is_kpi ? $request->pi_no : null,
             'pi_target' => $request->is_kpi ? $request->pi_target : null,
             'doc_link' => $request->doc_link,
+            'updated_by' => auth()->id(),
         ]);
 
         if ($request->has('jumlah')) {
@@ -258,13 +261,10 @@ class DataUtamaController extends Controller
                     $tahunId = $tahunKey;
                 } elseif (substr($tahunKey, 0, 5) === 'year_') {
                     $tahunTahun = (int) str_replace('year_', '', $tahunKey);
-
-                    // Insert ke table tahun jika belum wujud
                     $tahun = Tahun::firstOrCreate(
                         ['tahun' => $tahunTahun],
                         ['publish_status' => 1]
                     );
-
                     $tahunId = $tahun->id;
                 } else {
                     continue;
@@ -280,6 +280,10 @@ class DataUtamaController extends Controller
                     ]
                 );
             }
+
+            $dataUtama->updated_at = now();
+            $dataUtama->updated_by = auth()->id(); 
+            $dataUtama->save();
         }
 
         return redirect()->route('datautama')->with('success', 'Maklumat berjaya dikemaskini.');

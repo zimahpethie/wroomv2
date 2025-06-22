@@ -11,7 +11,7 @@ class DepartmentController extends Controller
     {
         $perPage = $request->input('perPage', 10);
 
-        $departmentList = Department::latest()->paginate($perPage);
+        $departmentList = Department::orderBy('name', 'asc')->paginate($perPage);
 
         return view('pages.department.index', [
             'departmentList' => $departmentList,

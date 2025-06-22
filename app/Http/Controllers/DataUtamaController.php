@@ -86,7 +86,7 @@ class DataUtamaController extends Controller
     {
         $departmentId = Auth::user()->department_id;
         $request->validate([
-            'subunit_id' => 'nullable|exists:subunits,id',
+            'subunit_id' => 'nullable|exists:sub_units,id',
             'jenis_data_ptj_id' => 'required|exists:jenis_data_ptjs,id',
             'is_kpi' => 'required|boolean',
             'pi_no' => 'required_if:is_kpi,1',
@@ -214,7 +214,7 @@ class DataUtamaController extends Controller
         }
 
         $request->validate([
-            'subunit_id' => 'nullable|exists:subunits,id',
+            'subunit_id' => 'nullable|exists:sub_units,id',
             'jenis_data_ptj_id' => 'required|exists:jenis_data_ptjs,id',
             'is_kpi' => 'required|boolean',
             'pi_no' => 'required_if:is_kpi,1',

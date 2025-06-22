@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
                 'name' => 'Hazimah',
                 'staff_id' => '111111',
                 'email' => 'hazimahpethie@gmail.com',
-                'password' => Hash::make('hazimah123'),
+                'password' => Hash::make('user123'),
                 'position_id' => 1,
                 'campus_id' => 2,
                 'department_id' => 12,

@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Models\JenisDataPtj;
 use App\Models\SubUnit;
 use App\Models\Tahun;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,19 @@ class DataUtamaController extends Controller
 {
     public function index(Request $request)
     {
+        $user = User::find(auth()->id());
         $perPage = $request->input('perPage', 10);
 
         $tahunList = Tahun::orderBy('tahun', 'asc')->get();
-        $datautamaList = DataUtama::latest()->paginate($perPage);
+
+        if ($user->hasAnyRole(['Superadmin', 'Admin'])) {
+            // Superadmin akses semua
+            $datautamaList = DataUtama::latest()->paginate($perPage);
+        } else {
+            // Biasa ikut department
+            $datautamaList = DataUtama::where('department_id', $user->department_id)
+                ->latest()->paginate($perPage);
+        }
 
         return view('pages.datautama.index', [
             'datautamaList' => $datautamaList,
@@ -30,19 +40,22 @@ class DataUtamaController extends Controller
 
     public function create()
     {
-        $departmentId = Auth::user()->department_id;
+        $user = Auth::user();
 
-        $subunitList = SubUnit::where('department_id', $departmentId)->get();
+        $departmentId = $user->role_id == 1 ? null : $user->department_id;
+
+        $subunitList = $departmentId ? SubUnit::where('department_id', $departmentId)->get() : SubUnit::all();
 
         $jenisDataIdYangDahIsi = DataUtama::pluck('jenis_data_ptj_id')->toArray();
 
-        $jenisDataList = JenisDataPtj::where('department_id', $departmentId)
+        $jenisDataList = JenisDataPtj::when($departmentId, function ($query) use ($departmentId) {
+            return $query->where('department_id', $departmentId);
+        })
             ->whereNotIn('id', $jenisDataIdYangDahIsi)
             ->get();
 
         $tahunList = Tahun::orderBy('tahun')->get();
-
-        $currentYear = Carbon::now()->year;
+        $currentYear = now()->year;
 
         // Check if current year is already in the list
         if (!$tahunList->contains('tahun', $currentYear)) {
@@ -143,6 +156,7 @@ class DataUtamaController extends Controller
     {
         $tahunList = Tahun::orderBy('tahun', 'asc')->get();
         $datautama = DataUtama::findOrFail($id);
+        $this->authorizeDataAccess($datautama);
 
         return view('pages.datautama.view', [
             'datautama' => $datautama,
@@ -157,9 +171,7 @@ class DataUtamaController extends Controller
 
         $dataUtama = DataUtama::with('jumlahs')->findOrFail($id);
 
-        if ($dataUtama->department_id !== $departmentId) {
-            abort(403, 'Anda tidak dibenarkan mengakses data ini.');
-        }
+        $this->authorizeDataAccess($dataUtama);
 
         $subunitList = SubUnit::where('department_id', $departmentId)->get();
 
@@ -185,6 +197,8 @@ class DataUtamaController extends Controller
         $departmentId = Auth::user()->department_id;
 
         $dataUtama = DataUtama::findOrFail($id);
+
+        $this->authorizeDataAccess($dataUtama);
 
         if ($dataUtama->department_id !== $departmentId) {
             abort(403, 'Anda tidak dibenarkan mengemaskini data ini.');
@@ -281,17 +295,27 @@ class DataUtamaController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $datautama = DataUtama::findOrFail($id);
+        $dataUtama = DataUtama::findOrFail($id);
 
-        $datautama->delete();
+        $this->authorizeDataAccess($dataUtama);
+
+        $dataUtama->delete();
 
         return redirect()->route('datautama')->with('success', 'Maklumat berjaya dihapuskan');
     }
 
     public function trashList()
     {
-        $trashList = DataUtama::onlyTrashed()->latest()->paginate(10);
+        $user = User::find(auth()->id());
         $tahunList = Tahun::orderBy('tahun', 'asc')->get();
+
+        if ($user->hasAnyRole(['Superadmin', 'Admin'])) {
+            $trashList = DataUtama::onlyTrashed()->latest()->paginate(10);
+        } else {
+            $trashList = DataUtama::onlyTrashed()
+                ->where('department_id', $user->department_id)
+                ->latest()->paginate(10);
+        }
 
         return view('pages.datautama.trash', [
             'trashList' => $trashList,
@@ -301,7 +325,11 @@ class DataUtamaController extends Controller
 
     public function restore($id)
     {
-        DataUtama::withTrashed()->where('id', $id)->restore();
+        $datautama = DataUtama::withTrashed()->findOrFail($id);
+
+        $this->authorizeDataAccess($datautama);
+
+        $datautama->restore();
 
         return redirect()->route('datautama')->with('success', 'Maklumat berjaya dikembalikan');
     }
@@ -311,8 +339,19 @@ class DataUtamaController extends Controller
     {
         $datautama = DataUtama::withTrashed()->findOrFail($id);
 
+        $this->authorizeDataAccess($datautama);
+
         $datautama->forceDelete();
 
         return redirect()->route('datautama.trash')->with('success', 'Maklumat berjaya dihapuskan sepenuhnya');
+    }
+
+    private function authorizeDataAccess(DataUtama $dataUtama)
+    {
+        $user = User::find(auth()->id());
+
+        if (!$user->hasAnyRole(['Superadmin', 'Admin']) && $dataUtama->department_id !== $user->department_id) {
+            abort(403, 'Anda tidak dibenarkan mengakses data ini.');
+        }
     }
 }

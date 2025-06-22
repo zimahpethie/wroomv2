@@ -141,10 +141,12 @@ class DataUtamaController extends Controller
 
     public function show($id)
     {
+        $tahunList = Tahun::orderBy('tahun', 'asc')->get();
         $datautama = DataUtama::findOrFail($id);
 
         return view('pages.datautama.view', [
             'datautama' => $datautama,
+            'tahunList' => $tahunList,
         ]);
     }
 
@@ -193,7 +195,13 @@ class DataUtamaController extends Controller
             'jenis_data_ptj_id' => 'required|exists:jenis_data_ptjs,id',
             'is_kpi' => 'required|boolean',
             'pi_no' => 'required_if:is_kpi,1',
-            'pi_target' => 'required_if:is_kpi,1|numeric',
+            'pi_target' => [
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->is_kpi == 1 && ($value === null || !is_numeric($value))) {
+                        $fail('PI Target diperlukan dan mesti nombor jika KPI dipilih.');
+                    }
+                }
+            ],
             'doc_link' => 'nullable|url',
             'jumlah' => 'array',
             'jumlah.*' => 'nullable|numeric',
@@ -219,17 +227,36 @@ class DataUtamaController extends Controller
             'doc_link' => $request->doc_link,
         ]);
 
-        // Kemaskini atau tambah data_jumlah
-        foreach ($request->jumlah as $tahunId => $value) {
-            DataJumlah::updateOrCreate(
-                [
-                    'data_utama_id' => $dataUtama->id,
-                    'tahun_id' => $tahunId
-                ],
-                [
-                    'jumlah' => $value
-                ]
-            );
+        if ($request->has('jumlah')) {
+            foreach ($request->jumlah as $tahunKey => $value) {
+                if ($value === null) continue;
+
+                if (is_numeric($tahunKey)) {
+                    $tahunId = $tahunKey;
+                } elseif (substr($tahunKey, 0, 5) === 'year_') {
+                    $tahunTahun = (int) str_replace('year_', '', $tahunKey);
+
+                    // Insert ke table tahun jika belum wujud
+                    $tahun = Tahun::firstOrCreate(
+                        ['tahun' => $tahunTahun],
+                        ['publish_status' => 1]
+                    );
+
+                    $tahunId = $tahun->id;
+                } else {
+                    continue;
+                }
+
+                DataJumlah::updateOrCreate(
+                    [
+                        'data_utama_id' => $dataUtama->id,
+                        'tahun_id' => $tahunId
+                    ],
+                    [
+                        'jumlah' => $value
+                    ]
+                );
+            }
         }
 
         return redirect()->route('datautama')->with('success', 'Maklumat berjaya dikemaskini.');
@@ -264,9 +291,11 @@ class DataUtamaController extends Controller
     public function trashList()
     {
         $trashList = DataUtama::onlyTrashed()->latest()->paginate(10);
+        $tahunList = Tahun::orderBy('tahun', 'asc')->get();
 
         return view('pages.datautama.trash', [
             'trashList' => $trashList,
+            'tahunList' => $tahunList,
         ]);
     }
 

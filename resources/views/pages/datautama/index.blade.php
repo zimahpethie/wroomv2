@@ -66,51 +66,50 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (count($datautamaList) > 0)
-                            @foreach ($datautamaList as $datautama)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $datautama->department->name }}</td>
-                                    <td>{{ $datautama->jenisDataPtj->name ?? '-' }}</td>
-                                    <td>{{ $datautama->is_kpi ? 'Ya' : 'Tidak' }}</td>
-                                    <td>{{ $datautama->pi_no ?? '-' }}</td>
-                                    <td>{{ $datautama->pi_target ?? '-' }}</td>
+                        @forelse ($datautamaList as $datautama)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $datautama->department->name }}</td>
+                                <td>{{ $datautama->jenisDataPtj->name ?? '-' }}</td>
+                                <td>{{ $datautama->is_kpi ? 'Ya' : 'Tidak' }}</td>
+                                <td>{{ $datautama->pi_no ?? '-' }}</td>
+                                <td>{{ $datautama->pi_target ?? '-' }}</td>
 
-                                    @foreach ($tahunList as $tahun)
-                                        @php
-                                            $jumlah = $datautama->jumlahs->firstWhere('tahun_id', $tahun->id);
-                                        @endphp
-                                        <td>{{ $jumlah->jumlah ?? '-' }}</td>
-                                    @endforeach
-                                    <td>
-                                        @if (!empty($datautama->doc_link))
-                                            <a href="{{ $datautama->doc_link }}" target="_blank">Pautan</a>
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('datautama.edit', $datautama->id) }}" class="btn btn-info btn-sm"
-                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
-                                            <i class="bx bxs-edit"></i>
-                                        </a>
-                                        <a href="{{ route('datautama.show', $datautama->id) }}"
-                                            class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom" title="Papar">
-                                            <i class="bx bx-show"></i>
-                                        </a>
-                                        <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                            data-bs-title="Padam">
-                                            <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal{{ $datautama->id }}"><i
-                                                    class="bx bx-trash"></i></span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <td colspan="5">Tiada rekod</td>
-                        @endif
+                                @foreach ($tahunList as $tahun)
+                                    @php
+                                        $jumlah = $datautama->jumlahs->firstWhere('tahun_id', $tahun->id);
+                                    @endphp
+                                    <td>{{ $jumlah->jumlah ?? '-' }}</td>
+                                @endforeach
+                                <td>
+                                    @if (!empty($datautama->doc_link))
+                                        <a href="{{ $datautama->doc_link }}" target="_blank">Pautan</a>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('datautama.edit', $datautama->id) }}" class="btn btn-info btn-sm"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
+                                        <i class="bx bxs-edit"></i>
+                                    </a>
+                                    <a href="{{ route('datautama.show', $datautama->id) }}" class="btn btn-primary btn-sm"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
+                                        <i class="bx bx-show"></i>
+                                    </a>
+                                    <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        data-bs-title="Padam">
+                                        <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal{{ $datautama->id }}"><i
+                                                class="bx bx-trash"></i></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="{{ 10 + $tahunList->count() }}" class="text-center">Tiada rekod</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

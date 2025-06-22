@@ -24,34 +24,65 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Bahagian / Unit</th>
-                            <th>Nama Data</th>
+                            <th>#</th>
+                            <th>Pemilik Data</th>
+                            <th>Tajuk Data</th>
+                            <th>Adakah ini KPI?</th>
+                            <th>No. PI</th>
+                            <th>Sasaran PI</th>
+
+                            @foreach ($tahunList as $tahun)
+                                <th>{{ $tahun->tahun }}</th>
+                            @endforeach
+                            <th>Pautan Simpanan</th>
                             <th>Tindakan</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (count($trashList) > 0)
-                            @foreach ($trashList as $datautama)
-                                <tr>
-                                    <td>{{ $datautama->department->name }}</td>
-                                    <td>{{ ucfirst($datautama->name) }}</td>
-                                    <td>
-                                        <a href="{{ route('datautama.restore', $datautama->id) }}" class="btn btn-success btn-sm"
-                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kembalikan">
-                                            <i class="bx bx-undo"></i>
-                                        </a>
-                                        <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                            data-bs-title="Padam">
-                                            <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal{{ $datautama->id }}"><i
-                                                    class="bx bx-trash"></i></span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <td colspan="4">Tiada rekod</td>
-                        @endif
+                        @forelse ($trashList as $datautama)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $datautama->department->name }}</td>
+                                <td>{{ $datautama->jenisDataPtj->name ?? '-' }}</td>
+                                <td>{{ $datautama->is_kpi ? 'Ya' : 'Tidak' }}</td>
+                                <td>{{ $datautama->pi_no ?? '-' }}</td>
+                                <td>{{ $datautama->pi_target ?? '-' }}</td>
+
+                                @foreach ($tahunList as $tahun)
+                                    @php
+                                        $jumlah = $datautama->jumlahs->firstWhere('tahun_id', $tahun->id);
+                                    @endphp
+                                    <td>{{ $jumlah->jumlah ?? '-' }}</td>
+                                @endforeach
+                                <td>
+                                    @if (!empty($datautama->doc_link))
+                                        <a href="{{ $datautama->doc_link }}" target="_blank">Pautan</a>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('datautama.edit', $datautama->id) }}" class="btn btn-info btn-sm"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
+                                        <i class="bx bxs-edit"></i>
+                                    </a>
+                                    <a href="{{ route('datautama.show', $datautama->id) }}" class="btn btn-primary btn-sm"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
+                                        <i class="bx bx-show"></i>
+                                    </a>
+                                    <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        data-bs-title="Padam">
+                                        <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal{{ $datautama->id }}"><i
+                                                class="bx bx-trash"></i></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="{{ 10 + $tahunList->count() }}" class="text-center">Tiada rekod</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -98,7 +129,8 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         @isset($datautama)
-                            <form class="d-inline" method="POST" action="{{ route('datautama.forceDelete', $datautama->id) }}">
+                            <form class="d-inline" method="POST"
+                                action="{{ route('datautama.forceDelete', $datautama->id) }}">
                                 {{ method_field('delete') }}
                                 {{ csrf_field() }}
                                 <button type="submit" class="btn btn-danger">Padam</button>

@@ -35,24 +35,26 @@
                 {{-- Subunit --}}
                 <div class="mb-3">
                     <label for="subunit_id" class="form-label">Sub Unit</label>
-                    <select class="form-select {{ $errors->has('subunit_id') ? 'is-invalid' : '' }}" name="subunit_id">
-                        @if ($subunitList->isEmpty())
-                            <option value="" selected><em>Tiada subunit</em></option>
-                        @else
+
+                    @if ($subunitList->isEmpty())
+                        <input type="text" class="form-control bg-light" value="Tiada subunit" readonly>
+                        <input type="hidden" name="subunit_id" value="">
+                    @else
+                        <select class="form-select {{ $errors->has('subunit_id') ? 'is-invalid' : '' }}" name="subunit_id">
                             <option value="">-- Pilih Sub Unit --</option>
                             @foreach ($subunitList as $unit)
                                 <option value="{{ $unit->id }}" {{ old('subunit_id') == $unit->id ? 'selected' : '' }}>
                                     {{ $unit->name }}
                                 </option>
                             @endforeach
+                        </select>
+                        @if ($errors->has('subunit_id'))
+                            <div class="invalid-feedback">
+                                @foreach ($errors->get('subunit_id') as $error)
+                                    {{ $error }}
+                                @endforeach
+                            </div>
                         @endif
-                    </select>
-                    @if ($errors->has('subunit_id'))
-                        <div class="invalid-feedback">
-                            @foreach ($errors->get('subunit_id') as $error)
-                                {{ $error }}
-                            @endforeach
-                        </div>
                     @endif
                 </div>
 

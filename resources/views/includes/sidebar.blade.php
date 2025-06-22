@@ -18,13 +18,6 @@
         </a>
     </li>
 
-    <li class="{{ Request::routeIs('activity-log') ? 'mm-active' : '' }}">
-        <a href="{{ route('activity-log') }}">
-            <div class="parent-icon"><i class='bx bx-history'></i></div>
-            <div class="menu-title">Log Aktiviti</div>
-        </a>
-    </li>
-
     <li class="menu-label">Pengurusan Pengguna</li>
 
     <li class="{{ Request::is('user*') && !Request::is('user-role*') ? 'mm-active' : '' }}">
@@ -57,6 +50,23 @@
         </ul>
     </li>
 
+    <li class="{{ Request::is('jenisdataptj*') && !Request::is('tahun*') ? 'mm-active' : '' }}">
+        <a class="has-arrow" href="#">
+            <div class="parent-icon"><i class="bx bx-spreadsheet"></i></div>
+            <div class="menu-title">Tetapan Data</div>
+        </a>
+        <ul>
+            <li class="{{ Request::is('jenisdataptj*') ? 'mm-active' : '' }}">
+                <a href="{{ route('jenisdataptj') }}"><i class="bx bx-right-arrow-alt"></i>Jenis Data PTJ</a>
+            </li>
+        </ul>
+        <ul>
+            <li class="{{ Request::is('tahun*') ? 'mm-active' : '' }}">
+                <a href="{{ route('tahun') }}"><i class="bx bx-right-arrow-alt"></i>Tahun</a>
+            </li>
+        </ul>
+    </li>
+
     <li class="{{ Request::is('position*') && !Request::is('department*') ? 'mm-active' : '' }}">
         <a class="has-arrow" href="#">
             <div class="parent-icon"><i class="bx bx-cog"></i></div>
@@ -78,11 +88,11 @@
             </li>
         </ul>
     </li>
-
-    <li class="{{ Request::is('jenisdataptj*') ? 'mm-active' : '' }}">
-        <a href="{{ route('jenisdataptj') }}">
-            <div class="parent-icon"><i class='bx bx-list-ul'></i></div>
-            <div class="menu-title">Jenis Data PTJ</div>
+    
+    <li class="{{ Request::routeIs('activity-log') ? 'mm-active' : '' }}">
+        <a href="{{ route('activity-log') }}">
+            <div class="parent-icon"><i class='bx bx-history'></i></div>
+            <div class="menu-title">Log Aktiviti</div>
         </a>
     </li>
 

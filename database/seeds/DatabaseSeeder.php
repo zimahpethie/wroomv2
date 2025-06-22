@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\JenisDataPtj;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,5 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SubUnitSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(CampusSeeder::class);
+        $this->call(JenisDataPtjSeeder::class);
+        $this->call(TahunSeeder::class);
     }
 }

@@ -36,6 +36,11 @@ Route::middleware('auth')->group(function () {
     Route::get('campus/view/{id}', 'CampusController@show')->name('campus.show');
     Route::get('/campus/search', 'CampusController@search')->name('campus.search');
 
+    //Tahun
+    Route::get('tahun', 'TahunController@index')->name('tahun');
+    Route::get('tahun/view/{id}', 'TahunController@show')->name('tahun.show');
+    Route::get('/tahun/search', 'TahunController@search')->name('tahun.search');
+
     //Department
     Route::get('department', 'DepartmentController@index')->name('department');
     Route::get('department/view/{id}', 'DepartmentController@show')->name('department.show');
@@ -105,6 +110,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/campus/trash', 'CampusController@trashList')->name('campus.trash');
     Route::get('/campus/{id}/restore', 'CampusController@restore')->name('campus.restore');
     Route::delete('/campus/{id}/force-delete', 'CampusController@forceDelete')->name('campus.forceDelete');
+
+    //Tahun
+    Route::get('tahun/create', 'TahunController@create')->name('tahun.create');
+    Route::post('tahun/store', 'TahunController@store')->name('tahun.store');
+    Route::get('tahun/{id}/edit', 'TahunController@edit')->name('tahun.edit');
+    Route::post('tahun/{id}', 'TahunController@update')->name('tahun.update');
+    Route::delete('tahun/{id}', 'TahunController@destroy')->name('tahun.destroy');
+    Route::get('/tahun/trash', 'TahunController@trashList')->name('tahun.trash');
+    Route::get('/tahun/{id}/restore', 'TahunController@restore')->name('tahun.restore');
+    Route::delete('/tahun/{id}/force-delete', 'TahunController@forceDelete')->name('tahun.forceDelete');
 
     //Department
     Route::get('department/create', 'DepartmentController@create')->name('department.create');

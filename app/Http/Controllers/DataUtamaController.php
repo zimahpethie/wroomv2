@@ -38,6 +38,25 @@ class DataUtamaController extends Controller
         ]);
     }
 
+    public function dashboard(Request $request)
+    {
+        $query = DataUtama::with(['department', 'jenisDataPtj', 'jumlahs.tahun'])
+            ->withCount('jumlahs');
+
+        if ($request->has('department_id') && $request->department_id != '') {
+            $query->where('department_id', $request->department_id);
+        }
+
+        $dataList = $query->get()->groupBy('department.name');
+
+        $departmentList = Department::orderBy('name')->get();
+
+        return view('pages.datautama.dashboard', [
+            'dataList' => $dataList,
+            'departmentList' => $departmentList,
+            'selectedDepartment' => $request->department_id,
+        ]);
+    }
     public function create()
     {
         $user = User::find(auth()->id());
@@ -282,7 +301,7 @@ class DataUtamaController extends Controller
             }
 
             $dataUtama->updated_at = now();
-            $dataUtama->updated_by = auth()->id(); 
+            $dataUtama->updated_by = auth()->id();
             $dataUtama->save();
         }
 

@@ -67,7 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/position/search', 'PositionController@search')->name('position.search');
 
 
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'DataUtamaController@dashboard')->name('home');
 
     // User Profile
     Route::get('profile/{id}', 'UserProfileController@show')->name('profile.show');
@@ -155,6 +155,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/datautama/trash', 'DataUtamaController@trashList')->name('datautama.trash');
     Route::get('/datautama/{id}/restore', 'DataUtamaController@restore')->name('datautama.restore');
     Route::delete('/datautama/{id}/force-delete', 'DataUtamaController@forceDelete')->name('datautama.forceDelete');
+    Route::get('/datautama/dashboard', 'DataUtamaController@dashboard')->name('datautama.dashboard');
 
     //Jenis Data PTJ
     Route::get('jenisdataptj/create', 'JenisDataPtjController@create')->name('jenisdataptj.create');

@@ -18,10 +18,12 @@ class DataUtamaController extends Controller
     {
         $perPage = $request->input('perPage', 10);
 
+        $tahunList = Tahun::orderBy('tahun', 'asc')->get();
         $datautamaList = DataUtama::latest()->paginate($perPage);
 
         return view('pages.datautama.index', [
             'datautamaList' => $datautamaList,
+            'tahunList' => $tahunList,
             'perPage' => $perPage,
         ]);
     }
@@ -71,7 +73,13 @@ class DataUtamaController extends Controller
             'jenis_data_ptj_id' => 'required|exists:jenis_data_ptjs,id',
             'is_kpi' => 'required|boolean',
             'pi_no' => 'required_if:is_kpi,1',
-            'pi_target' => 'required_if:is_kpi,1|numeric',
+            'pi_target' => [
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->is_kpi == 1 && ($value === null || !is_numeric($value))) {
+                        $fail('PI Target diperlukan dan mesti dalam nombor jika KPI dipilih.');
+                    }
+                }
+            ],
             'doc_link' => 'nullable|url',
             'jumlah' => 'array',
             'jumlah.*' => 'nullable|numeric',
@@ -99,7 +107,27 @@ class DataUtamaController extends Controller
 
         // Simpan nilai jumlah ikut tahun
         if ($request->has('jumlah')) {
-            foreach ($request->jumlah as $tahunId => $value) {
+            foreach ($request->jumlah as $tahunKey => $value) {
+                if ($value === null) continue;
+
+                if (is_numeric($tahunKey)) {
+                    // Tahun dari DB
+                    $tahunId = $tahunKey;
+                } elseif (substr($tahunKey, 0, 5) === 'year_') {
+                    // Extract 2025 dari 'year_2025'
+                    $tahunTahun = (int) str_replace('year_', '', $tahunKey);
+
+                    // Insert ke table tahun dengan publish_status = 1
+                    $tahun = \App\Models\Tahun::firstOrCreate(
+                        ['tahun' => $tahunTahun],
+                        ['publish_status' => 1]
+                    );
+
+                    $tahunId = $tahun->id;
+                } else {
+                    continue;
+                }
+
                 DataJumlah::create([
                     'data_utama_id' => $dataUtama->id,
                     'tahun_id' => $tahunId,

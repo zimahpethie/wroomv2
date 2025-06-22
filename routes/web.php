@@ -46,6 +46,11 @@ Route::middleware('auth')->group(function () {
     Route::get('subunit/view/{id}', 'SubUnitController@show')->name('subunit.show');
     Route::get('/subunit/search', 'SubUnitController@search')->name('subunit.search');
 
+    //Jenis Data PTJ
+    Route::get('jenisdataptj', 'JenisDataPtjController@index')->name('jenisdataptj');
+    Route::get('jenisdataptj/view/{id}', 'JenisDataPtjController@show')->name('jenisdataptj.show');
+    Route::get('/jenisdataptj/search', 'JenisDataPtjController@search')->name('jenisdataptj.search');
+
     //Position
     Route::get('position', 'PositionController@index')->name('position');
     Route::get('position/view/{id}', 'PositionController@show')->name('position.show');
@@ -120,6 +125,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/subunit/trash', 'SubUnitController@trashList')->name('subunit.trash');
     Route::get('/subunit/{id}/restore', 'SubUnitController@restore')->name('subunit.restore');
     Route::delete('/subunit/{id}/force-delete', 'SubUnitController@forceDelete')->name('subunit.forceDelete');
+
+    //Jenis Data PTJ
+    Route::get('jenisdataptj/create', 'JenisDataPtjController@create')->name('jenisdataptj.create');
+    Route::post('jenisdataptj/store', 'JenisDataPtjController@store')->name('jenisdataptj.store');
+    Route::get('jenisdataptj/{id}/edit', 'JenisDataPtjController@edit')->name('jenisdataptj.edit');
+    Route::post('jenisdataptj/{id}', 'JenisDataPtjController@update')->name('jenisdataptj.update');
+    Route::delete('jenisdataptj/{id}', 'JenisDataPtjController@destroy')->name('jenisdataptj.destroy');
+    Route::get('/jenisdataptj/trash', 'JenisDataPtjController@trashList')->name('jenisdataptj.trash');
+    Route::get('/jenisdataptj/{id}/restore', 'JenisDataPtjController@restore')->name('jenisdataptj.restore');
+    Route::delete('/jenisdataptj/{id}/force-delete', 'JenisDataPtjController@forceDelete')->name('jenisdataptj.forceDelete');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');

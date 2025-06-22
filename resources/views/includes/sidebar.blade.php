@@ -79,6 +79,13 @@
         </ul>
     </li>
 
+    <li class="{{ Request::is('jenisdataptj*') ? 'mm-active' : '' }}">
+        <a href="{{ route('jenisdataptj') }}">
+            <div class="parent-icon"><i class='bx bx-list-ul'></i></div>
+            <div class="menu-title">Jenis Data PTJ</div>
+        </a>
+    </li>
+
     <li class="{{ Request::routeIs('logs.debug') ? 'mm-active' : '' }}">
         <a href="{{ route('logs.debug') }}">
             <div class="parent-icon"><i class='bx bxs-bug'></i></div>

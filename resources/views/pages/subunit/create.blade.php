@@ -26,19 +26,6 @@
             {{ csrf_field() }}
 
             <div class="mb-3">
-                <label for="name" class="form-label">Nama Sub Unit</label>
-                <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
-                    name="name" value="{{ old('name') }}">
-                @if ($errors->has('name'))
-                <div class="invalid-feedback">
-                    @foreach ($errors->get('name') as $error)
-                    {{ $error }}
-                    @endforeach
-                </div>
-                @endif
-            </div>
-
-            <div class="mb-3">
                 <label for="department_id" class="form-label">Bahagian / Unit</label>
                 <select class="form-select {{ $errors->has('department_id') ? 'is-invalid' : '' }}" id="department_id"
                     name="department_id">
@@ -52,6 +39,19 @@
                 @if ($errors->has('department'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('department') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+            
+            <div class="mb-3">
+                <label for="name" class="form-label">Nama Sub Unit</label>
+                <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
+                    name="name" value="{{ old('name') }}">
+                @if ($errors->has('name'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('name') as $error)
                     {{ $error }}
                     @endforeach
                 </div>

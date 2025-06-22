@@ -14,59 +14,59 @@ class DepartmentSeeder extends Seeder
     {
         Department::insert([
             [
-                'name' => 'PEJABAT REKTOR',
+                'name' => 'Pejabat Rektor',
                 'publish_status' => true
             ],
             [
-                'name' => 'BAHAGIAN HAL EHWAL AKADEMIK & ANTARABANGSA',
+                'name' => 'Bahagian Hal Ehwal Akademik dan Antarabangsa',
                 'publish_status' => true
             ],
             [
-                'name' => 'BAHAGIAN HAL EHWAL PELAJAR',
+                'name' => 'Bahagian Hal Ehwal Pelajar',
                 'publish_status' => true
             ],
             [
-                'name' => 'BAHAGIAN PENYELIDIKAN DAN JARINGAN INDUSTRI',
+                'name' => 'Bahagian Penyelidikan dan Jaringan Industri',
                 'publish_status' => true
             ],
             [
-                'name' => 'BAHAGIAN PENTADBIRAN',
+                'name' => 'Bahagian Pentadbiran',
                 'publish_status' => true
             ],
             [
-                'name' => 'BAHAGIAN PENTADBIRAN (KAMPUS MUKAH)',
+                'name' => 'Bahagian Pentadbiran (Kampus Mukah)',
                 'publish_status' => true
             ],
             [
-                'name' => 'PEJABAT BENDAHARI',
+                'name' => 'Pejabat Bendahari',
                 'publish_status' => true
             ],
             [
-                'name' => 'BAHAGIAN PERPUSTAKAAN',
+                'name' => 'Bahagian Perpustakaan',
                 'publish_status' => true
             ],
             [
-                'name' => 'BAHAGIAN PENGURUSAN FASILITI',
+                'name' => 'Bahagian Pengurusan Fasiliti',
                 'publish_status' => true
             ],
             [
-                'name' => 'UNIT KUALITI',
+                'name' => 'Unit Kualiti',
                 'publish_status' => true
             ],
             [
-                'name' => 'UNIT PERANCANGAN STRATEGIK',
+                'name' => 'Unit Perancangan Strategik',
                 'publish_status' => true
             ],
             [
-                'name' => 'BAHAGIAN INFOSTRUKTUR',
+                'name' => 'Bahagian Infostruktur',
                 'publish_status' => true
             ],
             [
-                'name' => 'PEJABAT POLIS BANTUAN',
+                'name' => 'Pejabat Polis Bantuan',
                 'publish_status' => true
             ],
             [
-                'name' => 'UNIT KOMUNIKASI KORPORAT',
+                'name' => 'Unit Komunikasi Korporat',
                 'publish_status' => true
             ],
         ]);

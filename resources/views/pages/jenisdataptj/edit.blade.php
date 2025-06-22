@@ -3,20 +3,20 @@
 @section('content')
 <!-- Breadcrumb -->
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Pengurusan Sub Unit</div>
+    <div class="breadcrumb-title pe-3">Pengurusan Jenis Data PTJ</div>
     <div class="ps-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
-                <li class="breadcrumb-item"><a href="{{ route('subunit') }}">Senarai Sub Unit</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $str_mode }} Sub Unit</li>
+                <li class="breadcrumb-item"><a href="{{ route('subunit') }}">Senarai Jenis Data PTJ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $str_mode }} Jenis Data PTJ</li>
             </ol>
         </nav>
     </div>
 </div>
 <!-- End Breadcrumb -->
 
-<h6 class="mb-0 text-uppercase">{{ $str_mode }} Sub Unit</h6>
+<h6 class="mb-0 text-uppercase">{{ $str_mode }} Jenis Data PTJ</h6>
 <hr />
 
 <div class="card">
@@ -44,7 +44,26 @@
             </div>
 
             <div class="mb-3">
-                <label for="name" class="form-label">Nama Sub Unit</label>
+                <label for="subunit_id" class="form-label">Sub Unit</label>
+                <select class="form-select {{ $errors->has('subunit_id') ? 'is-invalid' : '' }}" id="subunit_id" name="subunit_id">
+                    @foreach ($subunitList as $subunit)
+                    <option value="{{ $subunit->id }}"
+                        {{ old('subunit_id') == $subunit->id || ($subunit->subunit_id ?? '') == $subunit->id ? 'selected' : '' }}>
+                        {{ $subunit->name }}
+                    </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('subunit_id'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('subunit_id') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+            
+            <div class="mb-3">
+                <label for="name" class="form-label">Nama Data</label>
                 <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
                     name="name" value="{{ old('name') ?? ($subunit->name ?? '') }}">
                 @if ($errors->has('name'))
@@ -55,7 +74,7 @@
                 </div>
                 @endif
             </div>
-            
+
             <div class="mb-3">
                 <label for="publish_status" class="form-label">Status</label>
                 <div class="form-check">

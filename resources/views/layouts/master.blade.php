@@ -95,8 +95,8 @@
         var currentYear = new Date().getFullYear();
 
         // Update the content of the element with the current year
-        document.getElementById("copyright").innerHTML = 'Copyright © ' + currentYear +
-            ' <a href="https://sarawak.uitm.edu.my/" target="_blank">UiTM Cawangan Sarawak</a>.';
+        document.getElementById("copyright").innerHTML = '© ' + currentYear +
+            ' <a href="https://sarawak.uitm.edu.my/" target="_blank">UiTM Cawangan Sarawak</a>';
     </script>
     <script>
         window.onpageshow = function(event) {

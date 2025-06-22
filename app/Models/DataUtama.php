@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class JenisDataPtj extends Model
+class DataUtama extends Model
 {
     use LogsActivity;
     use SoftDeletes;
@@ -15,19 +15,15 @@ class JenisDataPtj extends Model
 
     protected static $logOnlyDirty = true;
 
-    protected $table = 'jenis_data_ptjs';
-
     protected $fillable = [
-        'name',
         'department_id',
         'subunit_id',
-        'publish_status',
+        'jenis_data_ptj_id',
+        'is_kpi',
+        'pi_no',
+        'pi_target',
+        'doc_link',
     ];
-
-    public function getPublishStatusAttribute()
-    {
-        return $this->attributes['publish_status'] ? 'Aktif' : 'Tidak Aktif';
-    }
 
     public function department()
     {
@@ -36,18 +32,16 @@ class JenisDataPtj extends Model
 
     public function subunit()
     {
-        return $this->belongsTo(SubUnit::class);
+        return $this->belongsTo(Subunit::class);
     }
 
-    public function dataUtama()
+    public function jenisDataPtj()
     {
-        return $this->hasMany(DataUtama::class);
+        return $this->belongsTo(JenisDataPtj::class);
     }
 
-    public static function boot()
+    public function jumlahs()
     {
-        parent::boot();
-
-        logger('Table used: ' . (new static)->getTable());
+        return $this->hasMany(DataJumlah::class);
     }
 }

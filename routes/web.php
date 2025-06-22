@@ -51,6 +51,11 @@ Route::middleware('auth')->group(function () {
     Route::get('subunit/view/{id}', 'SubUnitController@show')->name('subunit.show');
     Route::get('/subunit/search', 'SubUnitController@search')->name('subunit.search');
 
+    //Data Utama
+    Route::get('datautama', 'DataUtamaController@index')->name('datautama');
+    Route::get('datautama/view/{id}', 'DataUtamaController@show')->name('datautama.show');
+    Route::get('/datautama/search', 'DataUtamaController@search')->name('datautama.search');
+
     //Jenis Data PTJ
     Route::get('jenisdataptj', 'JenisDataPtjController@index')->name('jenisdataptj');
     Route::get('jenisdataptj/view/{id}', 'JenisDataPtjController@show')->name('jenisdataptj.show');
@@ -140,6 +145,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/subunit/trash', 'SubUnitController@trashList')->name('subunit.trash');
     Route::get('/subunit/{id}/restore', 'SubUnitController@restore')->name('subunit.restore');
     Route::delete('/subunit/{id}/force-delete', 'SubUnitController@forceDelete')->name('subunit.forceDelete');
+
+    //Data Utama
+    Route::get('datautama/create', 'DataUtamaController@create')->name('datautama.create');
+    Route::post('datautama/store', 'DataUtamaController@store')->name('datautama.store');
+    Route::get('datautama/{id}/edit', 'DataUtamaController@edit')->name('datautama.edit');
+    Route::post('datautama/{id}', 'DataUtamaController@update')->name('datautama.update');
+    Route::delete('datautama/{id}', 'DataUtamaController@destroy')->name('datautama.destroy');
+    Route::get('/datautama/trash', 'DataUtamaController@trashList')->name('datautama.trash');
+    Route::get('/datautama/{id}/restore', 'DataUtamaController@restore')->name('datautama.restore');
+    Route::delete('/datautama/{id}/force-delete', 'DataUtamaController@forceDelete')->name('datautama.forceDelete');
 
     //Jenis Data PTJ
     Route::get('jenisdataptj/create', 'JenisDataPtjController@create')->name('jenisdataptj.create');

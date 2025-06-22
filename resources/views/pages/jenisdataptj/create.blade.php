@@ -49,7 +49,7 @@
                 <div class="mb-3">
                     <label for="subunit_id" class="form-label">Sub Unit</label>
                     <select class="form-select" id="subunit_id" name="subunit_id">
-                        <option value="" disabled selected>Pilih Sub Unit</option>
+                        <option value="">Tiada Sub Unit</option>
                         {{-- Akan diisi melalui JavaScript --}}
                     </select>
                     @if ($errors->has('subunit'))

@@ -50,7 +50,10 @@ class JenisDataPtjController extends Controller
 
         $jenisdataptj = new JenisDataPtj();
 
-        $jenisdataptj->fill($request->all());
+        $data = $request->all();
+        $data['subunit_id'] = $request->input('subunit_id') ?: null; // Tukar '' kepada null
+
+        $jenisdataptj->fill($data);
         $jenisdataptj->save();
 
         return redirect()->route('jenisdataptj')->with('success', 'Maklumat berjaya disimpan');
@@ -70,7 +73,7 @@ class JenisDataPtjController extends Controller
         $jenisdataptj = JenisDataPtj::findOrFail($id);
         $departmentList = Department::where('publish_status', 1)->get();
         $subunitList = SubUnit::where('publish_status', 1)
-            ->where('department_id', $jenisdataptj->department_id) 
+            ->where('department_id', $jenisdataptj->department_id)
             ->get();
 
         return view('pages.jenisdataptj.edit', [
@@ -98,7 +101,10 @@ class JenisDataPtjController extends Controller
 
         $jenisdataptj = JenisDataPtj::findOrFail($id);
 
-        $jenisdataptj->fill($request->all());
+        $data = $request->all();
+        $data['subunit_id'] = $request->input('subunit_id') ?: null; // Tukar '' kepada null
+
+        $jenisdataptj->fill($data);
         $jenisdataptj->save();
 
         return redirect()->route('jenisdataptj')->with('success', 'Maklumat berjaya dikemaskini');

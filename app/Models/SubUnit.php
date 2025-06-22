@@ -30,4 +30,14 @@ class SubUnit extends Model
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function jenisDataPtj()
+    {
+        return $this->hasMany(JenisDataPtj::class);
+    }
+
+    public function dataUtama()
+    {
+        return $this->hasMany(DataUtama::class);
+    }
 }

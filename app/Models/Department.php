@@ -34,4 +34,14 @@ class Department extends Model
     {
         return $this->hasMany(SubUnit::class);
     }
+
+    public function jenisDataPtj()
+    {
+        return $this->hasMany(JenisDataPtj::class);
+    }
+
+    public function dataUtama()
+    {
+        return $this->hasMany(DataUtama::class);
+    }
 }

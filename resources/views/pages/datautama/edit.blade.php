@@ -26,9 +26,8 @@
 
                 <div class="mb-3">
                     <label class="form-label">Bahagian / Unit</label>
-                    <input type="text" class="form-control" value="{{ auth()->user()->department->name ?? '-' }}"
-                        readonly>
-                    <input type="hidden" name="department_id" value="{{ auth()->user()->department_id }}">
+                    <input type="text" class="form-control" value="{{ $dataUtama->department->name ?? '-' }}" readonly>
+                    <input type="hidden" name="department_id" value="{{ $dataUtama->department_id }}">
                 </div>
 
                 {{-- Subunit --}}

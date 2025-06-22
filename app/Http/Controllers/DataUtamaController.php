@@ -40,11 +40,14 @@ class DataUtamaController extends Controller
 
     public function create()
     {
-        $user = Auth::user();
+        $user = User::find(auth()->id());
+        $departmentList = Department::orderBy('name')->get();
+        $isSuperadmin = $user->hasAnyRole(['Superadmin', 'Admin']);
+        $departmentId = $isSuperadmin ? null : $user->department_id;
 
-        $departmentId = $user->role_id == 1 ? null : $user->department_id;
-
-        $subunitList = $departmentId ? SubUnit::where('department_id', $departmentId)->get() : SubUnit::all();
+        $subunitList = $departmentId
+            ? SubUnit::where('department_id', $departmentId)->get()
+            : SubUnit::with('department')->get();
 
         $jenisDataIdYangDahIsi = DataUtama::pluck('jenis_data_ptj_id')->toArray();
 
@@ -74,6 +77,7 @@ class DataUtamaController extends Controller
             'str_mode' => 'Tambah',
             'subunitList' => $subunitList,
             'jenisDataList' => $jenisDataList,
+            'departmentList' => $departmentList,
             'tahunList' => $tahunList,
         ]);
     }
@@ -166,16 +170,20 @@ class DataUtamaController extends Controller
 
     public function edit($id)
     {
-        $user = Auth::user();
-        $departmentId = $user->department_id;
-
+        $departmentList = Department::orderBy('name')->get();
+        $user = User::find(auth()->id());
         $dataUtama = DataUtama::with('jumlahs')->findOrFail($id);
 
         $this->authorizeDataAccess($dataUtama);
 
-        $subunitList = SubUnit::where('department_id', $departmentId)->get();
-
-        $jenisDataList = JenisDataPtj::where('department_id', $departmentId)->get();
+        if ($user->hasAnyRole(['Superadmin', 'Admin'])) {
+            $subunitList = SubUnit::where('department_id', $dataUtama->department_id)->get();
+            $jenisDataList = JenisDataPtj::where('department_id', $dataUtama->department_id)->get();
+        } else {
+            // Pengguna biasa ikut department sendiri
+            $subunitList = SubUnit::where('department_id', $user->department_id)->get();
+            $jenisDataList = JenisDataPtj::where('department_id', $user->department_id)->get();
+        }
 
         $tahunList = Tahun::orderBy('tahun')->get();
 
@@ -187,6 +195,7 @@ class DataUtamaController extends Controller
             'str_mode' => 'Kemaskini',
             'subunitList' => $subunitList,
             'jenisDataList' => $jenisDataList,
+            'departmentList' => $departmentList,
             'tahunList' => $tahunList,
             'jumlahArray' => $jumlahArray,
         ]);

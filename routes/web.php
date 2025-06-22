@@ -135,6 +135,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jenisdataptj/trash', 'JenisDataPtjController@trashList')->name('jenisdataptj.trash');
     Route::get('/jenisdataptj/{id}/restore', 'JenisDataPtjController@restore')->name('jenisdataptj.restore');
     Route::delete('/jenisdataptj/{id}/force-delete', 'JenisDataPtjController@forceDelete')->name('jenisdataptj.forceDelete');
+    Route::get('/get-subunits/{department_id}', 'JenisDataPtjController@getSubunits')->name('jenisdataptj.getSubunits');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');

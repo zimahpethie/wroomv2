@@ -28,7 +28,8 @@ For other than owner, please use fork.
 6. Open mysql phpmyadmin, create database. Make sure the name is same with you have declare in .env.
 7. Run "php artisan migrate" and "php artisan db:seed"
 8. After done import, run "php artisan serve"
-9. You can access the local system by using link http://127.0.0.1:8000
+9. Run this please for photos php artisan storage:link
+10. You can access the local system by using link http://127.0.0.1:8000
 
 ## License
 

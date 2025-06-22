@@ -29,7 +29,7 @@
                 <select class="form-select {{ $errors->has('department_id') ? 'is-invalid' : '' }}" id="department_id" name="department_id">
                     @foreach ($departmentList as $department)
                     <option value="{{ $department->id }}"
-                        {{ old('department_id') == $department->id || ($subunit->department_id ?? '') == $department->id ? 'selected' : '' }}>
+                        {{ old('department_id') == $department->id || ($jenisdataptj->department_id ?? '') == $department->id ? 'selected' : '' }}>
                         {{ $department->name }}
                     </option>
                     @endforeach
@@ -48,7 +48,7 @@
                 <select class="form-select {{ $errors->has('subunit_id') ? 'is-invalid' : '' }}" id="subunit_id" name="subunit_id">
                     @foreach ($subunitList as $subunit)
                     <option value="{{ $subunit->id }}"
-                        {{ old('subunit_id') == $subunit->id || ($subunit->subunit_id ?? '') == $subunit->id ? 'selected' : '' }}>
+                        {{ old('subunit_id', $jenisdataptj->subunit_id ?? '') == $subunit->id ? 'selected' : '' }}>
                         {{ $subunit->name }}
                     </option>
                     @endforeach
@@ -65,7 +65,7 @@
             <div class="mb-3">
                 <label for="name" class="form-label">Nama Data</label>
                 <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
-                    name="name" value="{{ old('name') ?? ($subunit->name ?? '') }}">
+                    name="name" value="{{ old('name') ?? ($jenisdataptj->name ?? '') }}">
                 @if ($errors->has('name'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('name') as $error)
@@ -79,12 +79,12 @@
                 <label for="publish_status" class="form-label">Status</label>
                 <div class="form-check">
                     <input type="radio" id="aktif" name="publish_status" value="1"
-                        {{ ($subunit->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}>
+                        {{ ($jenisdataptj->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}>
                     <label class="form-check-label" for="aktif">Aktif</label>
                 </div>
                 <div class="form-check">
                     <input type="radio" id="tidak_aktif" name="publish_status" value="0"
-                        {{ ($subunit->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}>
+                        {{ ($jenisdataptj->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}>
                     <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
                 </div>
                 @if ($errors->has('publish_status'))
@@ -100,5 +100,42 @@
         </form>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    function loadSubunits(departmentId, selectedSubunitId = null) {
+        if (departmentId) {
+            $.ajax({
+                url: '{{ url("get-subunits") }}/' + departmentId,
+                type: 'GET',
+                success: function(data) {
+                    $('#subunit_id').empty();
+
+                    if (data.length === 0) {
+                        $('#subunit_id').append('<option disabled selected>Tiada Sub Unit</option>');
+                    } else {
+                        $('#subunit_id').append('<option disabled selected>Pilih Sub Unit</option>');
+                        $.each(data, function(index, subunit) {
+                            $('#subunit_id').append('<option value="' + subunit.id + '"'
+                                + (subunit.id == selectedSubunitId ? ' selected' : '')
+                                + '>' + subunit.name + '</option>');
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    // Bila department ditukar
+    $('#department_id').on('change', function() {
+        loadSubunits($(this).val());
+    });
+
+    // Auto-load masa page load kalau edit
+    @if(isset($jenisdataptj))
+        loadSubunits('{{ $jenisdataptj->department_id }}', '{{ $jenisdataptj->subunit_id }}');
+    @endif
+});
+</script>
+
 <!-- End Page Wrapper -->
 @endsection

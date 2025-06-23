@@ -8,13 +8,13 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('campus') }}">Senarai Jawatan</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('position') }}">Senarai Jawatan</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Maklumat {{ $position->title }}</li>
                 </ol>
             </nav>
         </div>
         <div class="ms-auto">
-            <a href="{{ route('campus.edit', $position->id) }}">
+            <a href="{{ route('position.edit', $position->id) }}">
                 <button type="button" class="btn btn-primary mt-2 mt-lg-0">Kemaskini Maklumat</button>
             </a>
         </div>
@@ -24,7 +24,7 @@
     <h6 class="mb-0 text-uppercase">Maklumat {{ $position->title }}</h6>
     <hr />
 
-    <!-- Campus Information Table -->
+    <!-- position Information Table -->
     <div class="row">
         <div class="col-md-6">
             <div class="card">
@@ -47,6 +47,6 @@
             </div>
         </div>
     </div>
-    <!-- End Campus Information Table -->
+    <!-- End position Information Table -->
     <!-- End Page Wrapper -->
 @endsection

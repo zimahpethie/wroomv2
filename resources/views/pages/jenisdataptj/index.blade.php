@@ -70,7 +70,7 @@
                                         @if ($jenisdataptj->subunit)
                                             {{ $jenisdataptj->subunit->name }}
                                         @else
-                                            <em>Tiada Sub Unit</em>
+                                            <em>Tiada</em>
                                         @endif
                                     </td>
                                     <td>

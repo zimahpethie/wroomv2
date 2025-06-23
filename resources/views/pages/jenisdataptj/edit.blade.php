@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
-                <li class="breadcrumb-item"><a href="{{ route('subunit') }}">Senarai Jenis Data PTJ</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('jenisdataptj') }}">Senarai Jenis Data PTJ</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $str_mode }} Jenis Data PTJ</li>
             </ol>
         </nav>

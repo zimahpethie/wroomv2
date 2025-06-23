@@ -8,7 +8,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('subunit') }}">Senarai Jenis Data PTJ</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('jenisdataptj') }}">Senarai Jenis Data PTJ</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $str_mode }} Jenis Data PTJ</li>
                 </ol>
             </nav>
@@ -78,13 +78,13 @@
                     <label for="publish_status" class="form-label">Status</label>
                     <div class="form-check">
                         <input type="radio" id="aktif" name="publish_status" value="1"
-                            {{ old('publish_status') == '1' || ($subunit->publish_status ?? false) ? 'checked' : '' }}
+                            {{ old('publish_status') == '1' || ($jenisdataptj->publish_status ?? false) ? 'checked' : '' }}
                             required>
                         <label class="form-check-label" for="aktif">Aktif</label>
                     </div>
                     <div class="form-check">
                         <input type="radio" id="tidak_aktif" name="publish_status" value="0"
-                            {{ old('publish_status') == '0' || !($subunit->publish_status ?? true) ? 'checked' : '' }}
+                            {{ old('publish_status') == '0' || !($jenisdataptj->publish_status ?? true) ? 'checked' : '' }}
                             required>
                         <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
                     </div>

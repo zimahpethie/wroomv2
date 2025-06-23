@@ -51,7 +51,7 @@
                     <label for="subunit_id" class="form-label">Sub Unit</label>
 
                     @if ($subunitList->isEmpty())
-                        <input type="text" class="form-control bg-light" value="Tiada subunit" readonly>
+                        <input type="text" class="form-control bg-light" value="Tiada" readonly>
                         <input type="hidden" name="subunit_id" value="">
                     @else
                         <select class="form-select {{ $errors->has('subunit_id') ? 'is-invalid' : '' }}" name="subunit_id">

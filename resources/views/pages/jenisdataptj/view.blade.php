@@ -8,13 +8,13 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('subunit') }}">Senarai Jenis Data PTJ</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('jenisdataptj') }}">Senarai Jenis Data PTJ</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Maklumat {{ ucfirst($jenisdataptj->name) }}</li>
                 </ol>
             </nav>
         </div>
         <div class="ms-auto">
-            <a href="{{ route('subunit.edit', $jenisdataptj->id) }}">
+            <a href="{{ route('jenisdataptj.edit', $jenisdataptj->id) }}">
                 <button type="button" class="btn btn-primary mt-2 mt-lg-0">Kemaskini Maklumat</button>
             </a>
         </div>
@@ -40,7 +40,7 @@
                                 @if ($jenisdataptj->subunit)
                                     {{ $jenisdataptj->subunit->name }}
                                 @else
-                                    <em>Tiada Sub Unit</em>
+                                    <em>Tiada</em>
                                 @endif
                             </td>
                         </tr>

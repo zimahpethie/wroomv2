@@ -48,21 +48,20 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-striped text-wrap">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Pemilik Data</th>
-                            <th>Tajuk Data</th>
-                            <th>Adakah ini KPI Universiti (BTU)?</th>
-                            <th>No. PI</th>
-                            <th>Sasaran PI</th>
-
+                            <th scope="col" class="text-wrap w-5">#</th>
+                            <th scope="col" class="text-wrap w-25">Pemilik Data</th>
+                            <th scope="col" class="text-wrap w-25">Tajuk Data</th>
+                            <th scope="col" class="text-wrap w-25">Adakah ini KPI Universiti (BTU)?</th>
+                            <th scope="col" class="text-wrap w-15">No. PI</th>
+                            <th scope="col" class="text-wrap w-15">Sasaran PI</th>
                             @foreach ($tahunList as $tahun)
-                                <th>{{ $tahun->tahun }}</th>
+                                <th scope="col" class="text-wrap text-center w-10">{{ $tahun->tahun }}</th>
                             @endforeach
-                            <th>Shared Folder</th>
-                            <th>Tindakan</th>
+                            <th scope="col" class="text-wrap text-center w-10">Shared Folder</th>
+                            <th scope="col" class="text-wrap text-center w-10">Tindakan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,29 +82,28 @@
                                 @endforeach
                                 <td class="text-center">
                                     @if (!empty($datautama->doc_link))
-                                        <a href="{{ $datautama->doc_link }}" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Buka pautan shared folder">
+                                        <a href="{{ $datautama->doc_link }}" target="_blank" data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom" title="Buka pautan shared folder">
                                             <i class='bx bxs-folder-open' style="font-size: 1.2rem; color: #007bff;"></i>
                                         </a>
                                     @else
                                         -
                                     @endif
                                 </td>
-                                <td>
-                                    <a href="{{ route('datautama.edit', $datautama->id) }}" class="btn btn-info btn-sm"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
-                                        <i class="bx bxs-edit"></i>
-                                    </a>
-                                    <a href="{{ route('datautama.show', $datautama->id) }}" class="btn btn-primary btn-sm"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
-                                        <i class="bx bx-show"></i>
-                                    </a>
-                                    <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                        data-bs-title="Padam">
-                                        <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal{{ $datautama->id }}"><i
-                                                class="bx bx-trash"></i></span>
-                                    </a>
-                                </td>
+<td class="text-center">
+    <div class="d-flex justify-content-center gap-1 flex-wrap">
+        <a href="{{ route('datautama.edit', $datautama->id) }}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" title="Kemaskini">
+            <i class="bx bxs-edit"></i>
+        </a>
+        <a href="{{ route('datautama.show', $datautama->id) }}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Papar">
+            <i class="bx bx-show"></i>
+        </a>
+        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $datautama->id }}" data-bs-toggle="tooltip" title="Padam">
+            <i class="bx bx-trash"></i>
+        </button>
+    </div>
+</td>
+
                             </tr>
                         @empty
                             <tr>

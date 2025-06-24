@@ -17,7 +17,10 @@ class DataJumlah extends Model
 
     protected $fillable = [
         'data_utama_id',
-        'tahun_id',
+        'tahun_id',        
+        'is_kpi',
+        'pi_no',
+        'pi_target',
         'jumlah',
     ];
 

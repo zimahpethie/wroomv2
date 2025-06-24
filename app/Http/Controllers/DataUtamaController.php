@@ -100,22 +100,32 @@ class DataUtamaController extends Controller
         $request->validate([
             'subunit_id' => 'nullable|exists:sub_units,id',
             'jenis_data_ptj_id' => 'required|exists:jenis_data_ptjs,id',
-            'is_kpi' => 'required|boolean',
-            'pi_no' => 'required_if:is_kpi,1',
-            'pi_target' => [
-                function ($attribute, $value, $fail) use ($request) {
-                    if ($request->is_kpi == 1 && ($value === null || !is_numeric($value))) {
-                        $fail('PI Target diperlukan dan mesti dalam nombor jika KPI dipilih.');
-                    }
-                }
-            ],
             'doc_link' => 'nullable|url',
             'jumlah' => 'array',
             'jumlah.*' => 'nullable|numeric',
-        ], [
-            'jenis_data_ptj_id.required'     => 'Sila isi jenis data',
-            'jenis_data_ptj_id.unique' => 'Jenis data telah wujud',
+            'is_kpi' => 'array',
+            'is_kpi.*' => 'required|boolean',
+            'pi_no' => 'array',
+            'pi_target' => 'array',
         ]);
+
+        // Custom validation untuk pi_no & pi_target jika is_kpi = 1
+        $errors = [];
+
+        foreach ($request->is_kpi as $tahunKey => $value) {
+            if ($value == 1) {
+                if (empty($request->pi_no[$tahunKey])) {
+                    $errors["pi_no.$tahunKey"] = 'No. PI diperlukan jika KPI ditanda Ya bagi tahun ' . $tahunKey;
+                }
+                if (empty($request->pi_target[$tahunKey]) || !is_numeric($request->pi_target[$tahunKey])) {
+                    $errors["pi_target.$tahunKey"] = 'Sasaran PI mesti nombor dan diperlukan bagi tahun ' . $tahunKey;
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
 
         $jenisData = JenisDataPtj::findOrFail($request->jenis_data_ptj_id);
 
@@ -134,9 +144,6 @@ class DataUtamaController extends Controller
             'department_id' => $departmentId,
             'subunit_id' => $request->subunit_id,
             'jenis_data_ptj_id' => $request->jenis_data_ptj_id,
-            'is_kpi' => $request->is_kpi,
-            'pi_no' => $request->is_kpi ? $request->pi_no : null,
-            'pi_target' => $request->is_kpi ? $request->pi_target : null,
             'doc_link' => $request->doc_link,
             'created_by' => auth()->id(),
             'updated_by' => auth()->id(),
@@ -147,28 +154,20 @@ class DataUtamaController extends Controller
             foreach ($request->jumlah as $tahunKey => $value) {
                 if ($value === null) continue;
 
-                if (is_numeric($tahunKey)) {
-                    // Tahun dari DB
-                    $tahunId = $tahunKey;
-                } elseif (substr($tahunKey, 0, 5) === 'year_') {
-                    // Extract 2025 dari 'year_2025'
-                    $tahunTahun = (int) str_replace('year_', '', $tahunKey);
-
-                    // Insert ke table tahun dengan publish_status = 1
-                    $tahun = \App\Models\Tahun::firstOrCreate(
-                        ['tahun' => $tahunTahun],
+                $tahunId = is_numeric($tahunKey)
+                    ? $tahunKey
+                    : Tahun::firstOrCreate(
+                        ['tahun' => (int) str_replace('year_', '', $tahunKey)],
                         ['publish_status' => 1]
-                    );
-
-                    $tahunId = $tahun->id;
-                } else {
-                    continue;
-                }
+                    )->id;
 
                 DataJumlah::create([
                     'data_utama_id' => $dataUtama->id,
                     'tahun_id' => $tahunId,
                     'jumlah' => $value,
+                    'is_kpi' => $request->is_kpi[$tahunKey] ?? false,
+                    'pi_no' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_no[$tahunKey] ?? null : null,
+                    'pi_target' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_target[$tahunKey] ?? null : null,
                 ]);
             }
         }
@@ -248,22 +247,31 @@ class DataUtamaController extends Controller
         $request->validate([
             'subunit_id' => 'nullable|exists:sub_units,id',
             'jenis_data_ptj_id' => 'required|exists:jenis_data_ptjs,id',
-            'is_kpi' => 'required|boolean',
-            'pi_no' => 'required_if:is_kpi,1',
-            'pi_target' => [
-                function ($attribute, $value, $fail) use ($request) {
-                    if ($request->is_kpi == 1 && ($value === null || !is_numeric($value))) {
-                        $fail('PI Target diperlukan dan mesti nombor jika KPI dipilih.');
-                    }
-                }
-            ],
             'doc_link' => 'nullable|url',
             'jumlah' => 'array',
             'jumlah.*' => 'nullable|numeric',
-        ], [
-            'jenis_data_ptj_id.required'     => 'Sila isi jenis data',
-            'jenis_data_ptj_id.unique' => 'Jenis data telah wujud',
+            'is_kpi' => 'array',
+            'is_kpi.*' => 'required|boolean',
+            'pi_no' => 'array',
+            'pi_target' => 'array',
         ]);
+
+        $errors = [];
+
+        foreach ($request->is_kpi as $tahunKey => $value) {
+            if ($value == 1) {
+                if (empty($request->pi_no[$tahunKey])) {
+                    $errors["pi_no.$tahunKey"] = 'No. PI diperlukan jika KPI ditanda Ya bagi tahun ' . $tahunKey;
+                }
+                if (empty($request->pi_target[$tahunKey]) || !is_numeric($request->pi_target[$tahunKey])) {
+                    $errors["pi_target.$tahunKey"] = 'Sasaran PI mesti nombor dan diperlukan bagi tahun ' . $tahunKey;
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
 
         $jenisData = JenisDataPtj::findOrFail($request->jenis_data_ptj_id);
         if ($jenisData->department_id !== $departmentId) {
@@ -281,9 +289,6 @@ class DataUtamaController extends Controller
         $dataUtama->update([
             'subunit_id' => $request->subunit_id,
             'jenis_data_ptj_id' => $request->jenis_data_ptj_id,
-            'is_kpi' => $request->is_kpi,
-            'pi_no' => $request->is_kpi ? $request->pi_no : null,
-            'pi_target' => $request->is_kpi ? $request->pi_target : null,
             'doc_link' => $request->doc_link,
             'updated_by' => auth()->id(),
         ]);
@@ -292,18 +297,12 @@ class DataUtamaController extends Controller
             foreach ($request->jumlah as $tahunKey => $value) {
                 if ($value === null) continue;
 
-                if (is_numeric($tahunKey)) {
-                    $tahunId = $tahunKey;
-                } elseif (substr($tahunKey, 0, 5) === 'year_') {
-                    $tahunTahun = (int) str_replace('year_', '', $tahunKey);
-                    $tahun = Tahun::firstOrCreate(
-                        ['tahun' => $tahunTahun],
+                $tahunId = is_numeric($tahunKey)
+                    ? $tahunKey
+                    : Tahun::firstOrCreate(
+                        ['tahun' => (int) str_replace('year_', '', $tahunKey)],
                         ['publish_status' => 1]
-                    );
-                    $tahunId = $tahun->id;
-                } else {
-                    continue;
-                }
+                    )->id;
 
                 DataJumlah::updateOrCreate(
                     [
@@ -311,7 +310,10 @@ class DataUtamaController extends Controller
                         'tahun_id' => $tahunId
                     ],
                     [
-                        'jumlah' => $value
+                        'jumlah' => $value,
+                        'is_kpi' => $request->is_kpi[$tahunKey] ?? false,
+                        'pi_no' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_no[$tahunKey] ?? null : null,
+                        'pi_target' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_target[$tahunKey] ?? null : null,
                     ]
                 );
             }

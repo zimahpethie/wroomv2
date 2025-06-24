@@ -17,6 +17,9 @@ class CreateDataJumlahsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('data_utama_id');
             $table->unsignedBigInteger('tahun_id');
+            $table->boolean('is_kpi')->default(false);
+            $table->string('pi_no')->nullable();
+            $table->decimal('pi_target', 12, 2)->nullable();
             $table->decimal('jumlah', 12, 2)->nullable();
             $table->softDeletes();
             $table->timestamps();

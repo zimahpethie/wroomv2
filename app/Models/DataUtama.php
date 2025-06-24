@@ -19,9 +19,6 @@ class DataUtama extends Model
         'department_id',
         'subunit_id',
         'jenis_data_ptj_id',
-        'is_kpi',
-        'pi_no',
-        'pi_target',
         'doc_link',
         'created_by',
         'updated_by'

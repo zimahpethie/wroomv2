@@ -18,12 +18,9 @@ class CreateDataUtamasTable extends Migration
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('subunit_id')->nullable();
             $table->unsignedBigInteger('jenis_data_ptj_id')->unique();
-            $table->boolean('is_kpi')->default(false);
-            $table->string('pi_no')->nullable();
-            $table->decimal('pi_target', 8, 2)->nullable();
             $table->string('doc_link')->nullable();
-                $table->unsignedBigInteger('created_by')->nullable();
-    $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

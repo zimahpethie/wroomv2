@@ -81,71 +81,90 @@
                     @endif
                 </div>
 
-                <div class="row mb-3">
-                    {{-- KPI --}}
-                    <div class="col-md-4">
-                        <label class="form-label">Adakah ini KPI Universiti (BTU)?</label>
-                        <div>
-                            <label><input type="radio" name="is_kpi" value="1"
-                                    {{ old('is_kpi') == '1' ? 'checked' : '' }}> Ya</label>
-                            &nbsp;
-                            <label><input type="radio" name="is_kpi" value="0"
-                                    {{ old('is_kpi', '0') == '0' ? 'checked' : '' }}> Tidak</label>
-                        </div>
-                        @if ($errors->has('is_kpi'))
-                            <div class="invalid-feedback d-block">
-                                @foreach ($errors->get('is_kpi') as $error)
-                                    {{ $error }}
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-
-                    {{-- PI No --}}
-                    <div class="col-md-4">
-                        <label for="pi_no" class="form-label">No. PI</label>
-                        <input type="text" class="form-control" name="pi_no" id="pi_no"
-                            value="{{ old('pi_no') }}">
-                        @if ($errors->has('pi_no'))
-                            <div class="invalid-feedback d-block">
-                                @foreach ($errors->get('pi_no') as $error)
-                                    {{ $error }}
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-
-                    {{-- PI Target --}}
-                    <div class="col-md-4">
-                        <label for="pi_target" class="form-label">Sasaran PI</label>
-                        <input type="number" step="0.01" class="form-control" name="pi_target" id="pi_target"
-                            value="{{ old('pi_target') }}">
-                        @if ($errors->has('pi_target'))
-                            <div class="invalid-feedback d-block">
-                                @foreach ($errors->get('pi_target') as $error)
-                                    {{ $error }}
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-                </div>
-
                 {{-- Input Jumlah Mengikut Tahun --}}
                 <hr />
                 <h6 class="text-uppercase mt-4">Perbandingan Jumlah / Bilangan / Peratus / Pencapaian Bagi Data Berkenaan
                     Mengikut Tahun (Jika Ada)</h6>
 
-                <div class="row">
-                    @foreach ($tahunList as $tahun)
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label">{{ $tahun->tahun }}</label>
-                            <input type="number" step="0.01" class="form-control"
-                                name="jumlah[{{ $tahun->id ?? 'year_' . $tahun->tahun }}]"
-                                value="{{ old('jumlah.' . ($tahun->id ?? 'year_' . $tahun->tahun)) }}">
-                        </div>
-                    @endforeach
-                </div>
+                @foreach ($tahunList as $tahun)
+                    @php
+                        $tahunKey = $tahun->id ?? 'year_' . $tahun->tahun;
+                    @endphp
 
+                    <div class="border p-3 mb-3 rounded bg-light-subtle">
+                        <strong>{{ $tahun->tahun }}</strong>
+                        <div class="row mt-2">
+                            {{-- is_kpi --}}
+                            <div class="col-md-3">
+                                <label class="form-label d-block">Adakah ini KPI Universiti (BTU)?</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input is-kpi-radio" type="radio"
+                                        name="is_kpi[{{ $tahunKey }}]" id="kpi_{{ $tahunKey }}_1" value="1"
+                                        {{ old('is_kpi.' . $tahunKey) == '1' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="kpi_{{ $tahunKey }}_1">Ya</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input is-kpi-radio" type="radio"
+                                        name="is_kpi[{{ $tahunKey }}]" id="kpi_{{ $tahunKey }}_0" value="0"
+                                        {{ old('is_kpi.' . $tahunKey, '0') == '0' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="kpi_{{ $tahunKey }}_0">Tidak</label>
+                                </div>
+                                @if ($errors->has('is_kpi.' . $tahunKey))
+                                    <div class="invalid-feedback d-block">
+                                        @foreach ($errors->get('is_kpi.' . $tahunKey) as $error)
+                                            {{ $error }}
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- pi_no --}}
+                            <div class="col-md-3">
+                                <label class="form-label">No. PI</label>
+                                <input type="text"
+                                    class="form-control {{ $errors->has('pi_no.' . $tahunKey) ? 'is-invalid' : '' }}"
+                                    name="pi_no[{{ $tahunKey }}]" value="{{ old('pi_no.' . $tahunKey) }}">
+                                @if ($errors->has('pi_no.' . $tahunKey))
+                                    <div class="invalid-feedback">
+                                        @foreach ($errors->get('pi_no.' . $tahunKey) as $error)
+                                            {{ $error }}
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- pi_target --}}
+                            <div class="col-md-3">
+                                <label class="form-label">Sasaran PI</label>
+                                <input type="number" step="0.01"
+                                    class="form-control {{ $errors->has('pi_target.' . $tahunKey) ? 'is-invalid' : '' }}"
+                                    name="pi_target[{{ $tahunKey }}]" value="{{ old('pi_target.' . $tahunKey) }}">
+                                @if ($errors->has('pi_target.' . $tahunKey))
+                                    <div class="invalid-feedback">
+                                        @foreach ($errors->get('pi_target.' . $tahunKey) as $error)
+                                            {{ $error }}
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- jumlah --}}
+                            <div class="col-md-3">
+                                <label class="form-label">Jumlah</label>
+                                <input type="number" step="0.01"
+                                    class="form-control {{ $errors->has('jumlah.' . $tahunKey) ? 'is-invalid' : '' }}"
+                                    name="jumlah[{{ $tahunKey }}]" value="{{ old('jumlah.' . $tahunKey) }}">
+                                @if ($errors->has('jumlah.' . $tahunKey))
+                                    <div class="invalid-feedback">
+                                        @foreach ($errors->get('jumlah.' . $tahunKey) as $error)
+                                            {{ $error }}
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
 
                 {{-- Doc Link --}}
                 <div class="mb-3">
@@ -169,27 +188,38 @@
     </div>
     <!-- End Page Wrapper -->
     <script>
-        function togglePIFields() {
-            const isKPI = document.querySelector('input[name="is_kpi"]:checked')?.value;
-            const piFields = ['pi_no', 'pi_target'];
+        function togglePIFieldsForYear(tahunKey) {
+            const kpiYes = document.getElementById(`kpi_${tahunKey}_1`);
+            const piNoInput = document.querySelector(`input[name="pi_no[${tahunKey}]"]`);
+            const piTargetInput = document.querySelector(`input[name="pi_target[${tahunKey}]"]`);
 
-            piFields.forEach(id => {
-                const el = document.getElementById(id);
-                if (isKPI === '1') {
-                    el.removeAttribute('readonly');
-                    el.classList.remove('bg-light');
-                } else {
-                    el.setAttribute('readonly', true);
-                    el.value = '';
-                    el.classList.add('bg-light');
-                }
-            });
+            if (!kpiYes || !piNoInput || !piTargetInput) return;
+
+            if (kpiYes.checked) {
+                piNoInput.removeAttribute("readonly");
+                piTargetInput.removeAttribute("readonly");
+                piNoInput.classList.remove("bg-light");
+                piTargetInput.classList.remove("bg-light");
+            } else {
+                piNoInput.setAttribute("readonly", true);
+                piTargetInput.setAttribute("readonly", true);
+                piNoInput.value = "";
+                piTargetInput.value = "";
+                piNoInput.classList.add("bg-light");
+                piTargetInput.classList.add("bg-light");
+            }
         }
 
-        document.querySelectorAll('input[name="is_kpi"]').forEach(el => {
-            el.addEventListener('change', togglePIFields);
+        document.addEventListener("DOMContentLoaded", function() {
+            const radios = document.querySelectorAll('.is-kpi-radio');
+            radios.forEach(function(radio) {
+                const tahunKey = radio.name.match(/is_kpi\[(.*?)\]/)[1];
+                radio.addEventListener("change", function() {
+                    togglePIFieldsForYear(tahunKey);
+                });
+                togglePIFieldsForYear(tahunKey); // run on load
+            });
         });
-
-        togglePIFields(); // Run on page load
     </script>
+
 @endsection

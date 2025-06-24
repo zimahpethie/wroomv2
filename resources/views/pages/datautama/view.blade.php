@@ -21,10 +21,21 @@
     </div>
     <!-- End Breadcrumb -->
 
-    <h6 class="mb-0 text-uppercase">Maklumat {{ ucfirst($datautama->name) }}</h6>
+    <h6 class="mb-0 text-uppercase">Maklumat {{ ucfirst($datautama->jenisdataptj->name) }}</h6>
     <hr />
 
-    <!-- Campus Information Table -->
+    <div class="row">
+        <div class="col-lg-12">
+            @if (count($jumlahByYear) > 0)
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <canvas id="jumlahByYearChart" height="80"></canvas>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+    <!-- Information Table -->
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
@@ -66,27 +77,23 @@
                         <tr>
                             <th>Jumlah Mengikut Tahun</th>
                             <td>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            @foreach ($tahunList as $tahun)
-                                                <th>{{ $tahun->tahun }}</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            @foreach ($tahunList as $tahun)
-                                                @php
-                                                    $jumlah = $datautama->jumlahs->firstWhere('tahun_id', $tahun->id);
-                                                @endphp
-                                                <td>{{ $jumlah->jumlah ?? '-' }}</td>
-                                            @endforeach
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <ul class="list-group list-group-flush">
+                                    @foreach ($tahunList as $tahun)
+                                        @php
+                                            $jumlah = $datautama->jumlahs->firstWhere('tahun_id', $tahun->id);
+                                        @endphp
+                                        @if ($jumlah && $jumlah->jumlah !== null)
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                <strong>{{ $tahun->tahun }}</strong>
+                                                <span>{{ $jumlah->jumlah }}</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                </ul>
                             </td>
                         </tr>
+
                     </table>
                 </div>
             </div>
@@ -117,6 +124,96 @@
         </div>
     </div>
 
-    <!-- End Campus Information Table -->
+    <!-- End Information Table -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var ctx = document.getElementById('jumlahByYearChart').getContext('2d');
+            var jumlahByYear = <?php echo json_encode($jumlahByYear); ?>;
+
+            var labels = Object.keys(jumlahByYear);
+            var counts = Object.values(jumlahByYear);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Jumlah',
+                        data: counts,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            ticks: {
+                                maxTicksLimit: 10
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                padding: 10,
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: [
+                                'JUMLAH DATA MENGIKUT TAHUN',
+                                @php
+                                    echo json_encode('(' . $datautama->jenisDataPtj->name . ' - ' . $datautama->department->name . ')');
+                                @endphp
+                            ],
+                            font: {
+                                size: 14,
+                                weight: 'bold',
+                            },
+                            color: '#000',
+                            padding: {
+                                top: 10,
+                                bottom: 45
+                            }
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    var year = labels[tooltipItem.dataIndex];
+                                    var count = counts[tooltipItem.dataIndex];
+                                    return `Tahun ${year}: ${count}`;
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [{
+                    afterDraw: function(chart) {
+                        var ctx = chart.ctx;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+                        ctx.fillStyle = '#000';
+                        ctx.font = 'bold 12px Arial';
+
+                        chart.data.datasets.forEach((dataset, i) => {
+                            var meta = chart.getDatasetMeta(i);
+                            meta.data.forEach((bar, index) => {
+                                var data = dataset.data[index];
+                                ctx.fillText(data, bar.x, bar.y - 5);
+                            });
+                        });
+                    }
+                }]
+            });
+        });
+    </script>
     <!-- End Page Wrapper -->
 @endsection

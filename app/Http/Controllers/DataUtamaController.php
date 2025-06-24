@@ -179,12 +179,24 @@ class DataUtamaController extends Controller
     public function show($id)
     {
         $tahunList = Tahun::orderBy('tahun', 'asc')->get();
-        $datautama = DataUtama::findOrFail($id);
+        $datautama = DataUtama::with('jumlahs.tahun')->findOrFail($id);
         $this->authorizeDataAccess($datautama);
+
+        $jumlahByYear = [];
+
+        foreach ($datautama->jumlahs as $jumlah) {
+            if ($jumlah->tahun && $jumlah->tahun->tahun) {
+                $tahun = $jumlah->tahun->tahun;
+                $jumlahByYear[$tahun] = $jumlah->jumlah;
+            }
+        }
+
+        ksort($jumlahByYear);
 
         return view('pages.datautama.view', [
             'datautama' => $datautama,
             'tahunList' => $tahunList,
+            'jumlahByYear' => $jumlahByYear,
         ]);
     }
 

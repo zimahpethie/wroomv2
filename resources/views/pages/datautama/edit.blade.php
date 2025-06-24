@@ -133,7 +133,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Sasaran PI</label>
+                                <label class="form-label">Sasaran</label>
                                 <input type="number" step="0.01" class="form-control"
                                     name="pi_target[{{ $tahunKey }}]" value="{{ $piTarget }}">
                                 @if ($errors->has('pi_target.' . $tahunKey))
@@ -170,22 +170,16 @@
         function togglePIFieldsForYear(tahunKey) {
             const kpiYes = document.getElementById(`kpi_${tahunKey}_1`);
             const piNoInput = document.querySelector(`input[name="pi_no[${tahunKey}]"]`);
-            const piTargetInput = document.querySelector(`input[name="pi_target[${tahunKey}]"]`);
 
-            if (!kpiYes || !piNoInput || !piTargetInput) return;
+            if (!kpiYes || !piNoInput) return;
 
             if (kpiYes.checked) {
                 piNoInput.removeAttribute("readonly");
-                piTargetInput.removeAttribute("readonly");
                 piNoInput.classList.remove("bg-light");
-                piTargetInput.classList.remove("bg-light");
             } else {
                 piNoInput.setAttribute("readonly", true);
-                piTargetInput.setAttribute("readonly", true);
                 piNoInput.value = "";
-                piTargetInput.value = "";
                 piNoInput.classList.add("bg-light");
-                piTargetInput.classList.add("bg-light");
             }
         }
 

@@ -73,7 +73,7 @@
                                                 <th style="width:15%" class="text-wrap">Adakah ini KPI Universiti (BTU)?
                                                 </th>
                                                 <th style="width:30%">No. PI</th>
-                                                <th style="width:20%">Sasaran PI</th>
+                                                <th style="width:20%">Sasaran</th>
                                                 <th style="width:25%">Jumlah</th>
                                             </tr>
                                         </thead>
@@ -149,7 +149,7 @@
                             borderWidth: 1
                         },
                         {
-                            label: 'Sasaran PI',
+                            label: 'Sasaran',
                             data: piTargetData,
                             backgroundColor: 'rgba(255, 99, 132, 0.6)',
                             borderColor: 'rgba(255, 99, 132, 1)',
@@ -175,7 +175,7 @@
                         title: {
                             display: true,
                             text: [
-                                'PERBANDINGAN JUMLAH VS SASARAN PI',
+                                'PERBANDINGAN JUMLAH DAN SASARAN',
                                 @json('(' . $datautama->jenisDataPtj->name . ' - ' . $datautama->department->name . ')')
                             ],
                             font: {

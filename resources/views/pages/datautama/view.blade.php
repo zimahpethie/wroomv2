@@ -50,7 +50,7 @@
                             <td>{{ $datautama->jenisDataPtj->name ?? '-' }}</td>
                         </tr>
                         <tr>
-                            <th>Adakah ini KPI?</th>
+                            <th>Adakah ini KPI Universiti (BTU)?</th>
                             <td>{{ $datautama->is_kpi ? 'Ya' : 'Tidak' }}</td>
                         </tr>
                         <tr>

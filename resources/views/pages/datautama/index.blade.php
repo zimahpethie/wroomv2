@@ -54,7 +54,7 @@
                             <th>#</th>
                             <th>Pemilik Data</th>
                             <th>Tajuk Data</th>
-                            <th>Adakah ini KPI?</th>
+                            <th>Adakah ini KPI Universiti (BTU)?</th>
                             <th>No. PI</th>
                             <th>Sasaran PI</th>
 

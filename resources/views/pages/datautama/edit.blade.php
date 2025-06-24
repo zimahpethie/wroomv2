@@ -72,7 +72,7 @@
                 <div class="row mb-3">
                     {{-- KPI --}}
                     <div class="col-md-4">
-                        <label class="form-label">Adakah ini KPI?</label>
+                        <label class="form-label">Adakah ini KPI Universiti (BTU)?</label>
                         <div>
                             <label><input type="radio" name="is_kpi" value="1"
                                     {{ old('is_kpi', $dataUtama->is_kpi) == '1' ? 'checked' : '' }}> Ya</label>

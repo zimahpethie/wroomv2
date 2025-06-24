@@ -28,22 +28,9 @@
                 <div class="mb-3">
                     <label class="form-label">Bahagian / Unit</label>
 
-                    @if (auth()->user()->hasAnyRole(['Superadmin', 'Admin']))
-                        {{-- Superadmin/Admin boleh pilih jabatan --}}
-                        <select name="department_id" class="form-select">
-                            @foreach ($departmentList as $dept)
-                                <option value="{{ $dept->id }}"
-                                    {{ old('department_id', $dataUtama->department_id ?? auth()->user()->department_id) == $dept->id ? 'selected' : '' }}>
-                                    {{ $dept->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    @else
-                        {{-- Pengguna biasa hanya nampak jabatan sendiri --}}
-                        <input type="text" class="form-control" value="{{ auth()->user()->department->name ?? '-' }}"
-                            readonly>
-                        <input type="hidden" name="department_id" value="{{ auth()->user()->department_id }}">
-                    @endif
+                    <input type="text" class="form-control" value="{{ auth()->user()->department->name ?? '-' }}"
+                        readonly>
+                    <input type="hidden" name="department_id" value="{{ auth()->user()->department_id }}">
                 </div>
 
                 {{-- Subunit --}}
@@ -57,8 +44,7 @@
                         <select class="form-select {{ $errors->has('subunit_id') ? 'is-invalid' : '' }}" name="subunit_id">
                             <option value="">-- Pilih Sub Unit --</option>
                             @foreach ($subunitList as $unit)
-                                <option value="{{ $unit->id }}"
-                                    {{ old('subunit_id') == $unit->id ? 'selected' : '' }}>
+                                <option value="{{ $unit->id }}" {{ old('subunit_id') == $unit->id ? 'selected' : '' }}>
                                     {{ $unit->name }}
                                 </option>
                             @endforeach
@@ -146,7 +132,8 @@
 
                 {{-- Input Jumlah Mengikut Tahun --}}
                 <hr />
-                <h6 class="text-uppercase mt-4">Perbandingan Jumlah / Bilangan / Peratus / Pencapaian Bagi Data Berkenaan Mengikut Tahun (Jika Ada)</h6>
+                <h6 class="text-uppercase mt-4">Perbandingan Jumlah / Bilangan / Peratus / Pencapaian Bagi Data Berkenaan
+                    Mengikut Tahun (Jika Ada)</h6>
 
                 <div class="row">
                     @foreach ($tahunList as $tahun)

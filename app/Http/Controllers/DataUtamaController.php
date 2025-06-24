@@ -59,25 +59,19 @@ class DataUtamaController extends Controller
     }
     public function create()
     {
-        $user = User::find(auth()->id());
-        $departmentList = Department::orderBy('name')->get();
-        $isSuperadmin = $user->hasAnyRole(['Superadmin', 'Admin']);
-        $departmentId = $isSuperadmin ? null : $user->department_id;
+        $departmentId = Auth::user()->department_id;
 
-        $subunitList = $departmentId
-            ? SubUnit::where('department_id', $departmentId)->get()
-            : SubUnit::with('department')->get();
+        $subunitList = SubUnit::where('department_id', $departmentId)->get();
 
         $jenisDataIdYangDahIsi = DataUtama::pluck('jenis_data_ptj_id')->toArray();
 
-        $jenisDataList = JenisDataPtj::when($departmentId, function ($query) use ($departmentId) {
-            return $query->where('department_id', $departmentId);
-        })
+        $jenisDataList = JenisDataPtj::where('department_id', $departmentId)
             ->whereNotIn('id', $jenisDataIdYangDahIsi)
             ->get();
 
         $tahunList = Tahun::orderBy('tahun')->get();
-        $currentYear = now()->year;
+
+        $currentYear = Carbon::now()->year;
 
         // Check if current year is already in the list
         if (!$tahunList->contains('tahun', $currentYear)) {
@@ -96,7 +90,6 @@ class DataUtamaController extends Controller
             'str_mode' => 'Tambah',
             'subunitList' => $subunitList,
             'jenisDataList' => $jenisDataList,
-            'departmentList' => $departmentList,
             'tahunList' => $tahunList,
         ]);
     }
@@ -123,6 +116,12 @@ class DataUtamaController extends Controller
             'jenis_data_ptj_id.required'     => 'Sila isi jenis data',
             'jenis_data_ptj_id.unique' => 'Jenis data telah wujud',
         ]);
+
+        $jenisData = JenisDataPtj::findOrFail($request->jenis_data_ptj_id);
+
+        if ($jenisData->department_id !== $departmentId) {
+            abort(403, 'Anda tidak dibenarkan menambah data untuk PTJ lain.');
+        }
 
         $alreadyExists = DataUtama::where('jenis_data_ptj_id', $request->jenis_data_ptj_id)->exists();
 
@@ -253,6 +252,11 @@ class DataUtamaController extends Controller
             'jenis_data_ptj_id.required'     => 'Sila isi jenis data',
             'jenis_data_ptj_id.unique' => 'Jenis data telah wujud',
         ]);
+
+        $jenisData = JenisDataPtj::findOrFail($request->jenis_data_ptj_id);
+        if ($jenisData->department_id !== $departmentId) {
+            abort(403, 'Anda tidak dibenarkan mengemaskini data dari PTJ lain.');
+        }
 
         $exists = DataUtama::where('jenis_data_ptj_id', $request->jenis_data_ptj_id)
             ->where('id', '!=', $id)

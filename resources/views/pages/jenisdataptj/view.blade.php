@@ -45,7 +45,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Nama Data</th>
+                            <th>Tajuk Data</th>
                             <td>{{ ucfirst($jenisdataptj->name) }}</td>
                         </tr>
                         <tr>

@@ -55,7 +55,7 @@
 
                 {{-- Jenis Data --}}
                 <div class="mb-3">
-                    <label for="jenis_data_ptj_id" class="form-label">Nama Data</label>
+                    <label for="jenis_data_ptj_id" class="form-label">Tajuk Data</label>
                     <select class="form-select {{ $errors->has('jenis_data_ptj_id') ? 'is-invalid' : '' }}"
                         name="jenis_data_ptj_id" required>
                         @foreach ($jenisDataList as $data)

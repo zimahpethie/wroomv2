@@ -63,7 +63,7 @@
             </div>
             
             <div class="mb-3">
-                <label for="name" class="form-label">Nama Data</label>
+                <label for="name" class="form-label">Tajuk Data</label>
                 <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
                     name="name" value="{{ old('name') ?? ($jenisdataptj->name ?? '') }}">
                 @if ($errors->has('name'))

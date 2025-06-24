@@ -75,10 +75,10 @@
 
                 {{-- Jenis Data --}}
                 <div class="mb-3">
-                    <label for="jenis_data_ptj_id" class="form-label">Nama Data</label>
+                    <label for="jenis_data_ptj_id" class="form-label">Tajuk Data</label>
                     <select class="form-select {{ $errors->has('jenis_data_ptj_id') ? 'is-invalid' : '' }}"
                         name="jenis_data_ptj_id" required>
-                        <option value="">-- Pilih Nama Data --</option>
+                        <option value="">-- Pilih Tajuk Data --</option>
                         @foreach ($jenisDataList as $data)
                             <option value="{{ $data->id }}"
                                 {{ old('jenis_data_ptj_id') == $data->id ? 'selected' : '' }}>
@@ -98,7 +98,7 @@
                 <div class="row mb-3">
                     {{-- KPI --}}
                     <div class="col-md-4">
-                        <label class="form-label">Adakah ini KPI?</label>
+                        <label class="form-label">Adakah ini KPI Universiti (BTU)?</label>
                         <div>
                             <label><input type="radio" name="is_kpi" value="1"
                                     {{ old('is_kpi') == '1' ? 'checked' : '' }}> Ya</label>
@@ -131,7 +131,7 @@
 
                     {{-- PI Target --}}
                     <div class="col-md-4">
-                        <label for="pi_target" class="form-label">PI Target</label>
+                        <label for="pi_target" class="form-label">Sasaran PI</label>
                         <input type="number" step="0.01" class="form-control" name="pi_target" id="pi_target"
                             value="{{ old('pi_target') }}">
                         @if ($errors->has('pi_target'))
@@ -144,25 +144,9 @@
                     </div>
                 </div>
 
-
-
-                {{-- Doc Link --}}
-                <div class="mb-3">
-                    <label for="doc_link" class="form-label">Pautan Dokumen</label>
-                    <input type="url" class="form-control {{ $errors->has('doc_link') ? 'is-invalid' : '' }}"
-                        name="doc_link" value="{{ old('doc_link') }}">
-                    @if ($errors->has('doc_link'))
-                        <div class="invalid-feedback">
-                            @foreach ($errors->get('doc_link') as $error)
-                                {{ $error }}
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-
                 {{-- Input Jumlah Mengikut Tahun --}}
                 <hr />
-                <h6 class="text-uppercase mt-4">Isi Jumlah Mengikut Tahun</h6>
+                <h6 class="text-uppercase mt-4">Perbandingan Jumlah / Bilangan / Peratus / Pencapaian Bagi Data Berkenaan Mengikut Tahun (Jika Ada)</h6>
 
                 <div class="row">
                     @foreach ($tahunList as $tahun)
@@ -173,6 +157,23 @@
                                 value="{{ old('jumlah.' . ($tahun->id ?? 'year_' . $tahun->tahun)) }}">
                         </div>
                     @endforeach
+                </div>
+
+
+                {{-- Doc Link --}}
+                <div class="mb-3">
+                    <label for="doc_link" class="form-label">Shared Folder</label>
+                    <span data-bs-toggle="tooltip" data-bs-placement="right"
+                        title="Sila letak pautan url shared folder"><input type="url"
+                            class="form-control {{ $errors->has('doc_link') ? 'is-invalid' : '' }}" name="doc_link"
+                            value="{{ old('doc_link') }}"></span>
+                    @if ($errors->has('doc_link'))
+                        <div class="invalid-feedback">
+                            @foreach ($errors->get('doc_link') as $error)
+                                {{ $error }}
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
 
                 <button type="submit" class="btn btn-primary">{{ $str_mode }}</button>

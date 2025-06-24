@@ -52,7 +52,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nama Data</th>
+                            <th>Tajuk Data</th>
                             <th>Bahagian / Unit</th>
                             <th>Sub Unit</th>
                             <th>Status</th>

@@ -42,8 +42,8 @@ class JenisDataPtjController extends Controller
             'subunit_id' => 'nullable',
             'publish_status' => 'required|in:1,0',
         ], [
-            'name.required'     => 'Sila isi nama data',
-            'name.unique' => 'Nama data telah wujud',
+            'name.required'     => 'Sila isi tajuk data',
+            'name.unique' => 'tajuk data telah wujud',
             'department_id.required' => 'Sila isi bahagian/unit',
             'publish_status.required' => 'Sila isi status',
         ]);
@@ -93,8 +93,8 @@ class JenisDataPtjController extends Controller
             'subunit_id' => 'nullable',
             'publish_status' => 'required|in:1,0',
         ], [
-            'name.required'     => 'Sila isi nama data',
-            'name.unique' => 'Nama data telah wujud',
+            'name.required'     => 'Sila isi tajuk data',
+            'name.unique' => 'Tajuk data telah wujud',
             'department_id.required' => 'Sila isi bahagian/unit',
             'publish_status.required' => 'Sila isi status',
         ]);

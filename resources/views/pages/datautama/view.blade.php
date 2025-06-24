@@ -26,7 +26,7 @@
 
     <!-- Campus Information Table -->
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
                     <table class="table table-borderless">
@@ -35,7 +35,7 @@
                             <td>{{ $datautama->department->name }}</td>
                         </tr>
                         <tr>
-                            <th>Nama Data</th>
+                            <th>Tajuk Data</th>
                             <td>{{ $datautama->jenisDataPtj->name ?? '-' }}</td>
                         </tr>
                         <tr>
@@ -54,7 +54,10 @@
                             <th>Pautan Dokumen</th>
                             <td>
                                 @if (!empty($datautama->doc_link))
-                                    <a href="{{ $datautama->doc_link }}" target="_blank">Pautan</a>
+                                    <a href="{{ $datautama->doc_link }}" target="_blank" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" title="Buka pautan shared folder">
+                                        <i class='bx bxs-folder-open' style="font-size: 1.2rem; color: #007bff;"></i>
+                                    </a>
                                 @else
                                     -
                                 @endif
@@ -88,17 +91,12 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Maklumat Ciptaan dan Kemaskini -->
-    <div class="row mt-1">
-        <div class="col-md-6">
+        <div class="col-lg-4">
             <div class="card border-start border-4 border-primary">
                 <div class="card-body">
-                    <h6 class="text-primary mb-3">Data Log</h6>
                     <table class="table table-borderless">
                         <tr>
-                            <th style="width: 30%">Dicipta oleh</th>
+                            <th style="width: 40%">Dicipta oleh</th>
                             <td>{{ $datautama->creator->name ?? '-' }}</td>
                         </tr>
                         <tr>

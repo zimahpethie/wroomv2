@@ -61,7 +61,7 @@
                             @foreach ($tahunList as $tahun)
                                 <th>{{ $tahun->tahun }}</th>
                             @endforeach
-                            <th>Pautan Simpanan</th>
+                            <th>Shared Folder</th>
                             <th>Tindakan</th>
                         </tr>
                     </thead>
@@ -81,9 +81,11 @@
                                     @endphp
                                     <td>{{ $jumlah->jumlah ?? '-' }}</td>
                                 @endforeach
-                                <td>
+                                <td class="text-center">
                                     @if (!empty($datautama->doc_link))
-                                        <a href="{{ $datautama->doc_link }}" target="_blank">Pautan</a>
+                                        <a href="{{ $datautama->doc_link }}" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Buka pautan shared folder">
+                                            <i class='bx bxs-folder-open' style="font-size: 1.2rem; color: #007bff;"></i>
+                                        </a>
                                     @else
                                         -
                                     @endif

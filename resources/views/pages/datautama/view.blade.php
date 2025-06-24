@@ -175,7 +175,7 @@
                         title: {
                             display: true,
                             text: [
-                                'PERBANDINGAN JUMLAH DAN SASARAN',
+                                'PERBANDINGAN JUMLAH / BILANGAN / PERATUS / PENCAPAIAN DAN SASARAN MENGIKUT TAHUN',
                                 @json('(' . $datautama->jenisDataPtj->name . ' - ' . $datautama->department->name . ')')
                             ],
                             font: {

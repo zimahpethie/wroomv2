@@ -26,7 +26,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            @if (count($jumlahByYear) > 0)
+            @if (count($perbandinganByYear) > 0)
                 <div class="card mt-4">
                     <div class="card-body">
                         <canvas id="jumlahByYearChart" height="80"></canvas>
@@ -131,30 +131,37 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var ctx = document.getElementById('jumlahByYearChart').getContext('2d');
-            var jumlahByYear = <?php echo json_encode($jumlahByYear); ?>;
+            var dataFromServer = @json($perbandinganByYear);
 
-            var labels = Object.keys(jumlahByYear);
-            var counts = Object.values(jumlahByYear);
+            var labels = Object.keys(dataFromServer);
+            var jumlahData = labels.map(year => dataFromServer[year].jumlah);
+            var piTargetData = labels.map(year => dataFromServer[year].pi_target);
 
             new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Jumlah',
-                        data: counts,
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
+                            label: 'Jumlah',
+                            data: jumlahData,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Sasaran PI',
+                            data: piTargetData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     scales: {
                         x: {
-                            ticks: {
-                                maxTicksLimit: 10
-                            }
+                            stacked: false
                         },
                         y: {
                             beginAtZero: true,
@@ -168,10 +175,8 @@
                         title: {
                             display: true,
                             text: [
-                                'JUMLAH DATA MENGIKUT TAHUN',
-                                @php
-                                    echo json_encode('(' . $datautama->jenisDataPtj->name . ' - ' . $datautama->department->name . ')');
-                                @endphp
+                                'PERBANDINGAN JUMLAH VS SASARAN PI',
+                                @json('(' . $datautama->jenisDataPtj->name . ' - ' . $datautama->department->name . ')')
                             ],
                             font: {
                                 size: 14,
@@ -183,40 +188,42 @@
                                 bottom: 45
                             }
                         },
-                        legend: {
-                            display: false
-                        },
                         tooltip: {
-                            enabled: true,
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    var year = labels[tooltipItem.dataIndex];
-                                    var count = counts[tooltipItem.dataIndex];
-                                    return `Tahun ${year}: ${count}`;
-                                }
+                            enabled: true
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 12
+                                },
+                                padding: 20
                             }
                         }
                     }
                 },
                 plugins: [{
-                    afterDraw: function(chart) {
+                    afterDatasetsDraw: function(chart) {
                         var ctx = chart.ctx;
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'bottom';
-                        ctx.fillStyle = '#000';
-                        ctx.font = 'bold 12px Arial';
-
-                        chart.data.datasets.forEach((dataset, i) => {
+                        chart.data.datasets.forEach(function(dataset, i) {
                             var meta = chart.getDatasetMeta(i);
-                            meta.data.forEach((bar, index) => {
-                                var data = dataset.data[index];
-                                ctx.fillText(data, bar.x, bar.y - 5);
+                            meta.data.forEach(function(bar, index) {
+                                var value = dataset.data[index];
+                                if (value !== null && value !== 0) {
+                                    ctx.fillStyle = '#000';
+                                    ctx.font = 'bold 11px sans-serif';
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'bottom';
+                                    ctx.fillText(value, bar.x, bar.y - 5);
+                                }
                             });
                         });
                     }
-                }]
+                }],
             });
         });
     </script>
+
     <!-- End Page Wrapper -->
 @endsection

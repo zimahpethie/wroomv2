@@ -181,21 +181,24 @@ class DataUtamaController extends Controller
         $datautama = DataUtama::with('jumlahs.tahun')->findOrFail($id);
         $this->authorizeDataAccess($datautama);
 
-        $jumlahByYear = [];
+        $perbandinganByYear = [];
 
         foreach ($datautama->jumlahs as $jumlah) {
-            if ($jumlah->tahun && $jumlah->tahun->tahun) {
+            if ($jumlah->tahun && $jumlah->tahun->tahun && $jumlah->jumlah !== null && $jumlah->jumlah != 0) {
                 $tahun = $jumlah->tahun->tahun;
-                $jumlahByYear[$tahun] = $jumlah->jumlah;
+                $perbandinganByYear[$tahun] = [
+                    'jumlah' => $jumlah->jumlah,
+                    'pi_target' => $jumlah->pi_target ?? 0 // fallback to 0 if null
+                ];
             }
         }
 
-        ksort($jumlahByYear);
+        ksort($perbandinganByYear);
 
         return view('pages.datautama.view', [
             'datautama' => $datautama,
             'tahunList' => $tahunList,
-            'jumlahByYear' => $jumlahByYear,
+            'perbandinganByYear' => $perbandinganByYear,
         ]);
     }
 
@@ -303,8 +306,6 @@ class DataUtamaController extends Controller
 
         if ($request->has('jumlah')) {
             foreach ($request->jumlah as $tahunKey => $value) {
-                if ($value === null) continue;
-
                 $tahunId = is_numeric($tahunKey)
                     ? $tahunKey
                     : Tahun::firstOrCreate(
@@ -315,10 +316,10 @@ class DataUtamaController extends Controller
                 DataJumlah::updateOrCreate(
                     [
                         'data_utama_id' => $dataUtama->id,
-                        'tahun_id' => $tahunId
+                        'tahun_id' => $tahunId,
                     ],
                     [
-                        'jumlah' => $value,
+                        'jumlah' => $value, // boleh null
                         'is_kpi' => $request->is_kpi[$tahunKey] ?? false,
                         'pi_no' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_no[$tahunKey] ?? null : null,
                         'pi_target' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_target[$tahunKey] ?? null : null,

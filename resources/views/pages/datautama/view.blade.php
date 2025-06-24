@@ -50,18 +50,6 @@
                             <td>{{ $datautama->jenisDataPtj->name ?? '-' }}</td>
                         </tr>
                         <tr>
-                            <th>Adakah ini KPI Universiti (BTU)?</th>
-                            <td>{{ $datautama->is_kpi ? 'Ya' : 'Tidak' }}</td>
-                        </tr>
-                        <tr>
-                            <th>No. PI</th>
-                            <td>{{ $datautama->pi_no ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Sasaran PI</th>
-                            <td>{{ $datautama->pi_target ?? '-' }}</td>
-                        </tr>
-                        <tr>
                             <th>Pautan Dokumen</th>
                             <td>
                                 @if (!empty($datautama->doc_link))
@@ -75,25 +63,40 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Jumlah Mengikut Tahun</th>
+                            <th>Jumlah / Bilangan / Peratus / Pencapaian Mengikut Tahun</th>
                             <td>
-                                <ul class="list-group list-group-flush">
-                                    @foreach ($tahunList as $tahun)
-                                        @php
-                                            $jumlah = $datautama->jumlahs->firstWhere('tahun_id', $tahun->id);
-                                        @endphp
-                                        @if ($jumlah && $jumlah->jumlah !== null)
-                                            <li
-                                                class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                                <strong>{{ $tahun->tahun }}</strong>
-                                                <span>{{ $jumlah->jumlah }}</span>
-                                            </li>
-                                        @endif
-                                    @endforeach
-                                </ul>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%">Tahun</th>
+                                                <th style="width:15%" class="text-wrap">Adakah ini KPI Universiti (BTU)?
+                                                </th>
+                                                <th style="width:30%">No. PI</th>
+                                                <th style="width:20%">Sasaran PI</th>
+                                                <th style="width:25%">Jumlah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($tahunList as $tahun)
+                                                @php
+                                                    $jumlah = $datautama->jumlahs->firstWhere('tahun_id', $tahun->id);
+                                                @endphp
+                                                @if ($jumlah)
+                                                    <tr>
+                                                        <td>{{ $tahun->tahun }}</td>
+                                                        <td>{{ $jumlah->is_kpi ? 'Ya' : 'Tidak' }}</td>
+                                                        <td>{{ $jumlah->pi_no ?? '-' }}</td>
+                                                        <td class="text-end">{{ $jumlah->pi_target ?? '-' }}</td>
+                                                        <td class="text-end">{{ $jumlah->jumlah ?? '-' }}</td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </td>
                         </tr>
-
                     </table>
                 </div>
             </div>

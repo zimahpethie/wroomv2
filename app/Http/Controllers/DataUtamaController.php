@@ -218,8 +218,16 @@ class DataUtamaController extends Controller
 
         $tahunList = Tahun::orderBy('tahun')->get();
 
-        $jumlahArray = $dataUtama->jumlahs->pluck('jumlah', 'tahun_id')->toArray();
+        $jumlahArray = [];
 
+        foreach ($dataUtama->jumlahs as $item) {
+            $jumlahArray[$item->tahun_id] = [
+                'jumlah' => $item->jumlah,
+                'is_kpi' => $item->is_kpi,
+                'pi_no' => $item->pi_no,
+                'pi_target' => $item->pi_target,
+            ];
+        }
         return view('pages.datautama.edit', [
             'dataUtama' => $dataUtama,
             'save_route' => route('datautama.update', $dataUtama->id),

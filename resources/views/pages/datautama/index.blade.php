@@ -48,20 +48,14 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped text-wrap">
+                <table class="table table-striped text-wrap text-center">
                     <thead>
                         <tr>
-                            <th scope="col" class="text-wrap w-5">#</th>
-                            <th scope="col" class="text-wrap w-25">Pemilik Data</th>
-                            <th scope="col" class="text-wrap w-25">Tajuk Data</th>
-                            <th scope="col" class="text-wrap w-25">Adakah ini KPI Universiti (BTU)?</th>
-                            <th scope="col" class="text-wrap w-15">No. PI</th>
-                            <th scope="col" class="text-wrap w-15">Sasaran PI</th>
-                            @foreach ($tahunList as $tahun)
-                                <th scope="col" class="text-wrap text-center w-10">{{ $tahun->tahun }}</th>
-                            @endforeach
-                            <th scope="col" class="text-wrap text-center w-10">Shared Folder</th>
-                            <th scope="col" class="text-wrap text-center w-10">Tindakan</th>
+                            <th>#</th>
+                            <th>Pemilik Data</th>
+                            <th>Tajuk Data</th>
+                            <th>Shared Folder</th>
+                            <th>Tindakan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,49 +64,80 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $datautama->department->name }}</td>
                                 <td>{{ $datautama->jenisDataPtj->name ?? '-' }}</td>
-                                <td>{{ $datautama->is_kpi ? 'Ya' : 'Tidak' }}</td>
-                                <td>{{ $datautama->pi_no ?? '-' }}</td>
-                                <td>{{ $datautama->pi_target ?? '-' }}</td>
-
-                                @foreach ($tahunList as $tahun)
-                                    @php
-                                        $jumlah = $datautama->jumlahs->firstWhere('tahun_id', $tahun->id);
-                                    @endphp
-                                    <td>{{ $jumlah->jumlah ?? '-' }}</td>
-                                @endforeach
                                 <td class="text-center">
                                     @if (!empty($datautama->doc_link))
-                                        <a href="{{ $datautama->doc_link }}" target="_blank" data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom" title="Buka pautan shared folder">
+                                        <a href="{{ $datautama->doc_link }}" target="_blank" title="Pautan dokumen">
                                             <i class='bx bxs-folder-open' style="font-size: 1.2rem; color: #007bff;"></i>
                                         </a>
                                     @else
                                         -
                                     @endif
                                 </td>
-<td class="text-center">
-    <div class="d-flex justify-content-center gap-1 flex-wrap">
-        <a href="{{ route('datautama.edit', $datautama->id) }}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" title="Kemaskini">
-            <i class="bx bxs-edit"></i>
-        </a>
-        <a href="{{ route('datautama.show', $datautama->id) }}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Papar">
-            <i class="bx bx-show"></i>
-        </a>
-        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $datautama->id }}" data-bs-toggle="tooltip" title="Padam">
-            <i class="bx bx-trash"></i>
-        </button>
-    </div>
-</td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                        <a href="{{ route('datautama.edit', $datautama->id) }}" class="btn btn-info btn-sm"
+                                            title="Kemaskini">
+                                            <i class="bx bxs-edit"></i>
+                                        </a>
+                                        <a href="{{ route('datautama.show', $datautama->id) }}"
+                                            class="btn btn-primary btn-sm" title="Papar">
+                                            <i class="bx bx-show"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal{{ $datautama->id }}" title="Padam">
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
 
+                            {{-- Sub-row Tahun --}}
+                            <tr>
+                                <td colspan="5" class="bg-light">
+                                    <table class="table table-sm table-bordered mb-0">
+                                        <thead class="table-secondary text-center align-middle">
+                                            <tr>
+                                                @foreach ($tahunList as $tahun)
+                                                    <th>{{ $tahun->tahun }}</th>
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center">
+                                            <tr>
+                                                @foreach ($tahunList as $tahun)
+                                                    @php
+                                                        $jumlah = $datautama->jumlahs->firstWhere(
+                                                            'tahun_id',
+                                                            $tahun->id);
+                                                    @endphp
+                                                    <td class="small">
+                                                        @if ($jumlah)
+                                                            <div><strong>KPI:</strong>
+                                                                {{ $jumlah->is_kpi ? 'Ya' : 'Tidak' }}</div>
+                                                            <div><strong>PI:</strong> {{ $jumlah->pi_no ?? '-' }}</div>
+                                                            <div><strong>Sasaran:</strong> {{ $jumlah->pi_target ?? '-' }}
+                                                            </div>
+                                                            <div><strong>Jumlah:</strong> {{ $jumlah->jumlah ?? '-' }}
+                                                            </div>
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ 10 + $tahunList->count() }}" class="text-center">Tiada rekod</td>
+                                <td colspan="5" class="text-center">Tiada rekod</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+
             <div class="mt-3 d-flex justify-content-between">
                 <div class="d-flex align-items-center">
                     <span class="mr-2 mx-1">Jumlah rekod per halaman</span>

@@ -27,13 +27,6 @@
         </a>
     </li>
 
-    <li class="{{ Request::is('dataptj*') ? 'mm-active' : '' }}">
-        <a href="{{ route('dataptj') }}">
-            <div class="parent-icon"><i class='bx bx-collection'></i></div>
-            <div class="menu-title">Data PTJ</div>
-        </a>
-    </li>
-
     <li class="menu-label">Pengurusan Pengguna</li>
 
     <li class="{{ Request::is('user*') && !Request::is('user-role*') ? 'mm-active' : '' }}">

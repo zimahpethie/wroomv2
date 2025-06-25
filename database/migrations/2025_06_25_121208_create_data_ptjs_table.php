@@ -17,13 +17,15 @@ class CreateDataPtjsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('subunit_id')->nullable();
-            $table->string('nama_data')->unique();
+            $table->string('nama_data');
             $table->string('jenis_nilai')->nullable();
             $table->string('doc_link')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->unique(['department_id', 'nama_data']);
         });
     }
 

@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class DataPtjController extends Controller
 {
@@ -56,6 +57,7 @@ class DataPtjController extends Controller
             'selectedDepartment' => $request->department_id,
         ]);
     }
+
     public function create()
     {
         $departmentId = Auth::user()->department_id;
@@ -91,7 +93,12 @@ class DataPtjController extends Controller
         $departmentId = Auth::user()->department_id;
         $request->validate([
             'subunit_id' => 'nullable|exists:sub_units,id',
-            'nama_data' => 'required|unique:data_ptjs',
+            'nama_data' => [
+                'required',
+                Rule::unique('data_ptjs')->where(function ($query) use ($departmentId) {
+                    return $query->where('department_id', $departmentId);
+                }),
+            ],
             'jenis_nilai' => 'required|in:Bilangan,Peratus,Mata Wang',
             'doc_link' => 'nullable|url',
             'jumlah' => 'array',
@@ -243,7 +250,13 @@ class DataPtjController extends Controller
 
         $request->validate([
             'subunit_id' => 'nullable|exists:sub_units,id',
-            'nama_data' => 'required|unique:data_ptjs,nama_data,' . $id,
+            'nama_data' => [
+                'required',
+                Rule::unique('data_ptjs')->where(function ($query) use ($departmentId, $id) {
+                    return $query->where('department_id', $departmentId)
+                        ->where('id', '!=', $id);
+                }),
+            ],
             'jenis_nilai' => 'required|in:Bilangan,Peratus,Mata Wang',
             'doc_link' => 'nullable|url',
             'jumlah' => 'array',

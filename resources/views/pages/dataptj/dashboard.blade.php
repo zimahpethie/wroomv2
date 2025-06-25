@@ -33,20 +33,20 @@
     @php
         // Warna unik untuk 14+ jabatan (boleh tambah lagi kalau perlu)
         $colorPalette = [
-            'primary',
-            'success',
-            'warning',
-            'danger',
-            'info',
-            'secondary',
-            'dark',
-            'indigo',
-            'teal',
-            'orange',
-            'pink',
-            'cyan',
-            'blue',
-            'red',
+            'primary', // #0d6efd (biru gelap Bootstrap)
+            'secondary', // #6c757d (kelabu gelap Bootstrap)
+            'dark', // #212529 (hampir hitam)
+            'indigo', // #4b0082 (ungu pekat)
+            'teal', // #116466 (hijau kebiruan gelap)
+            'orange-dark', // #cc5500 (oren gelap)
+            'pink-dark', // #800040 (pink gelap)
+            'maroon', // #800000 (merah hati)
+            'navy', // #001f3f (biru navy)
+            'slate', // #2f4f4f (slate grey)
+            'forest', // #228B22 (hijau hutan)
+            'charcoal', // #36454F (abu gelap)
+            'steel', // #2c3e50 (steel blue gelap)
+            'eggplant', // #311432 (ungu kehitaman)
         ];
 
         // Padankan department_id kepada warna unik
@@ -136,8 +136,9 @@
                             <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
                                 @if (!empty($item->doc_link))
                                     <a href="{{ $item->doc_link }}" target="_blank"
-                                        class="btn btn-sm btn-light text-{{ $color }} rounded-pill" data-bs-toggle="tooltip"
-                                        data-bs-placement="bottom" title="Buka pautan shared folder">
+                                        class="btn btn-sm btn-light text-{{ $color }} rounded-pill"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        title="Buka pautan shared folder">
                                         <i class="bx bxs-folder-open"></i> Shared Folder
                                     </a>
                                 @endif

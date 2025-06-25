@@ -19,6 +19,7 @@ class DataUtama extends Model
         'department_id',
         'subunit_id',
         'jenis_data_ptj_id',
+        'jenis_nilai',
         'doc_link',
         'created_by',
         'updated_by'

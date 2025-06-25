@@ -100,6 +100,7 @@ class DataUtamaController extends Controller
         $request->validate([
             'subunit_id' => 'nullable|exists:sub_units,id',
             'jenis_data_ptj_id' => 'required|exists:jenis_data_ptjs,id',
+            'jenis_nilai' => 'required|in:Bilangan,Peratus,Mata Wang',
             'doc_link' => 'nullable|url',
             'jumlah' => 'array',
             'jumlah.*' => 'nullable|numeric',
@@ -144,6 +145,7 @@ class DataUtamaController extends Controller
             'department_id' => $departmentId,
             'subunit_id' => $request->subunit_id,
             'jenis_data_ptj_id' => $request->jenis_data_ptj_id,
+            'jenis_nilai' => $request->jenis_nilai,
             'doc_link' => $request->doc_link,
             'created_by' => auth()->id(),
             'updated_by' => auth()->id(),
@@ -258,6 +260,7 @@ class DataUtamaController extends Controller
         $request->validate([
             'subunit_id' => 'nullable|exists:sub_units,id',
             'jenis_data_ptj_id' => 'required|exists:jenis_data_ptjs,id',
+            'jenis_nilai' => 'required|in:Bilangan,Peratus,Mata Wang',
             'doc_link' => 'nullable|url',
             'jumlah' => 'array',
             'jumlah.*' => 'nullable|numeric',
@@ -300,6 +303,7 @@ class DataUtamaController extends Controller
         $dataUtama->update([
             'subunit_id' => $request->subunit_id,
             'jenis_data_ptj_id' => $request->jenis_data_ptj_id,
+            'jenis_nilai' => $request->jenis_nilai,
             'doc_link' => $request->doc_link,
             'updated_by' => auth()->id(),
         ]);

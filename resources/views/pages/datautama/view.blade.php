@@ -83,12 +83,43 @@
                                                     $jumlah = $datautama->jumlahs->firstWhere('tahun_id', $tahun->id);
                                                 @endphp
                                                 @if ($jumlah)
+                                                    @php
+                                                        $jenis = $datautama->jenis_nilai ?? 'Bilangan';
+
+                                                        // Format jumlah
+                                                        if (!is_null($jumlah->jumlah)) {
+                                                            if ($jenis == 'Peratus') {
+                                                                $jumlahPaparan = $jumlah->jumlah . ' %';
+                                                            } elseif ($jenis == 'Mata Wang') {
+                                                                $jumlahPaparan =
+                                                                    'RM ' . number_format($jumlah->jumlah, 2);
+                                                            } else {
+                                                                $jumlahPaparan = $jumlah->jumlah;
+                                                            }
+                                                        } else {
+                                                            $jumlahPaparan = '-';
+                                                        }
+
+                                                        // Format sasaran
+                                                        if (!is_null($jumlah->pi_target)) {
+                                                            if ($jenis == 'Peratus') {
+                                                                $sasaranPaparan = $jumlah->pi_target . ' %';
+                                                            } elseif ($jenis == 'Mata Wang') {
+                                                                $sasaranPaparan =
+                                                                    'RM ' . number_format($jumlah->pi_target, 2);
+                                                            } else {
+                                                                $sasaranPaparan = $jumlah->pi_target;
+                                                            }
+                                                        } else {
+                                                            $sasaranPaparan = '-';
+                                                        }
+                                                    @endphp
                                                     <tr>
                                                         <td>{{ $tahun->tahun }}</td>
                                                         <td>{{ $jumlah->is_kpi ? 'Ya' : 'Tidak' }}</td>
                                                         <td>{{ $jumlah->pi_no ?? '-' }}</td>
-                                                        <td class="text-end">{{ $jumlah->pi_target ?? '-' }}</td>
-                                                        <td class="text-end">{{ $jumlah->jumlah ?? '-' }}</td>
+                                                        <td class="text-end">{{ $sasaranPaparan }}</td>
+                                                        <td class="text-end">{{ $jumlahPaparan }}</td>
                                                     </tr>
                                                 @endif
                                             @endforeach

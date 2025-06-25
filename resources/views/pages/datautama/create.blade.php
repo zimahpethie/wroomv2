@@ -81,6 +81,34 @@
                     @endif
                 </div>
 
+                {{-- Jenis Nilai Data --}}
+                <div class="mb-3">
+                    <label class="form-label d-block">Jenis Nilai Data</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="jenis_nilai" id="jenis_bilangan"
+                            value="Bilangan" {{ old('jenis_nilai') == 'Bilangan' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="jenis_bilangan">Bilangan</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="jenis_nilai" id="jenis_peratus" value="Peratus"
+                            {{ old('jenis_nilai') == 'Peratus' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="jenis_peratus">Peratus (%)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="jenis_nilai" id="jenis_rm" value="Mata Wang"
+                            {{ old('jenis_nilai') == 'Mata Wang' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="jenis_rm">Mata Wang (RM)</label>
+                    </div>
+
+                    @if ($errors->has('jenis_nilai'))
+                        <div class="invalid-feedback d-block">
+                            @foreach ($errors->get('jenis_nilai') as $error)
+                                {{ $error }}
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
                 {{-- Input Jumlah Mengikut Tahun --}}
                 <hr />
                 <h6 class="text-uppercase mt-4">Perbandingan Jumlah / Bilangan / Peratus / Pencapaian Bagi Data Berkenaan
@@ -192,7 +220,7 @@
             const kpiYes = document.getElementById(`kpi_${tahunKey}_1`);
             const piNoInput = document.querySelector(`input[name="pi_no[${tahunKey}]"]`);
 
-            if (!kpiYes || !piNoInput ) return;
+            if (!kpiYes || !piNoInput) return;
 
             if (kpiYes.checked) {
                 piNoInput.removeAttribute("readonly");

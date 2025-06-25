@@ -18,6 +18,7 @@ class CreateDataUtamasTable extends Migration
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('subunit_id')->nullable();
             $table->unsignedBigInteger('jenis_data_ptj_id')->unique();
+            $table->string('jenis_nilai')->nullable();
             $table->string('doc_link')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

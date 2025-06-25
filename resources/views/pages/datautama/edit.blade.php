@@ -69,15 +69,42 @@
                     @endif
                 </div>
 
-                {{-- Doc Link --}}
+                {{-- Jenis Nilai Data --}}
                 <div class="mb-3">
-                    <label for="doc_link" class="form-label">Pautan Dokumen</label>
-                    <input type="url" class="form-control {{ $errors->has('doc_link') ? 'is-invalid' : '' }}"
-                        name="doc_link" value="{{ old('doc_link', $dataUtama->doc_link) }}">
-                    @if ($errors->has('doc_link'))
-                        <div class="invalid-feedback">{{ $errors->first('doc_link') }}</div>
+                    <label class="form-label d-block">Jenis Nilai Data</label>
+
+                    @php
+                        // fallback: old() > $dataUtama->jenis_nilai > null
+                        $selectedJenisNilai = old('jenis_nilai', $dataUtama->jenis_nilai ?? null);
+                    @endphp
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="jenis_nilai" id="jenis_bilangan"
+                            value="Bilangan" {{ $selectedJenisNilai === 'Bilangan' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="jenis_bilangan">Bilangan</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="jenis_nilai" id="jenis_peratus" value="Peratus"
+                            {{ $selectedJenisNilai === 'Peratus' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="jenis_peratus">Peratus (%)</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="jenis_nilai" id="jenis_rm" value="Mata Wang"
+                            {{ $selectedJenisNilai === 'Mata Wang' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="jenis_rm">Mata Wang (RM)</label>
+                    </div>
+
+                    @if ($errors->has('jenis_nilai'))
+                        <div class="invalid-feedback d-block">
+                            @foreach ($errors->get('jenis_nilai') as $error)
+                                {{ $error }}
+                            @endforeach
+                        </div>
                     @endif
                 </div>
+
 
                 {{-- Input Jumlah Mengikut Tahun --}}
                 <hr />
@@ -160,6 +187,16 @@
                         </div>
                     </div>
                 @endforeach
+
+                {{-- Doc Link --}}
+                <div class="mb-3">
+                    <label for="doc_link" class="form-label">Shared Folder</label>
+                    <input type="url" class="form-control {{ $errors->has('doc_link') ? 'is-invalid' : '' }}"
+                        name="doc_link" value="{{ old('doc_link', $dataUtama->doc_link) }}">
+                    @if ($errors->has('doc_link'))
+                        <div class="invalid-feedback">{{ $errors->first('doc_link') }}</div>
+                    @endif
+                </div>
 
                 <button type="submit" class="btn btn-primary">{{ $str_mode }}</button>
             </form>

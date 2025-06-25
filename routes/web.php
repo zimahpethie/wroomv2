@@ -56,6 +56,11 @@ Route::middleware('auth')->group(function () {
     Route::get('datautama/view/{id}', 'DataUtamaController@show')->name('datautama.show');
     Route::get('/datautama/search', 'DataUtamaController@search')->name('datautama.search');
 
+    //Data PTJ
+    Route::get('dataptj', 'DataPTJController@index')->name('dataptj');
+    Route::get('dataptj/view/{id}', 'DataPTJController@show')->name('dataptj.show');
+    Route::get('/dataptj/search', 'DataPTJController@search')->name('dataptj.search');
+
     //Jenis Data PTJ
     Route::get('jenisdataptj', 'JenisDataPtjController@index')->name('jenisdataptj');
     Route::get('jenisdataptj/view/{id}', 'JenisDataPtjController@show')->name('jenisdataptj.show');
@@ -65,7 +70,6 @@ Route::middleware('auth')->group(function () {
     Route::get('position', 'PositionController@index')->name('position');
     Route::get('position/view/{id}', 'PositionController@show')->name('position.show');
     Route::get('/position/search', 'PositionController@search')->name('position.search');
-
 
     Route::get('/home', 'DataUtamaController@dashboard')->name('home');
 
@@ -156,6 +160,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/datautama/{id}/restore', 'DataUtamaController@restore')->name('datautama.restore');
     Route::delete('/datautama/{id}/force-delete', 'DataUtamaController@forceDelete')->name('datautama.forceDelete');
     Route::get('/datautama/dashboard', 'DataUtamaController@dashboard')->name('datautama.dashboard');
+
+    //Data PTJ
+    Route::get('dataptj/create', 'DataPTJController@create')->name('dataptj.create');
+    Route::post('dataptj/store', 'DataPTJController@store')->name('dataptj.store');
+    Route::get('dataptj/{id}/edit', 'DataPTJController@edit')->name('dataptj.edit');
+    Route::post('dataptj/{id}', 'DataPTJController@update')->name('dataptj.update');
+    Route::delete('dataptj/{id}', 'DataPTJController@destroy')->name('dataptj.destroy');
+    Route::get('/dataptj/trash', 'DataPTJController@trashList')->name('dataptj.trash');
+    Route::get('/dataptj/{id}/restore', 'DataPTJController@restore')->name('dataptj.restore');
+    Route::delete('/dataptj/{id}/force-delete', 'DataPTJController@forceDelete')->name('dataptj.forceDelete');
+    Route::get('/dataptj/dashboard', 'DataPTJController@dashboard')->name('dataptj.dashboard');
 
     //Jenis Data PTJ
     Route::get('jenisdataptj/create', 'JenisDataPtjController@create')->name('jenisdataptj.create');

@@ -71,11 +71,11 @@
             <div class="parent-icon"><i class="bx bx-spreadsheet"></i></div>
             <div class="menu-title">Tetapan Data</div>
         </a>
-        <ul>
+        {{-- <ul>
             <li class="{{ Request::is('jenisdataptj*') ? 'mm-active' : '' }}">
                 <a href="{{ route('jenisdataptj') }}"><i class="bx bx-right-arrow-alt"></i>Jenis Data PTJ</a>
             </li>
-        </ul>
+        </ul> --}}
         <ul>
             <li class="{{ Request::is('tahun*') ? 'mm-active' : '' }}">
                 <a href="{{ route('tahun') }}"><i class="bx bx-right-arrow-alt"></i>Tahun</a>

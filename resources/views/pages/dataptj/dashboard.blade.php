@@ -33,20 +33,20 @@
     @php
         // Warna unik untuk 14+ jabatan (boleh tambah lagi kalau perlu)
         $colorPalette = [
-            'primary', // #0d6efd (biru gelap Bootstrap)
-            'secondary', // #6c757d (kelabu gelap Bootstrap)
-            'dark', // #212529 (hampir hitam)
-            'indigo', // #4b0082 (ungu pekat)
-            'teal', // #116466 (hijau kebiruan gelap)
-            'orange-dark', // #cc5500 (oren gelap)
-            'pink-dark', // #800040 (pink gelap)
-            'maroon', // #800000 (merah hati)
-            'navy', // #001f3f (biru navy)
-            'slate', // #2f4f4f (slate grey)
-            'forest', // #228B22 (hijau hutan)
-            'charcoal', // #36454F (abu gelap)
-            'steel', // #2c3e50 (steel blue gelap)
-            'eggplant', // #311432 (ungu kehitaman)
+            '#0d6efd', // Primary Blue
+            '#6c757d', // Bootstrap Secondary
+            '#212529', // Bootstrap Dark
+            '#4b0082', // Indigo
+            '#116466', // Teal Dark
+            '#cc5500', // Orange Dark
+            '#800040', // Pink Dark
+            '#800000', // Maroon
+            '#001f3f', // Navy
+            '#2f4f4f', // Slate Grey
+            '#228B22', // Forest Green
+            '#36454F', // Charcoal
+            '#2c3e50', // Steel Blue
+            '#311432', // Eggplant
         ];
 
         // Padankan department_id kepada warna unik
@@ -72,14 +72,15 @@
                 @endphp
 
                 <div class="col-md-6 col-lg-4 mb-3">
-                    <div class="card shadow-sm h-100 border-0 rounded-3 bg-{{ $color }} text-white">
+                    <div class="card shadow-sm h-100 border-0 rounded-3 text-white"
+     style="background-color: {{ $color }};">
                         <div class="card-body d-flex flex-column p-3">
                             <!-- Tajuk -->
                             <div class="mb-2 d-flex justify-content-between align-items-center">
                                 <span class="fw-semibold text-uppercase" style="font-size: 0.9rem;">
                                     {{ $item->nama_data ?? '-' }}
                                 </span>
-                                <span class="badge bg-light text-{{ $color }}">
+                                <span class="badge bg-light"  style="color: {{ $color }};">
                                     {{ $currentYear }}
                                 </span>
                             </div>

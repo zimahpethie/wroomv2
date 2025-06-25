@@ -14,10 +14,6 @@ class TahunSeeder extends Seeder
     {
         Tahun::insert([
             [
-                'tahun' => 2019,
-                'publish_status' => true
-            ],
-            [
                 'tahun' => 2020,
                 'publish_status' => true
             ],

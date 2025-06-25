@@ -44,4 +44,9 @@ class Department extends Model
     {
         return $this->hasMany(DataUtama::class);
     }
+
+    public function dataPtj()
+    {
+        return $this->hasMany(DataPtj::class);
+    }
 }

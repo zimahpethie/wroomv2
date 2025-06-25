@@ -20,10 +20,17 @@
 
     <li class="menu-label">Pengurusan Data</li>
 
-    <li class="{{ Request::is('datautama*') ? 'mm-active' : '' }}">
+    {{-- <li class="{{ Request::is('datautama*') ? 'mm-active' : '' }}">
         <a href="{{ route('datautama') }}">
             <div class="parent-icon"><i class='bx bx-data'></i></div>
             <div class="menu-title">Data JKEN</div>
+        </a>
+    </li> --}}
+
+    <li class="{{ Request::is('dataptj*') ? 'mm-active' : '' }}">
+        <a href="{{ route('dataptj') }}">
+            <div class="parent-icon"><i class='bx bx-folder'></i></div>
+            <div class="menu-title">Data PTJ</div>
         </a>
     </li>
 

@@ -70,8 +70,7 @@
                                         <thead>
                                             <tr>
                                                 <th style="width:10%">Tahun</th>
-                                                <th style="width:15%" class="text-wrap">Adakah ini KPI Universiti (BTU)?
-                                                </th>
+                                                <th style="width:15%" class="text-wrap">KPI Universiti (BTU)</th>
                                                 <th style="width:30%">No. PI</th>
                                                 <th style="width:20%">Sasaran</th>
                                                 <th style="width:25%">Pencapaian</th>

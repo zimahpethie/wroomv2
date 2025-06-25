@@ -115,10 +115,14 @@ class DataUtamaController extends Controller
 
         foreach ($request->is_kpi as $tahunKey => $value) {
             if ($value == 1) {
-                if (empty($request->pi_no[$tahunKey])) {
+                // No. PI validation
+                if (!isset($request->pi_no[$tahunKey]) || trim($request->pi_no[$tahunKey]) === '') {
                     $errors["pi_no.$tahunKey"] = 'No. PI diperlukan jika KPI ditanda Ya bagi tahun ' . $tahunKey;
                 }
-                if (empty($request->pi_target[$tahunKey]) || !is_numeric($request->pi_target[$tahunKey])) {
+
+                // Sasaran PI validation
+                $piTargetValue = $request->pi_target[$tahunKey] ?? null;
+                if (!isset($piTargetValue) || !is_numeric($piTargetValue)) {
                     $errors["pi_target.$tahunKey"] = 'Sasaran PI mesti nombor dan diperlukan bagi tahun ' . $tahunKey;
                 }
             }
@@ -169,7 +173,7 @@ class DataUtamaController extends Controller
                     'jumlah' => $value,
                     'is_kpi' => $request->is_kpi[$tahunKey] ?? false,
                     'pi_no' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_no[$tahunKey] ?? null : null,
-                    'pi_target' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_target[$tahunKey] ?? null : null,
+                    'pi_target' => $request->pi_target[$tahunKey] ?? null,
                 ]);
             }
         }
@@ -326,7 +330,7 @@ class DataUtamaController extends Controller
                         'jumlah' => $value, // boleh null
                         'is_kpi' => $request->is_kpi[$tahunKey] ?? false,
                         'pi_no' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_no[$tahunKey] ?? null : null,
-                        'pi_target' => ($request->is_kpi[$tahunKey] ?? false) ? $request->pi_target[$tahunKey] ?? null : null,
+                        'pi_target' => $request->pi_target[$tahunKey] ?? null,
                     ]
                 );
             }

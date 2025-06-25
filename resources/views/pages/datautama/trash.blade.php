@@ -113,9 +113,9 @@
                                                             }
                                                         @endphp
                                                         @if ($jumlah)
-                                                            <div><strong>KPI:</strong>
+                                                            <div><strong>KPI (BTU):</strong>
                                                                 {{ $jumlah->is_kpi ? 'Ya' : 'Tidak' }}</div>
-                                                            <div><strong>PI:</strong> {{ $jumlah->pi_no ?? '-' }}</div>
+                                                            <div><strong>PI No.:</strong> {{ $jumlah->pi_no ?? '-' }}</div>
                                                             <div><strong>Sasaran:</strong> {{ $sasaranPaparan }}</div>
                                                             <div><strong>Pencapaian:</strong> {{ $jumlahPaparan }}</div>
                                                         @else

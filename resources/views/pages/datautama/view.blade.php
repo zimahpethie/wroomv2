@@ -74,7 +74,7 @@
                                                 </th>
                                                 <th style="width:30%">No. PI</th>
                                                 <th style="width:20%">Sasaran</th>
-                                                <th style="width:25%">Jumlah</th>
+                                                <th style="width:25%">Pencapaian</th>
                                             </tr>
                                         </thead>
                                         <tbody>

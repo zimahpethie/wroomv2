@@ -173,7 +173,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Jumlah</label>
+                                <label class="form-label">Pencapaian</label>
                                 <input type="number" step="0.01" class="form-control"
                                     name="jumlah[{{ $tahunKey }}]" value="{{ $jumlah }}">
                                 @if ($errors->has('jumlah.' . $tahunKey))

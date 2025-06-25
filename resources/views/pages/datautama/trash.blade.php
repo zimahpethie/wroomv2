@@ -84,17 +84,44 @@
                                                             $tahun->id);
                                                     @endphp
                                                     <td class="small">
+                                                        @php
+                                                            $jumlahPaparan = '-';
+                                                            $sasaranPaparan = '-';
+
+                                                            $jenis = $datautama->jenis_nilai ?? 'Bilangan';
+
+                                                            if ($jumlah && !is_null($jumlah->jumlah)) {
+                                                                if ($jenis == 'Peratus') {
+                                                                    $jumlahPaparan = $jumlah->jumlah . ' %';
+                                                                } elseif ($jenis == 'Mata Wang') {
+                                                                    $jumlahPaparan =
+                                                                        'RM ' . number_format($jumlah->jumlah, 2);
+                                                                } else {
+                                                                    $jumlahPaparan = $jumlah->jumlah;
+                                                                }
+                                                            }
+
+                                                            if ($jumlah && !is_null($jumlah->pi_target)) {
+                                                                if ($jenis == 'Peratus') {
+                                                                    $sasaranPaparan = $jumlah->pi_target . ' %';
+                                                                } elseif ($jenis == 'Mata Wang') {
+                                                                    $sasaranPaparan =
+                                                                        'RM ' . number_format($jumlah->pi_target, 2);
+                                                                } else {
+                                                                    $sasaranPaparan = $jumlah->pi_target;
+                                                                }
+                                                            }
+                                                        @endphp
                                                         @if ($jumlah)
                                                             <div><strong>KPI:</strong>
                                                                 {{ $jumlah->is_kpi ? 'Ya' : 'Tidak' }}</div>
                                                             <div><strong>PI:</strong> {{ $jumlah->pi_no ?? '-' }}</div>
-                                                            <div><strong>Sasaran:</strong> {{ $jumlah->pi_target ?? '-' }}
-                                                            </div>
-                                                            <div><strong>Jumlah:</strong> {{ $jumlah->jumlah ?? '-' }}
-                                                            </div>
+                                                            <div><strong>Sasaran:</strong> {{ $sasaranPaparan }}</div>
+                                                            <div><strong>Pencapaian:</strong> {{ $jumlahPaparan }}</div>
                                                         @else
                                                             <span class="text-muted">-</span>
                                                         @endif
+
                                                     </td>
                                                 @endforeach
                                             </tr>

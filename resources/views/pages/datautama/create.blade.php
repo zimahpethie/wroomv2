@@ -178,7 +178,7 @@
 
                             {{-- jumlah --}}
                             <div class="col-md-3">
-                                <label class="form-label">Jumlah</label>
+                                <label class="form-label">Pencapaian</label>
                                 <input type="number" step="0.01"
                                     class="form-control {{ $errors->has('jumlah.' . $tahunKey) ? 'is-invalid' : '' }}"
                                     name="jumlah[{{ $tahunKey }}]" value="{{ old('jumlah.' . $tahunKey) }}">

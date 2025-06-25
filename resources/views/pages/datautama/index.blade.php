@@ -144,7 +144,7 @@
                                                                 {{ $jumlah->is_kpi ? 'Ya' : 'Tidak' }}</div>
                                                             <div><strong>PI:</strong> {{ $jumlah->pi_no ?? '-' }}</div>
                                                             <div><strong>Sasaran:</strong> {{ $sasaranPaparan }}</div>
-                                                            <div><strong>Jumlah:</strong> {{ $jumlahPaparan }}</div>
+                                                            <div><strong>Pencapaian:</strong> {{ $jumlahPaparan }}</div>
                                                         @else
                                                             <span class="text-muted">-</span>
                                                         @endif

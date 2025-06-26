@@ -8,7 +8,7 @@
                 <div class="col-md-4 col-12 mb-2">
                     <div class="input-group">
                         <select name="department_id" class="form-select" onchange="this.form.submit()">
-                            <option value="">-- Semua Jabatan --</option>
+                            <option value="">Semua Bahagian</option>
                             @foreach ($departmentList as $department)
                                 <option value="{{ $department->id }}"
                                     {{ $selectedDepartment == $department->id ? 'selected' : '' }}>
@@ -145,7 +145,7 @@
                                 @endif
                                 <a href="{{ route('dataptj.show', $item->id) }}"
                                     class="btn btn-sm btn-light text-{{ $color }} rounded-pill">
-                                    <i class="bx bx-show"></i> Paparan Lanjut
+                                    <i class="bx bx-show"></i> Papar Maklumat
                                 </a>
                             </div>
                         </div>

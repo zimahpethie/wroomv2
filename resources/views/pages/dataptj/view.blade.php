@@ -171,18 +171,18 @@
                 type: 'bar',
                 data: {
                     labels: labels,
-                    datasets: [{
-                            label: 'Pencapaian',
-                            data: jumlahData,
-                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        },
+                    datasets: [
                         {
                             label: 'Sasaran',
                             data: piTargetData,
                             backgroundColor: 'rgba(255, 99, 132, 0.6)',
                             borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },{
+                            label: 'Pencapaian',
+                            data: jumlahData,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
                             borderWidth: 1
                         }
                     ]
@@ -205,7 +205,7 @@
                         title: {
                             display: true,
                             text: [
-                                'PERBANDINGAN JUMLAH / BILANGAN / PERATUS / PENCAPAIAN DAN SASARAN MENGIKUT TAHUN',
+                                'STATISTIK JUMLAH / BILANGAN / PERATUS / PENCAPAIAN DAN SASARAN MENGIKUT TAHUN',
                                 @json('(' . $dataptj->nama_data . ' - ' . $dataptj->department->name . ')')
                             ],
                             font: {

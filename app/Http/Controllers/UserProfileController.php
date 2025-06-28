@@ -62,7 +62,7 @@ class UserProfileController extends Controller
         $user = User::findOrFail($id);
 
         // Update the user's basic information
-        $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'office_phone_no', 'campus_id'));
+        $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'office_phone_no', 'campus_id', 'department_id'));
 
         // Handle profile image update or removal
         if ($request->hasFile('profile_image')) {

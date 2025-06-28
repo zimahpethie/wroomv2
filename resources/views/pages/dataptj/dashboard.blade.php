@@ -126,7 +126,7 @@
 
                             <!-- Info Ringkas -->
                             <div class="mb-3" style="font-size: 0.9rem;">
-                                <div><i class="bi bi-hash"></i> <strong>PI No:</strong> {{ $item->pi_no ?? '-' }}</div>
+                                <div><i class="bi bi-hash"></i> <strong>PI No:</strong> {{ $jumlahSemasaRecord->pi_no ?? '-' }}</div>
                                 <div><i class="bi bi-bullseye"></i> <strong>Sasaran:</strong> {{ $sasaranPaparan }}</div>
                                 <div><i class="bi bi-clock"></i> <strong>Kemaskini:</strong>
                                     {{ $item->updated_at ? $item->updated_at->format('d/m/Y') : $item->created_at->format('d/m/Y') }}

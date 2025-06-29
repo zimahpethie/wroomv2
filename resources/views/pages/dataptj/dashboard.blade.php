@@ -4,12 +4,15 @@
     <div class="container-fluid">
 
         <!-- PAGE TITLE + FILTER INLINE -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 border-bottom pb-3">
-            <h3 class="fw-bold text-primary mb-2 mb-md-0">DATA WAR ROOM DASHBOARD</h3>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+            <h2 class="fw-bold text-primary mb-3 mb-md-0" style="font-size: 1.8rem;">
+                DATA WAR ROOM DASHBOARD
+            </h2>
             <form id="dashboardFilter" action="{{ route('dataptj.dashboard') }}" method="GET"
-                class="d-flex align-items-center flex-wrap gap-2">
-                <div class="d-flex align-items-center gap-2">
-                    <select name="department_id" class="form-select form-select-sm shadow-sm" onchange="this.form.submit()">
+                class="d-flex flex-row flex-wrap align-items-center gap-2">
+                <div>
+                    <select name="department_id" class="form-select form-select-sm rounded-pill shadow-sm"
+                        onchange="this.form.submit()">
                         <option value="">📌 Semua Bahagian</option>
                         @foreach ($departmentList as $department)
                             <option value="{{ $department->id }}"
@@ -18,7 +21,9 @@
                             </option>
                         @endforeach
                     </select>
-                    <button id="resetButton" type="button" class="btn btn-sm btn-outline-dark shadow-sm">
+                </div>
+                <div>
+                    <button id="resetButton" type="button" class="btn btn-sm btn-outline-secondary rounded-pill">
                         Reset
                     </button>
                 </div>
@@ -28,20 +33,20 @@
         @php
             $currentYear = now()->year;
             $colorPalette = [
-                '#4e73df', // Formal Blue
-                '#6c5ce7', // Professional Purple
-                '#8e44ad', // Muted Violet
-                '#c0392b', // Classic Red
-                '#d35400', // Burnt Orange
-                '#f39c12', // Golden Amber
-                '#27ae60', // Corporate Green
-                '#16a085', // Teal
-                '#2980b9', // Business Blue
-                '#3498db', // Calmer Blue
-                '#95a5a6', // Muted Grey
-                '#7f8c8d', // Darker Grey
-                '#34495e', // Navy Grey
-                '#2c3e50', // Deep Navy
+                '#6D8BE4', // soft mid-blue
+                '#F5B64D', // soft gold
+                '#E27878', // soft coral red
+                '#79C98B', // minty green
+                '#B78ED3', // soft lilac purple
+                '#F2A977', // peachy orange
+                '#6CC3C1', // teal
+                '#F5D76E', // warm yellow
+                '#9DB3E1', // powder blue
+                '#F5A3C3', // soft pink
+                '#82C596', // pastel green
+                '#D9A066', // muted amber
+                '#A6A9E2', // lavender blue
+                '#E2B66C', // camel gold
             ];
 
             $departmentColors = [];
@@ -50,19 +55,21 @@
             }
         @endphp
 
+
         @forelse ($dataList as $departmentName => $dataItems)
             @php
                 $deptId = optional($dataItems->first())->department_id ?? null;
-                $headerColor = $departmentColors[$deptId] ?? '#6c757d';
-                $gradient = "linear-gradient(135deg, $headerColor, #ffffff)";
+                $accentColor = $departmentColors[$deptId] ?? '#6c757d';
+                $lightAccent = $accentColor . '33';
             @endphp
 
-            <!-- DEPARTMENT SECTION -->
             <div class="mb-5">
-                <div class="px-3 py-2 mb-3 rounded-3 shadow-sm" style="background: {{ $gradient }}; color: #fff;">
-                    <h4 class="fw-bold m-0 text-uppercase">
-                        <i class="bi bi-building"></i> {{ $departmentName }}
-                    </h4>
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-building" style="color: {{ $accentColor }};"></i>
+                    <span class="ms-2 fw-semibold text-uppercase" style="color: {{ $accentColor }}; font-size: 1.1rem;">
+                        {{ $departmentName }}
+                    </span>
+                    <div class="flex-fill ms-2" style="height: 1px; background-color: {{ $accentColor }}33;"></div>
                 </div>
 
                 <div class="row g-4">
@@ -95,65 +102,71 @@
                             }
                         @endphp
 
-                        <!-- CARD DESIGN -->
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card shadow-sm border-0 rounded-4 h-100 overflow-hidden"
-                                style="background-color: {{ $headerColor }}; color: #fff;">
+                            <div class="card border-0 shadow-sm rounded-5 h-100"
+                                style="background: radial-gradient(circle at top left, {{ $lightAccent }}, #ffffff);
+                                    box-shadow: inset 2px 2px 6px rgba(0,0,0,0.05), inset -2px -2px 6px rgba(255,255,255,0.8);">
+
+                                <!-- HEADER FIXED HEIGHT WITH WRAPPING -->
+                                <div class="d-flex align-items-center justify-content-center text-center px-2 py-2"
+                                    style="background: linear-gradient(90deg, {{ $accentColor }} 0%, {{ $accentColor }}aa 100%);
+            color: #fff;
+            min-height: 70px;
+            max-height: 90px;
+            border-top-left-radius: 1.5rem;
+            border-top-right-radius: 1.5rem;
+            overflow-y: auto;
+            white-space: normal;">
+                                    <h6 class="fw-semibold text-uppercase mb-0"
+                                        style="font-size: 0.95rem; line-height: 1.3;">
+                                        {{ $item->nama_data ?? '-' }}
+                                    </h6>
+                                </div>
+
                                 <div class="card-body d-flex flex-column p-4">
 
-                                    <!-- NAMA DATA -->
-                                    <div class="text-center mb-2">
-                                        <div class="text-uppercase fw-semibold"
-                                            style="opacity: 0.95; font-size: 0.95rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.4);">
-                                            {{ $item->nama_data ?? '-' }}
-                                        </div>
-                                    </div>
-
-                                    <div class="mx-auto mb-3"
-                                        style="width: 50%; height: 1px; background-color: rgba(255,255,255,0.25);"></div>
-
-                                    <!-- NILAI UTAMA -->
+                                    <!-- VALUE -->
                                     <div class="text-center mb-3">
-                                        <div class="fw-bold display-5">{{ $jumlahPaparan }}</div>
+                                        <div class="fw-bold display-6" style="color: {{ $accentColor }}; opacity: 1;">
+                                            {{ $jumlahPaparan }}
+                                        </div>
+
                                     </div>
 
-                                    <!-- INFO DETAIL TABLE -->
-                                    <div class="mb-3">
-                                        <table class="table table-sm table-borderless text-white mb-0">
-                                            <tbody>
-                                                <tr>
-                                                    <td>Tahun</td>
-                                                    <td class="text-end fw-semibold">{{ $currentYear }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>PI No</td>
-                                                    <td class="text-end fw-semibold">{{ $pi_no }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Sasaran</td>
-                                                    <td class="text-end fw-semibold">{{ $piTargetPaparan }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Kemaskini</td>
-                                                    <td class="text-end fw-semibold">
-                                                        {{ $item->updated_at ? $item->updated_at->format('d/m/Y') : $item->created_at->format('d/m/Y') ?? '-' }}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <!-- INFO TABLE -->
+                                    <table class="table table-sm table-borderless mb-3">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-muted">Tahun</td>
+                                                <td class="text-end fw-semibold">{{ $currentYear }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">PI No</td>
+                                                <td class="text-end fw-semibold">{{ $pi_no }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Sasaran</td>
+                                                <td class="text-end fw-semibold">{{ $piTargetPaparan }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Kemaskini</td>
+                                                <td class="text-end fw-semibold">
+                                                    {{ $item->updated_at ? $item->updated_at->format('d/m/Y') : $item->created_at->format('d/m/Y') ?? '-' }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
 
                                     <!-- BUTTONS -->
-                                    <div class="mt-auto d-flex justify-content-between gap-2">
+                                    <div class="mt-2 d-flex flex-wrap justify-content-between gap-2">
                                         @if (!empty($item->doc_link))
                                             <a href="{{ $item->doc_link }}" target="_blank"
-                                                class="btn btn-sm btn-light rounded-pill"
-                                                style="color: {{ $headerColor }};">
+                                                class="btn btn-sm btn-outline-secondary rounded-pill">
                                                 <i class="bx bxs-folder-open"></i> Shared Folder
                                             </a>
                                         @endif
                                         <a href="{{ route('dataptj.show', $item->id) }}"
-                                            class="btn btn-sm btn-light rounded-pill" style="color: {{ $headerColor }};">
+                                            class="btn btn-sm btn-outline-primary rounded-pill">
                                             <i class="bx bx-show"></i> Papar Maklumat
                                         </a>
                                     </div>

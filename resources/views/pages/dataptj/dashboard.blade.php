@@ -33,20 +33,20 @@
         @php
             $currentYear = now()->year;
             $colorPalette = [
-                '#6D8BE4', // soft mid-blue
-                '#F5B64D', // soft gold
-                '#E27878', // soft coral red
-                '#79C98B', // minty green
-                '#B78ED3', // soft lilac purple
-                '#F2A977', // peachy orange
-                '#6CC3C1', // teal
-                '#F5D76E', // warm yellow
-                '#9DB3E1', // powder blue
-                '#F5A3C3', // soft pink
-                '#82C596', // pastel green
-                '#D9A066', // muted amber
-                '#A6A9E2', // lavender blue
-                '#E2B66C', // camel gold
+                '#1F618D', // corporate blue
+                '#117A65', // corporate teal
+                '#AF601A', // burnt orange
+                '#884EA0', // royal purple
+                '#CB4335', // deep red
+                '#239B56', // strong green
+                '#CA6F1E', // dark orange
+                '#2980B9', // strong steel blue
+                '#7D3C98', // dark purple
+                '#D68910', // bold mustard
+                '#2874A6', // classic corporate blue
+                '#B03A2E', // dark brick red
+                '#16A085', // strong turquoise
+                '#76448A', // muted dark violet
             ];
 
             $departmentColors = [];

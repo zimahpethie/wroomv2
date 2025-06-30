@@ -11,6 +11,14 @@ class UserRoleController extends Controller
 {
     use SoftDeletes;
 
+    public function __construct()
+    {
+        $this->middleware('permission:Lihat Pengguna')->only(['index', 'show', 'search']);
+        $this->middleware('permission:Tambah Pengguna')->only(['create', 'store']);
+        $this->middleware('permission:Edit Pengguna')->only(['edit', 'update']);
+        $this->middleware('permission:Padam Pengguna')->only(['destroy', 'trashList', 'restore', 'forceDelete']);
+    }
+
     public function index(Request $request)
     {
         $perPage = $request->input('perPage', 10);

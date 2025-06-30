@@ -34,6 +34,7 @@
         </a>
     </li>
 
+    @can('Lihat Pengguna')
     <li class="menu-label">Pengurusan Pengguna</li>
 
     <li class="{{ Request::is('user*') && !Request::is('user-role*') ? 'mm-active' : '' }}">
@@ -49,7 +50,7 @@
             <div class="menu-title">Peranan Pengguna</div>
         </a>
     </li>
-
+    @endcan
 
 
     <li class="menu-label">Tetapan</li>

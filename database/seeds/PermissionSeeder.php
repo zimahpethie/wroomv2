@@ -19,6 +19,7 @@ class PermissionSeeder extends Seeder
                 ['name' => 'Edit Pengguna', 'category' => 'Pengurusan Pengguna'],
                 ['name' => 'Padam Pengguna', 'category' => 'Pengurusan Pengguna'],
                 ['name' => 'Lihat Pengguna', 'category' => 'Pengurusan Pengguna'],
+                ['name' => 'Lihat Pengguna', 'category' => 'Pengurusan Pengguna'],
             ],
             'Pengurusan Kampus' => [
                 ['name' => 'Tambah Kampus', 'category' => 'Pengurusan Kampus'],

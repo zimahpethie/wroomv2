@@ -18,6 +18,13 @@ class UserController extends Controller
 {
     use SoftDeletes;
 
+    public function __construct()
+    {
+        $this->middleware('permission:Lihat Pengguna')->only(['index', 'show', 'search']);
+        $this->middleware('permission:Tambah Pengguna')->only(['create', 'store']);
+        $this->middleware('permission:Edit Pengguna')->only(['edit', 'update']);
+        $this->middleware('permission:Padam Pengguna')->only(['destroy', 'trashList', 'restore', 'forceDelete']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -75,7 +82,7 @@ class UserController extends Controller
             'department_id' => 'required|exists:departments,id',
             'office_phone_no' => 'nullable|string',
             'publish_status' => 'required|in:1,0',
-        ],[
+        ], [
             'name.required'     => 'Sila isi nama pengguna',
             'staff_id.required' => 'Sila isi no. pekerja pengguna',
             'staff_id.unique' => 'No. pekerja telah wujud',
@@ -87,24 +94,24 @@ class UserController extends Controller
             'department_id.required' => 'Sila isi bahagian/unit pengguna',
             'publish_status.required' => 'Sila isi status pengguna',
         ]);
-    
+
         $user = new User();
         $user->fill($request->except('roles'));
-        $user->password = null; 
-        $user->email_verified_at = null; 
+        $user->password = null;
+        $user->email_verified_at = null;
         $user->save();
-    
+
         // Assign roles to the user
         $user->assignRole($request->input('roles'));
-    
+
         // Send password reset link to the new user with the isNewAccount flag set to true
         $token = Password::broker()->createToken($user);
         $user->notify(new ResetPasswordNotification($token, true));
-    
+
         return redirect()->route('user')
             ->with('success', 'Maklumat berjaya disimpan');
     }
-    
+
 
 
 
@@ -160,7 +167,7 @@ class UserController extends Controller
             'department_id'  => 'required|exists:departments,id',
             'office_phone_number' => 'nullable|string',
             'publish_status' => 'required|in:1,0',
-        ],[
+        ], [
             'name.required'     => 'Sila isi nama pengguna',
             'staff_id.required' => 'Sila isi no. pekerja pengguna',
             'staff_id.unique' => 'No. pekerja telah wujud',

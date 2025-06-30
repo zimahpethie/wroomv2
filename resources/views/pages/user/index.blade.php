@@ -41,11 +41,13 @@
                     </div>
                 </form>
             </div>
+            @can('Tambah Pengguna')
             <div class="ms-auto">
                 <a href="{{ route('user.create') }}" class="btn btn-primary radius-30 mt-2 mt-lg-0">
                     <i class="bx bxs-plus-square"></i> Tambah Pengguna
                 </a>
             </div>
+            @endcan
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -97,12 +99,14 @@
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
                                 <i class="bx bx-show"></i>
                             </a>
+                            @can('Padam Pengguna')
                             <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
                                 data-bs-title="Padam">
                                 <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#deleteModal{{ $user->id }}"><i
                                         class="bx bx-trash"></i></span>
                             </a>
+                            @endcan
                         </td>
                     </tr>
                     @endforeach

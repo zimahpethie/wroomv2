@@ -72,7 +72,7 @@
                                         <thead class="table-light">
                                             <tr class="text-center">
                                                 <th style="width:8%">Tahun</th>
-                                                <th style="width:12%">KPI BTU</th>
+                                                <th style="width:12%">KPI Universiti (BTU)</th>
                                                 <th style="width:25%">No. PI</th>
                                                 <th style="width:20%">Sasaran</th>
                                                 <th style="width:20%">Pencapaian</th>
@@ -127,7 +127,7 @@
                                                     @endphp
                                                     <tr>
                                                         <td class="text-center fw-semibold">{{ $tahun->tahun }}</td>
-                                                        <td class="text-center">{{ $jumlah->is_kpi ? '✔️' : '-' }}</td>
+                                                        <td class="text-center">{{ $jumlah->is_kpi ? 'Ya' : '-' }}</td>
                                                         <td class="text-wrap">{{ $jumlah->pi_no ?? '-' }}</td>
                                                         <td class="text-end fw-semibold">{{ $sasaranPaparan }}</td>
                                                         <td class="text-end fw-semibold">{{ $jumlahPaparan }}</td>

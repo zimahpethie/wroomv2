@@ -13,11 +13,13 @@
                 </ol>
             </nav>
         </div>
-        <div class="ms-auto">
-            <a href="{{ route('dataptj.edit', $dataptj->id) }}">
-                <button type="button" class="btn btn-primary mt-2 mt-lg-0">Kemaskini Maklumat</button>
-            </a>
-        </div>
+        @if (auth()->user()->hasAnyRole(['Superadmin', 'Admin']) || auth()->user()->department_id == $dataptj->department_id)
+            <div class="ms-auto">
+                <a href="{{ route('dataptj.edit', $dataptj->id) }}">
+                    <button type="button" class="btn btn-primary mt-2 mt-lg-0">Kemaskini Maklumat</button>
+                </a>
+            </div>
+        @endif
     </div>
     <!-- End Breadcrumb -->
 

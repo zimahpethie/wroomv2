@@ -52,7 +52,6 @@ class DataPtjController extends Controller
         ]);
     }
 
-
     public function dashboard(Request $request)
     {
         $user = User::find(auth()->id());
@@ -61,9 +60,9 @@ class DataPtjController extends Controller
             ->withCount('jumlahs');
 
         // Hanya Superadmin/Admin boleh tengok semua department
-        if (!$user->hasAnyRole(['Superadmin', 'Admin'])) {
-            $query->where('department_id', $user->department_id);
-        }
+        // if (!$user->hasAnyRole(['Superadmin', 'Admin'])) {
+        //     $query->where('department_id', $user->department_id);
+        // }
 
         // Jika ada filter department_id
         if ($request->has('department_id') && $request->department_id != '') {
@@ -95,7 +94,6 @@ class DataPtjController extends Controller
             'departmentCounts' => $departmentCounts,
         ]);
     }
-
 
     public function create()
     {
@@ -214,7 +212,7 @@ class DataPtjController extends Controller
     {
         $tahunList = Tahun::orderBy('tahun', 'asc')->get();
         $dataptj = DataPtj::with('jumlahs.tahun')->findOrFail($id);
-        $this->authorizeDataAccess($dataptj);
+        // $this->authorizeDataAccess($dataptj);
 
         $perbandinganByYear = [];
 

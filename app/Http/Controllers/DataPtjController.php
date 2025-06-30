@@ -20,24 +20,38 @@ class DataPtjController extends Controller
     {
         $user = User::find(auth()->id());
         $perPage = $request->input('perPage', 10);
+        $search = $request->input('search');
+        $departmentId = $request->input('department_id');
 
         $tahunList = Tahun::orderBy('tahun', 'asc')->get();
+        $departmentList = Department::orderBy('name')->get();
 
-        if ($user->hasAnyRole(['Superadmin', 'Admin'])) {
-            // Superadmin akses semua
-            $dataptjList = DataPtj::latest()->paginate($perPage);
-        } else {
-            // Biasa ikut department
-            $dataptjList = DataPtj::where('department_id', $user->department_id)
-                ->latest()->paginate($perPage);
+        $query = DataPtj::query();
+
+        if (!$user->hasAnyRole(['Superadmin', 'Admin'])) {
+            $query->where('department_id', $user->department_id);
         }
+
+        if ($departmentId) {
+            $query->where('department_id', $departmentId);
+        }
+
+        if ($search) {
+            $query->where('nama_data', 'LIKE', "%$search%");
+        }
+
+        $dataptjList = $query->latest()->paginate($perPage);
 
         return view('pages.dataptj.index', [
             'dataptjList' => $dataptjList,
             'tahunList' => $tahunList,
             'perPage' => $perPage,
+            'departmentList' => $departmentList,
+            'selectedDepartment' => $departmentId,
+            'search' => $search,
         ]);
     }
+
 
     public function dashboard(Request $request)
     {

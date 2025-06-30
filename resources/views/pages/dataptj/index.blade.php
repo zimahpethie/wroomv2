@@ -25,19 +25,26 @@
         <div class="card-body">
             <div class="d-lg-flex align-items-center mb-4 gap-3">
                 <div class="position-relative">
-                    <form action="{{ route('dataptj.search') }}" method="GET" id="searchForm"
-                        class="d-lg-flex align-items-center gap-3">
-                        <div class="input-group">
-                            <input type="text" class="form-control rounded" placeholder="Carian..." name="search"
-                                value="{{ request('search') }}" id="searchInput">
-
+                    <form action="{{ route('dataptj') }}" method="GET" id="searchFilterForm"
+                        class="d-flex flex-wrap gap-2 align-items-center">
+                        <div>
+                            <input type="text" name="search" class="form-control rounded" placeholder="Carian..."
+                                value="{{ request('search') }}">
+                        </div>
+                        <div>
+                            <select name="department_id" class="form-select rounded">
+                                <option value="">📌 Semua Bahagian</option>
+                                @foreach ($departmentList as $department)
+                                    <option value="{{ $department->id }}"
+                                        {{ request('department_id') == $department->id ? 'selected' : '' }}>
+                                        {{ $department->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
                             <input type="hidden" name="perPage" value="{{ request('perPage', 10) }}">
-                            <button type="submit" class="btn btn-primary ms-1 rounded" id="searchButton">
-                                <i class="bx bx-search"></i>
-                            </button>
-                            <button type="button" class="btn btn-secondary ms-1 rounded" id="resetButton">
-                                Reset
-                            </button>
+                            <button type="button" class="btn btn-secondary rounded" id="resetButton">Reset</button>
                         </div>
                     </form>
                 </div>
@@ -79,8 +86,8 @@
                                             title="Kemaskini">
                                             <i class="bx bxs-edit"></i>
                                         </a>
-                                        <a href="{{ route('dataptj.show', $dataptj->id) }}"
-                                            class="btn btn-primary btn-sm" title="Papar">
+                                        <a href="{{ route('dataptj.show', $dataptj->id) }}" class="btn btn-primary btn-sm"
+                                            title="Papar">
                                             <i class="bx bx-show"></i>
                                         </a>
                                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
@@ -98,7 +105,8 @@
                                         <thead class="table-secondary text-center align-middle">
                                             <tr>
                                                 @foreach ($tahunList as $tahun)
-                                                    <th style="background-color: #1b2b44; color: #fff">{{ $tahun->tahun }}</th>
+                                                    <th style="background-color: #1b2b44; color: #fff">{{ $tahun->tahun }}
+                                                    </th>
                                                 @endforeach
                                             </tr>
                                         </thead>
@@ -106,9 +114,7 @@
                                             <tr>
                                                 @foreach ($tahunList as $tahun)
                                                     @php
-                                                        $jumlah = $dataptj->jumlahs->firstWhere(
-                                                            'tahun_id',
-                                                            $tahun->id);
+                                                        $jumlah = $dataptj->jumlahs->firstWhere('tahun_id', $tahun->id);
                                                     @endphp
                                                     <td class="small">
                                                         @php
@@ -124,7 +130,11 @@
                                                                     $jumlahPaparan =
                                                                         'RM ' . number_format($jumlah->jumlah, 2);
                                                                 } elseif ($jenis == 'Bilangan') {
-                                                                    $jumlahPaparan = number_format((int) $jumlah->jumlah, 0, '.', ',');
+                                                                    $jumlahPaparan = number_format(
+                                                                        (int) $jumlah->jumlah,
+                                                                        0,
+                                                                        '.',
+                                                                        ',');
                                                                 } else {
                                                                     $jumlahPaparan = $jumlah->jumlah;
                                                                 }
@@ -137,7 +147,11 @@
                                                                     $sasaranPaparan =
                                                                         'RM ' . number_format($jumlah->pi_target, 2);
                                                                 } elseif ($jenis == 'Bilangan') {
-                                                                    $sasaranPaparan = number_format((int) $jumlah->pi_target, 0, '.', ',');
+                                                                    $sasaranPaparan = number_format(
+                                                                        (int) $jumlah->pi_target,
+                                                                        0,
+                                                                        '.',
+                                                                        ',');
                                                                 } else {
                                                                     $sasaranPaparan = $jumlah->pi_target;
                                                                 }
@@ -192,6 +206,7 @@
                     <div class="pagination-wrapper">
                         {{ $dataptjList->appends([
                                 'search' => request('search'),
+                                'department_id' => request('department_id'),
                             ])->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
@@ -234,17 +249,30 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto-submit the form on input change
-            document.getElementById('searchInput').addEventListener('input', function() {
-                document.getElementById('searchForm').submit();
+            const form = document.getElementById('searchFilterForm');
+            const searchInput = form.querySelector('input[name="search"]');
+            const departmentSelect = form.querySelector('select[name="department_id"]');
+
+            // Debounce for search input
+            let debounceTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    form.submit();
+                }, 500); // waits 500ms after typing stops
             });
 
-            // Reset form
+            // Instant submit on department change
+            departmentSelect.addEventListener('change', function() {
+                form.submit();
+            });
+
+            // Reset button
             document.getElementById('resetButton').addEventListener('click', function() {
-                // Redirect to the base route to clear query parameters
                 window.location.href = "{{ route('dataptj') }}";
             });
         });
     </script>
+
     <!--end page wrapper -->
 @endsection

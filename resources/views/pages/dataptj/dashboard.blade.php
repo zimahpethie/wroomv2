@@ -141,25 +141,25 @@
                                         <table class="table table-sm table-borderless mb-1">
                                             <tbody>
                                                 <tr>
-                                                    <td class="text-muted small">Tahun</td>
-                                                    <td class="text-end fw-semibold small">
+                                                    <td class="text-muted">Tahun</td>
+                                                    <td class="text-end fw-semibold">
                                                         <span class="badge"
                                                         style="background-color: {{ $accentColor }};">{{ $currentYear }}</span></td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-muted small">PI No</td>
-                                                    <td class="text-end fw-semibold small">
+                                                    <td class="text-muted">PI No</td>
+                                                    <td class="text-end fw-semibold">
                                                         <span class="badge"
                                                         style="background-color: {{ $accentColor }};">{{ $pi_no }}</span></td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-muted small">Sasaran</td>
-                                                    <td class="text-end fw-semibold small"><span class="badge"
+                                                    <td class="text-muted">Sasaran</td>
+                                                    <td class="text-end fw-semibold"><span class="badge"
                                                         style="background-color: {{ $accentColor }};">{{ $piTargetPaparan }}</span></td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-muted small">Kemaskini</td>
-                                                    <td class="text-end fw-semibold small">
+                                                    <td class="text-muted">Kemaskini</td>
+                                                    <td class="text-end fw-semibold">
                                                         <span class="badge"
                                                         style="background-color: {{ $accentColor }};">{{ $item->updated_at ? $item->updated_at->format('d/m/Y') : $item->created_at->format('d/m/Y') ?? '-' }}</span>
                                                     </td>
@@ -172,13 +172,13 @@
                                             @if (!empty($item->doc_link))
                                                 <a href="{{ $item->doc_link }}" target="_blank"
                                                     class="btn btn-sm btn-outline-secondary rounded-pill px-1 py-1"
-                                                    style="font-size: 0.7rem;">
+                                                    style="font-size: 0.75rem;">
                                                     <i class="bx bxs-folder-open"></i> Shared Folder
                                                 </a>
                                             @endif
                                             <a href="{{ route('dataptj.show', $item->id) }}"
                                                 class="btn btn-sm btn-outline-primary rounded-pill px-1 py-1"
-                                                style="font-size: 0.7rem;">
+                                                style="font-size: 0.75rem;">
                                                 <i class="bx bx-show"></i> Papar Maklumat
                                             </a>
                                         </div>

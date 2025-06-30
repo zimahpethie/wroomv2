@@ -98,7 +98,7 @@
                                         <thead class="table-secondary text-center align-middle">
                                             <tr>
                                                 @foreach ($tahunList as $tahun)
-                                                    <th>{{ $tahun->tahun }}</th>
+                                                    <th style="background-color: #1b2b44; color: #fff">{{ $tahun->tahun }}</th>
                                                 @endforeach
                                             </tr>
                                         </thead>

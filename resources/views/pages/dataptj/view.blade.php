@@ -149,11 +149,11 @@
                 <div class="card-body">
                     <table class="table table-borderless">
                         <tr>
-                            <th style="width: 40%">Dicipta oleh</th>
+                            <th style="width: 40%">Direkod oleh</th>
                             <td>{{ $dataptj->creator->name ?? '-' }}</td>
                         </tr>
                         <tr>
-                            <th>Tarikh Cipta</th>
+                            <th>Tarikh Daftar</th>
                             <td>{{ $dataptj->created_at ? $dataptj->created_at->format('d/m/Y h:i A') : '-' }}</td>
                         </tr>
                         <tr>

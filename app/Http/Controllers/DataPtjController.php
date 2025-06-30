@@ -41,23 +41,36 @@ class DataPtjController extends Controller
 
     public function dashboard(Request $request)
     {
+        $user = User::find(auth()->id());
+
         $query = DataPtj::with(['department', 'jumlahs.tahun'])
             ->withCount('jumlahs');
 
+        // Hanya Superadmin/Admin boleh tengok semua department
+        if (!$user->hasAnyRole(['Superadmin', 'Admin'])) {
+            $query->where('department_id', $user->department_id);
+        }
+
+        // Jika ada filter department_id
         if ($request->has('department_id') && $request->department_id != '') {
             $query->where('department_id', $request->department_id);
         }
 
         $dataList = $query->get()->groupBy('department.name');
 
-        // kira total rekod (tanpa groupBy)
+        // Kira total count selepas tapis
         $totalCount = $query->count();
+
+        // Count per department (juga ikut akses)
         $departmentCounts = DataPtj::select('department_id', DB::raw('count(*) as total'))
-    ->groupBy('department_id')
-    ->pluck('total', 'department_id')
-    ->toArray();
+            ->when(!$user->hasAnyRole(['Superadmin', 'Admin']), function ($q) use ($user) {
+                $q->where('department_id', $user->department_id);
+            })
+            ->groupBy('department_id')
+            ->pluck('total', 'department_id')
+            ->toArray();
 
-
+        // Senarai department tetap semua untuk butang filter
         $departmentList = Department::orderBy('name')->get();
 
         return view('pages.dataptj.dashboard', [
@@ -68,6 +81,7 @@ class DataPtjController extends Controller
             'departmentCounts' => $departmentCounts,
         ]);
     }
+
 
     public function create()
     {

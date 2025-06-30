@@ -1,166 +1,231 @@
 @extends('layouts.master')
 
 @section('content')
-    <!-- FILTER -->
     <div class="container-fluid mb-4">
-        <form id="dashboardFilter" action="{{ route('dataptj.dashboard') }}" method="GET">
-            <div class="row justify-content-end align-items-center">
-                <div class="col-md-4 col-12 mb-2">
-                    <div class="input-group">
-                        <select name="department_id" class="form-select" onchange="this.form.submit()">
-                            <option value="">Semua Bahagian</option>
-                            @foreach ($departmentList as $department)
-                                <option value="{{ $department->id }}"
-                                    {{ $selectedDepartment == $department->id ? 'selected' : '' }}>
-                                    {{ $department->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <button id="resetButton" class="btn btn-primary" type="button">Reset</button>
+        <div class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-3 text-center">
+
+            <!-- TITLE -->
+            <h2 class="fw-bold text-uppercase text-primary mb-0" style="font-size: 2.2rem;">
+                DATA WAR ROOM
+            </h2>
+        </div>
+
+        @if (auth()->user()->hasAnyRole(['Superadmin', 'Admin']))
+            <!-- FILTER GRID RESPONSIVE ALIGNED + RESET -->
+            <div class="mt-4 mb-4">
+                <form id="dashboardFilter" action="{{ route('dataptj.dashboard') }}" method="GET">
+                    <div class="row g-2">
+
+                        <!-- JUMLAH DATA -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <button type="submit" name="department_id" value=""
+                                class="w-100 border-0 d-flex flex-column justify-content-center align-items-center rounded-3 fw-semibold
+                        {{ $selectedDepartment == '' ? 'bg-primary text-white' : 'bg-white text-primary border border-primary' }}"
+                                style="height: 80px;">
+                                <div class="fw-bold" style="font-size: 1.3rem;">
+                                    {{ $totalCount }}
+                                </div>
+                                <div class="small text-uppercase" style="font-size: 0.85rem;">
+                                    Jumlah Data
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- SENARAI DEPARTMENT -->
+                        @foreach ($departmentList as $department)
+                            @php
+                                $deptCount = $departmentCounts[$department->id] ?? 0;
+                                $isSelected = $selectedDepartment == $department->id;
+                            @endphp
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <button type="submit" name="department_id" value="{{ $department->id }}"
+                                    class="w-100 border-0 d-flex flex-column justify-content-center align-items-center rounded-3 fw-semibold
+                            {{ $isSelected ? 'bg-primary text-white' : 'bg-white text-primary border border-primary' }}"
+                                    style="height: 80px;">
+                                    <div class="fw-bold" style="font-size: 1.3rem;">
+                                        {{ $deptCount }}
+                                    </div>
+                                    <div class="small text-uppercase" style="font-size: 0.85rem;">
+                                        {{ $department->name }}
+                                    </div>
+                                </button>
+                            </div>
+                        @endforeach
+
+                        <!-- RESET BUTTON -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <button type="button" id="resetButton"
+                                class="w-100 border border-secondary bg-white text-secondary rounded-3 fw-semibold
+                           d-flex flex-column justify-content-center align-items-center"
+                                style="height: 80px;">
+                                <div class="fw-bold" style="font-size: 1.2rem;">
+                                    ✖
+                                </div>
+                                <div class="small text-uppercase" style="font-size: 0.85rem;">
+                                    Reset
+                                </div>
+                            </button>
+                        </div>
+
                     </div>
-                </div>
+                </form>
             </div>
-        </form>
+        @endif
     </div>
 
-    <!-- TAJUK -->
-    <div class="text-center mb-4">
-        <h4 class="fw-bold text-primary mb-1">DATA WAR ROOM</h4>
-        <hr class="w-50 mx-auto border-primary" style="opacity: 0.75">
-    </div>
-
-    <!-- KAD -->
     @php
-        // Warna unik untuk 14+ jabatan (boleh tambah lagi kalau perlu)
+        $currentYear = now()->year;
         $colorPalette = [
-            '#0d6efd', // Primary Blue
-            '#6c757d', // Bootstrap Secondary
-            '#212529', // Bootstrap Dark
-            '#4b0082', // Indigo
-            '#116466', // Teal Dark
-            '#cc5500', // Orange Dark
-            '#800040', // Pink Dark
-            '#800000', // Maroon
-            '#001f3f', // Navy
-            '#2f4f4f', // Slate Grey
-            '#228B22', // Forest Green
-            '#36454F', // Charcoal
-            '#2c3e50', // Steel Blue
-            '#311432', // Eggplant
+            '#1565C0', // Vivid Blue
+            '#2E7D32', // Strong Green
+            '#C62828', // Bold Red
+            '#EF6C00', // Bold Orange
+            '#F9A825', // Strong Yellow
+            '#AD1457', // Bold Pink
+            '#6A1B9A', // Royal Purple
+            '#00897B', // Teal
+            '#00ACC1', // Cyan / Turquoise
+            '#6D4C41', // Brown
+            '#283593', // Navy Blue
+            '#9E9D24', // Olive/Lime
+            '#424242', // Dark Gray
+            '#37474F', // Slate / Blue-Gray
         ];
 
-        // Padankan department_id kepada warna unik
         $departmentColors = [];
-        $i = 0;
-        foreach ($departmentList as $dept) {
-            $departmentColors[$dept->id] = $colorPalette[$i] ?? 'dark'; // fallback if warna tak cukup
-            $i++;
+        foreach ($departmentList as $i => $dept) {
+            $departmentColors[$dept->id] = $colorPalette[$i] ?? '#6c757d';
         }
     @endphp
 
-    <div class="row">
-        @forelse ($dataList as $departmentName => $dataItems)
-            <div class="col-12">
-                <h5 class="fw-bold text-dark mt-4">{{ $departmentName }}</h5>
+
+    @forelse ($dataList as $departmentName => $dataItems)
+        @php
+            $deptId = optional($dataItems->first())->department_id ?? null;
+            $accentColor = $departmentColors[$deptId] ?? '#6c757d';
+            $lightAccent = $accentColor . '33';
+        @endphp
+
+        <div class="container-fluid mb-5">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+                <div class="flex-fill" style="height: 1px; background-color: {{ $accentColor }}33;"></div>
+                <i class="bi bi-building mx-2" style="color: {{ $accentColor }};"></i>
+                <span class="fw-semibold text-uppercase mx-2" style="color: {{ $accentColor }}; font-size: 1.1rem;">
+                    {{ $departmentName }}
+                </span>
+                <div class="flex-fill" style="height: 1px; background-color: {{ $accentColor }}33;"></div>
             </div>
 
-            @foreach ($dataItems as $item)
-                @php
-                    $currentYear = now()->year;
-                    $jumlahSemasa = $item->jumlahs->firstWhere('tahun.tahun', $currentYear)->jumlah ?? '-';
-                    $color = $departmentColors[$item->department_id] ?? 'dark';
-                @endphp
+            <div class="row g-4">
+                @foreach ($dataItems as $item)
+                    @php
+                        $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $currentYear);
+                        $jumlah = $jumlahRecord->jumlah ?? null;
+                        $pi_no = $jumlahRecord->pi_no ?? '-';
+                        $pi_target = $jumlahRecord->pi_target ?? null;
+                        $jenis = $item->jenis_nilai ?? 'Bilangan';
 
-                <div class="col-md-6 col-lg-4 mb-3">
-                    <div class="card shadow-sm h-100 border-0 rounded-3 text-white"
-     style="background-color: {{ $color }};">
-                        <div class="card-body d-flex flex-column p-3">
-                            <!-- Tajuk -->
-                            <div class="mb-2 d-flex justify-content-between align-items-center">
-                                <span class="fw-semibold text-uppercase" style="font-size: 0.9rem;">
-                                    {{ $item->nama_data ?? '-' }}
-                                </span>
-                                <span class="badge bg-light"  style="color: {{ $color }};">
-                                    {{ $currentYear }}
-                                </span>
+                        $jumlahPaparan = '-';
+                        if (!is_null($jumlah)) {
+                            $jumlahPaparan =
+                                $jenis === 'Peratus'
+                                    ? $jumlah . ' %'
+                                    : ($jenis === 'Mata Wang'
+                                        ? 'RM ' . number_format($jumlah, 2)
+                                        : $jumlah);
+                        }
+
+                        $piTargetPaparan = '-';
+                        if (!is_null($pi_target)) {
+                            $piTargetPaparan =
+                                $jenis === 'Peratus'
+                                    ? $pi_target . ' %'
+                                    : ($jenis === 'Mata Wang'
+                                        ? 'RM ' . number_format($pi_target, 2)
+                                        : $pi_target);
+                        }
+                    @endphp
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 position-relative">
+
+                            <!-- ACCENT STRIP -->
+                            <div
+                                style="height: 5px; background-color: {{ $accentColor }}; border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
                             </div>
 
-                            @php
-                                $currentYear = now()->year;
-                                $jumlahSemasaRecord = $item->jumlahs->firstWhere('tahun.tahun', $currentYear);
-                                $jumlahSemasa = $jumlahSemasaRecord->jumlah ?? '-';
-                                $jenis = $item->jenis_nilai ?? 'Bilangan';
+                            <!-- COLORED BORDER LEFT -->
+                            <div class="h-100"
+                                style="border-left: 5px solid {{ $accentColor }}; background-color: #fff; border-bottom-right-radius: 1rem; border-bottom-left-radius: 1rem;">
 
-                                // Format jumlah
-                                if (!is_null($jumlahSemasa) && $jumlahSemasa !== '-') {
-                                    if ($jenis === 'Peratus') {
-                                        $jumlahPaparan = $jumlahSemasa . ' %';
-                                    } elseif ($jenis === 'Mata Wang') {
-                                        $jumlahPaparan = 'RM ' . number_format($jumlahSemasa, 2);
-                                    } else {
-                                        $jumlahPaparan = $jumlahSemasa;
-                                    }
-                                } else {
-                                    $jumlahPaparan = '-';
-                                }
-
-                                // Format sasaran
-                                if (!is_null($jumlahSemasaRecord->pi_target ?? null)) {
-                                    if ($jenis === 'Peratus') {
-                                        $sasaranPaparan = $jumlahSemasaRecord->pi_target . ' %';
-                                    } elseif ($jenis === 'Mata Wang') {
-                                        $sasaranPaparan = 'RM ' . number_format($jumlahSemasaRecord->pi_target, 2);
-                                    } else {
-                                        $sasaranPaparan = $jumlahSemasaRecord->pi_target;
-                                    }
-                                } else {
-                                    $sasaranPaparan = '-';
-                                }
-                            @endphp
-
-
-                            <!-- Nilai -->
-                            <div class="text-center mb-3">
-                                <h1 class="fw-bold display-5 text-white">{{ $jumlahPaparan }}</h1>
-                            </div>
-
-                            <!-- Info Ringkas -->
-                            <div class="mb-3" style="font-size: 0.9rem;">
-                                <div><i class="bi bi-hash"></i> <strong>PI No:</strong> {{ $item->pi_no ?? '-' }}</div>
-                                <div><i class="bi bi-bullseye"></i> <strong>Sasaran:</strong> {{ $sasaranPaparan }}</div>
-                                <div><i class="bi bi-clock"></i> <strong>Kemaskini:</strong>
-                                    {{ $item->updated_at ? $item->updated_at->format('d/m/Y') : $item->created_at->format('d/m/Y') }}
+                                <!-- CONSISTENT HEADER -->
+                                <div class="d-flex align-items-center justify-content-center text-center px-3"
+                                    style="min-height: 70px; max-height: 90px; background-color: {{ $accentColor }}22; white-space: normal;">
+                                    <h6 class="fw-bold text-uppercase mb-0"
+                                        style="line-height: 1.3; font-size: 0.95rem; color: {{ $accentColor }};">
+                                        {{ $item->nama_data ?? '-' }}
+                                    </h6>
                                 </div>
-                            </div>
 
-                            <!-- Butang: Shared Folder + Paparan Lanjut -->
-                            <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
-                                @if (!empty($item->doc_link))
-                                    <a href="{{ $item->doc_link }}" target="_blank"
-                                        class="btn btn-sm btn-light text-{{ $color }} rounded-pill"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                        title="Buka pautan shared folder">
-                                        <i class="bx bxs-folder-open"></i> Shared Folder
-                                    </a>
-                                @endif
-                                <a href="{{ route('dataptj.show', $item->id) }}"
-                                    class="btn btn-sm btn-light text-{{ $color }} rounded-pill">
-                                    <i class="bx bx-show"></i> Papar Maklumat
-                                </a>
+                                <div class="card-body d-flex flex-column p-4">
+
+                                    <!-- VALUE -->
+                                    <div class="text-center mb-3">
+                                        <div class="fw-bold display-6" style="color: {{ $accentColor }};">
+                                            {{ $jumlahPaparan }}
+                                        </div>
+                                    </div>
+
+                                    <!-- INFO TABLE -->
+                                    <table class="table table-sm table-borderless mb-3">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-muted">Tahun</td>
+                                                <td class="text-end fw-semibold">{{ $currentYear }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">PI No</td>
+                                                <td class="text-end fw-semibold">{{ $pi_no }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Sasaran</td>
+                                                <td class="text-end fw-semibold">{{ $piTargetPaparan }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Kemaskini</td>
+                                                <td class="text-end fw-semibold">
+                                                    {{ $item->updated_at ? $item->updated_at->format('d/m/Y') : $item->created_at->format('d/m/Y') ?? '-' }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <!-- BUTTONS -->
+                                    <div class="mt-2 d-flex flex-wrap justify-content-between gap-2">
+                                        @if (!empty($item->doc_link))
+                                            <a href="{{ $item->doc_link }}" target="_blank"
+                                                class="btn btn-sm btn-outline-secondary rounded-pill">
+                                                <i class="bx bxs-folder-open"></i> Shared Folder
+                                            </a>
+                                        @endif
+                                        <a href="{{ route('dataptj.show', $item->id) }}"
+                                            class="btn btn-sm btn-outline-primary rounded-pill">
+                                            <i class="bx bx-show"></i> Papar Maklumat
+                                        </a>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        @empty
-            <div class="col-12">
-                <div class="alert alert-warning text-center">Tiada data dijumpai.</div>
+                @endforeach
             </div>
-        @endforelse
+        </div>
+    @empty
+        <div class="alert alert-warning text-center mt-4">Tiada data dijumpai.</div>
+    @endforelse
     </div>
 
-
-    <!-- SCRIPT RESET -->
     <script>
         document.getElementById('resetButton').addEventListener('click', function() {
             const url = new URL(window.location.href);

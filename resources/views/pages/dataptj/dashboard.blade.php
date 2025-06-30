@@ -63,7 +63,7 @@
                 $lightAccent = $accentColor . '33';
             @endphp
 
-            <div class="mb-5">
+            <div class="mb-3">
                 <div class="d-flex align-items-center mb-3">
                     <i class="bi bi-building" style="color: {{ $accentColor }};"></i>
                     <span class="badge rounded-pill shadow-sm text-uppercase fw-bold"
@@ -108,7 +108,7 @@
                         @endphp
 
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative">
+                            <div class="card border-0 shadow-sm rounded-4 h-98 position-relative">
 
                                 <!-- ACCENT STRIP -->
                                 <div
@@ -116,14 +116,14 @@
                                 </div>
 
                                 <!-- COLORED BORDER LEFT -->
-                                <div class="h-100"
+                                <div class="h-98"
                                     style="border-left: 4px solid {{ $accentColor }}; background-color: #fff; border-bottom-right-radius: 0.75rem; border-bottom-left-radius: 0.75rem;">
 
                                     <!-- COMPACT HEADER -->
                                     <div class="d-flex align-items-center justify-content-center text-center px-2"
-                                        style="min-height: 50px; max-height: 60px; background-color: {{ $accentColor }}; white-space: normal;">
+                                        style="min-height: 50px; max-height: 60px; background-color: {{ $accentColor }}33; white-space: normal;">
                                         <h6 class="fw-bold text-uppercase mb-0"
-                                            style="line-height: 1.2; font-size: 0.85rem; color: #fff;">
+                                            style="line-height: 1.2; font-size: 0.85rem; color: {{ $accentColor }};">
                                             {{ $item->nama_data ?? '-' }}
                                         </h6>
                                     </div>
@@ -131,14 +131,14 @@
                                     <div class="card-body d-flex flex-column p-3">
 
                                         <!-- VALUE -->
-                                        <div class="text-center mb-2">
+                                        <div class="text-center mb-1">
                                             <div class="fw-bold" style="font-size: 1.5rem; color: {{ $accentColor }};">
                                                 {{ $jumlahPaparan }}
                                             </div>
                                         </div>
 
                                         <!-- INFO TABLE -->
-                                        <table class="table table-sm table-borderless mb-2">
+                                        <table class="table table-sm table-borderless mb-1">
                                             <tbody>
                                                 <tr>
                                                     <td class="text-muted small">Tahun</td>
@@ -162,7 +162,7 @@
                                         </table>
 
                                         <!-- BUTTONS -->
-                                        <div class="mt-1 d-flex flex-wrap justify-content-between gap-1">
+                                        <div class="mt-1 d-flex flex-wrap justify-content-between gap-1 mb-1">
                                             @if (!empty($item->doc_link))
                                                 <a href="{{ $item->doc_link }}" target="_blank"
                                                     class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1">
@@ -174,7 +174,6 @@
                                                 <i class="bx bx-show"></i> Papar Maklumat
                                             </a>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

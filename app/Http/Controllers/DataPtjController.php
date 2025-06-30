@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class DataPtjController extends Controller
@@ -49,12 +50,22 @@ class DataPtjController extends Controller
 
         $dataList = $query->get()->groupBy('department.name');
 
+        // kira total rekod (tanpa groupBy)
+        $totalCount = $query->count();
+        $departmentCounts = DataPtj::select('department_id', DB::raw('count(*) as total'))
+    ->groupBy('department_id')
+    ->pluck('total', 'department_id')
+    ->toArray();
+
+
         $departmentList = Department::orderBy('name')->get();
 
         return view('pages.dataptj.dashboard', [
             'dataList' => $dataList,
             'departmentList' => $departmentList,
             'selectedDepartment' => $request->department_id,
+            'totalCount' => $totalCount,
+            'departmentCounts' => $departmentCounts,
         ]);
     }
 

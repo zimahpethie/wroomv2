@@ -123,6 +123,8 @@
                                                                 } elseif ($jenis == 'Mata Wang') {
                                                                     $jumlahPaparan =
                                                                         'RM ' . number_format($jumlah->jumlah, 2);
+                                                                } elseif ($jenis == 'Bilangan') {
+                                                                    $jumlahPaparan = number_format((int) $jumlah->jumlah, 0, '.', ',');
                                                                 } else {
                                                                     $jumlahPaparan = $jumlah->jumlah;
                                                                 }
@@ -134,6 +136,8 @@
                                                                 } elseif ($jenis == 'Mata Wang') {
                                                                     $sasaranPaparan =
                                                                         'RM ' . number_format($jumlah->pi_target, 2);
+                                                                } elseif ($jenis == 'Bilangan') {
+                                                                    $sasaranPaparan = number_format((int) $jumlah->pi_target, 0, '.', ',');
                                                                 } else {
                                                                     $sasaranPaparan = $jumlah->pi_target;
                                                                 }

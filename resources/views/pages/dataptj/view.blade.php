@@ -64,16 +64,18 @@
                         </tr>
                         <tr>
                             <th>Jumlah / Bilangan / Peratus / Pencapaian Mengikut Tahun</th>
-                            <td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">
                                 <div class="table-responsive">
-                                    <table class="table table-sm table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:10%">Tahun</th>
-                                                <th style="width:15%" class="text-wrap">KPI Universiti (BTU)</th>
-                                                <th style="width:30%">No. PI</th>
+                                    <table class="table table-sm table-striped table-bordered align-middle mb-0">
+                                        <thead class="table-light">
+                                            <tr class="text-center">
+                                                <th style="width:8%">Tahun</th>
+                                                <th style="width:12%">KPI BTU</th>
+                                                <th style="width:25%">No. PI</th>
                                                 <th style="width:20%">Sasaran</th>
-                                                <th style="width:25%">Pencapaian</th>
+                                                <th style="width:20%">Pencapaian</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -85,13 +87,18 @@
                                                     @php
                                                         $jenis = $dataptj->jenis_nilai ?? 'Bilangan';
 
-                                                        // Format jumlah
                                                         if (!is_null($jumlah->jumlah)) {
                                                             if ($jenis == 'Peratus') {
                                                                 $jumlahPaparan = $jumlah->jumlah . ' %';
                                                             } elseif ($jenis == 'Mata Wang') {
                                                                 $jumlahPaparan =
                                                                     'RM ' . number_format($jumlah->jumlah, 2);
+                                                            } elseif ($jenis == 'Bilangan') {
+                                                                $jumlahPaparan = number_format(
+                                                                    (int) $jumlah->jumlah,
+                                                                    0,
+                                                                    '.',
+                                                                    ',');
                                                             } else {
                                                                 $jumlahPaparan = $jumlah->jumlah;
                                                             }
@@ -99,13 +106,18 @@
                                                             $jumlahPaparan = '-';
                                                         }
 
-                                                        // Format sasaran
                                                         if (!is_null($jumlah->pi_target)) {
                                                             if ($jenis == 'Peratus') {
                                                                 $sasaranPaparan = $jumlah->pi_target . ' %';
                                                             } elseif ($jenis == 'Mata Wang') {
                                                                 $sasaranPaparan =
                                                                     'RM ' . number_format($jumlah->pi_target, 2);
+                                                            } elseif ($jenis == 'Bilangan') {
+                                                                $sasaranPaparan = number_format(
+                                                                    (int) $jumlah->pi_target,
+                                                                    0,
+                                                                    '.',
+                                                                    ',');
                                                             } else {
                                                                 $sasaranPaparan = $jumlah->pi_target;
                                                             }
@@ -114,19 +126,20 @@
                                                         }
                                                     @endphp
                                                     <tr>
-                                                        <td>{{ $tahun->tahun }}</td>
-                                                        <td>{{ $jumlah->is_kpi ? 'Ya' : '-' }}</td>
-                                                        <td>{{ $jumlah->pi_no ?? '-' }}</td>
-                                                        <td class="text-end">{{ $sasaranPaparan }}</td>
-                                                        <td class="text-end">{{ $jumlahPaparan }}</td>
+                                                        <td class="text-center fw-semibold">{{ $tahun->tahun }}</td>
+                                                        <td class="text-center">{{ $jumlah->is_kpi ? '✔️' : '-' }}</td>
+                                                        <td class="text-wrap">{{ $jumlah->pi_no ?? '-' }}</td>
+                                                        <td class="text-end fw-semibold">{{ $sasaranPaparan }}</td>
+                                                        <td class="text-end fw-semibold">{{ $jumlahPaparan }}</td>
                                                     </tr>
                                                 @endif
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                            </td>
+                            </th>
                         </tr>
+
                     </table>
                 </div>
             </div>
@@ -171,21 +184,19 @@
                 type: 'bar',
                 data: {
                     labels: labels,
-                    datasets: [
-                        {
-                            label: 'Sasaran',
-                            data: piTargetData,
-                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        },{
-                            label: 'Pencapaian',
-                            data: jumlahData,
-                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }
-                    ]
+                    datasets: [{
+                        label: 'Sasaran',
+                        data: piTargetData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Pencapaian',
+                        data: jumlahData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
                 },
                 options: {
                     responsive: true,

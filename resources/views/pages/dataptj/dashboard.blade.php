@@ -67,7 +67,7 @@
                 <div class="d-flex align-items-center mb-3">
                     <i class="bi bi-building" style="color: {{ $accentColor }};"></i>
                     <span class="badge rounded-pill shadow-sm text-uppercase fw-bold"
-                        style="background-color: {{ $accentColor }}; font-size: 1rem;">
+                        style="background-color: {{ $accentColor }}; font-size: 0.9rem;">
                         <i class="bi bi-building-fill me-1"></i> {{ $departmentName }}
                     </span>
                     <div class="flex-fill ms-2" style="height: 1px; background-color: {{ $accentColor }}33;"></div>

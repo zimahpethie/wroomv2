@@ -41,13 +41,13 @@
                     </div>
                 </form>
             </div>
-            @hasanyrole('Superadmin|Admin')
+            @can('Tambah Kampus')
             <div class="ms-auto">
                 <a href="{{ route('campus.create') }}" class="btn btn-primary radius-30 mt-2 mt-lg-0">
                     <i class="bx bxs-plus-square"></i> Tambah Kampus
                 </a>
             </div>
-            @endhasanyrole
+            @endcan
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -73,26 +73,26 @@
                             @endif
                         </td>
                         <td>
-                            @hasanyrole('Superadmin|Admin')
+                            @can('Edit Kampus')
                             <a href="{{ route('campus.edit', $campus->id) }}" class="btn btn-info btn-sm"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
                                 <i class="bx bxs-edit"></i>
                             </a>
-                            @endhasanyrole
+                            @endcan
+                            @can('Lihat Kampus')
                             <a href="{{ route('campus.show', $campus->id) }}" class="btn btn-primary btn-sm"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
                                 <i class="bx bx-show"></i>
                             </a>
-                            @hasanyrole('Superadmin|Admin')
+                            @endcan
+                            @can('Padam Kampus')
                             <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
                                 data-bs-title="Padam">
                                 <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#deleteModal{{ $campus->id }}"><i
                                         class="bx bx-trash"></i></span>
                             </a>
-                            @endhasanyrole
-
-
+                            @endcan
                         </td>
                     </tr>
                     @endforeach

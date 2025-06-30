@@ -53,19 +53,20 @@
 
 
     <li class="menu-label">Tetapan</li>
-
-    <li class="{{ Request::is('campus*') ? 'mm-active' : '' }}">
-        <a class="has-arrow" href="#">
-            <div class="parent-icon"><i class='bx bx-location-plus'></i></div>
-            <div class="menu-title">Lokasi</div>
-        </a>
-        <ul>
-            <li class="{{ Request::is('campus*') ? 'mm-active' : '' }}">
-                <a href="{{ route('campus') }}"><i class="bx bx-right-arrow-alt"></i>Kampus</a>
-            </li>
-        </ul>
-    </li>
-
+    @can('Lihat Kampus')
+        <li class="{{ Request::is('campus*') ? 'mm-active' : '' }}">
+            <a class="has-arrow" href="#">
+                <div class="parent-icon"><i class='bx bx-location-plus'></i></div>
+                <div class="menu-title">Lokasi</div>
+            </a>
+            <ul>
+                <li class="{{ Request::is('campus*') ? 'mm-active' : '' }}">
+                    <a href="{{ route('campus') }}"><i class="bx bx-right-arrow-alt"></i>Kampus</a>
+                </li>
+            </ul>
+        </li>
+    @endcan
+    
     <li class="{{ Request::is('jenisdataptj*') && !Request::is('tahun*') ? 'mm-active' : '' }}">
         <a class="has-arrow" href="#">
             <div class="parent-icon"><i class="bx bx-spreadsheet"></i></div>
@@ -104,7 +105,7 @@
             </li>
         </ul>
     </li>
-    
+
     <li class="{{ Request::routeIs('activity-log') ? 'mm-active' : '' }}">
         <a href="{{ route('activity-log') }}">
             <div class="parent-icon"><i class='bx bx-history'></i></div>

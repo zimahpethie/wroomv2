@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class CampusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:Lihat Kampus')->only(['index', 'show', 'search']);
+        $this->middleware('permission:Tambah Kampus')->only(['create', 'store']);
+        $this->middleware('permission:Edit Kampus')->only(['edit', 'update']);
+        $this->middleware('permission:Padam Kampus')->only(['destroy', 'trashList', 'restore', 'forceDelete']);
+    }
+
     public function index(Request $request)
     {
         $perPage = $request->input('perPage', 10);
@@ -32,7 +40,7 @@ class CampusController extends Controller
         $request->validate([
             'name' => 'required|unique:campuses',
             'publish_status' => 'required|in:1,0',
-        ],[
+        ], [
             'name.required'     => 'Sila isi nama kampus',
             'name.unique' => 'Nama kampus telah wujud',
             'publish_status.required' => 'Sila isi status pengguna',
@@ -69,7 +77,7 @@ class CampusController extends Controller
         $request->validate([
             'name' => 'required|unique:campuses,name,' . $id,
             'publish_status' => 'required|in:1,0',
-        ],[
+        ], [
             'name.required'     => 'Sila isi nama kampus',
             'name.unique' => 'Nama kampus telah wujud',
             'publish_status.required' => 'Sila isi status pengguna',

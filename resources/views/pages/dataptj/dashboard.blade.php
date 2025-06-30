@@ -107,7 +107,7 @@
                             }
                         @endphp
 
-                        <div class="col-12 col-md-6 col-lg-4">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                             <div class="card border-0 shadow-sm rounded-4 h-98 position-relative">
 
                                 <!-- ACCENT STRIP -->
@@ -162,18 +162,21 @@
                                         </table>
 
                                         <!-- BUTTONS -->
-                                        <div class="mt-1 d-flex flex-wrap justify-content-between gap-1 mb-1">
+                                        <div class="mt-2 d-flex flex-nowrap justify-content-center gap-3">
                                             @if (!empty($item->doc_link))
                                                 <a href="{{ $item->doc_link }}" target="_blank"
-                                                    class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1">
+                                                    class="btn btn-sm btn-outline-secondary rounded-pill px-1 py-1"
+                                                    style="font-size: 0.7rem;">
                                                     <i class="bx bxs-folder-open"></i> Shared Folder
                                                 </a>
                                             @endif
                                             <a href="{{ route('dataptj.show', $item->id) }}"
-                                                class="btn btn-sm btn-outline-primary rounded-pill px-2 py-1">
+                                                class="btn btn-sm btn-outline-primary rounded-pill px-1 py-1"
+                                                style="font-size: 0.7rem;">
                                                 <i class="bx bx-show"></i> Papar Maklumat
                                             </a>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>

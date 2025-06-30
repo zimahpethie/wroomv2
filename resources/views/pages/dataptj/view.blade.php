@@ -216,8 +216,8 @@
                         title: {
                             display: true,
                             text: [
-                                'STATISTIK JUMLAH / BILANGAN / PERATUS / PENCAPAIAN DAN SASARAN MENGIKUT TAHUN',
-                                @json('(' . $dataptj->nama_data . ' - ' . $dataptj->department->name . ')')
+                                'JUMLAH / BILANGAN / PERATUS / PENCAPAIAN DAN SASARAN MENGIKUT TAHUN',
+                                @json($dataptj->nama_data . ' - ' . $dataptj->department->name)
                             ],
                             font: {
                                 size: 14,

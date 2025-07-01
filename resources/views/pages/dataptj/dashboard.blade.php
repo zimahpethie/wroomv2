@@ -136,7 +136,7 @@
                                                 $progress = min(100, round(($jumlah / $pi_target) * 100));
                                                 $chartId = 'gaugeChart_' . $item->id;
                                             @endphp
-                                            <div class="my-2" style="height:150px; width:150px; margin:auto;">
+                                            <div class="my-2" style="height:200px; width:200px; margin:auto;">
                                                 <canvas id="{{ $chartId }}"></canvas>
                                             </div>
                                         @else
@@ -230,42 +230,67 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            @foreach ($dataList as $dataItems)
-                @foreach ($dataItems as $item)
-                    @php
-                        $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $currentYear);
-                        $jumlah = $jumlahRecord->jumlah ?? null;
-                        $pi_target = $jumlahRecord->pi_target ?? null;
-                        $accentColor = $departmentColors[$item->department_id] ?? '#6c757d';
-                        $chartId = 'gaugeChart_' . $item->id;
-                        $progress = $pi_target && $pi_target > 0 && is_numeric($jumlah) ? min(100, round(($jumlah / $pi_target) * 100)) : null;
-                    @endphp
-                    @if ($progress !== null)
-                        new Chart(document.getElementById('{{ $chartId }}'), {
-                            type: 'doughnut',
-                            data: {
-                                datasets: [{
-                                    data: [{{ $progress }}, {{ 100 - $progress }}],
-                                    backgroundColor: ['{{ $accentColor }}', '#e0e0e0'],
-                                    borderWidth: 0
-                                }]
+            // Build array of data
+            const ringChartsData = [
+                @foreach ($dataList as $dataItems)
+                    @foreach ($dataItems as $item)
+                        @php
+                            $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $currentYear);
+                            $jumlah = $jumlahRecord->jumlah ?? null;
+                            $pi_target = $jumlahRecord->pi_target ?? null;
+                            $accentColor = $departmentColors[$item->department_id] ?? '#6c757d';
+                            $chartId = 'gaugeChart_' . $item->id;
+                        @endphp
+                        @if ($jumlah !== null && $pi_target !== null && $pi_target > 0)
+                            {
+                                id: '{{ $chartId }}',
+                                label: @json($item->nama_data ?? '-'),
+                                jumlah: {{ $jumlah }},
+                                pi_target: {{ $pi_target }},
+                                accentColor: '{{ $accentColor }}'
                             },
-                            options: {
-                                cutout: '70%',
-                                responsive: true,
-                                plugins: {
-                                    tooltip: {
-                                        enabled: true
-                                    },
-                                    legend: {
-                                        display: false
+                        @endif
+                    @endforeach
+                @endforeach
+            ];
+
+            // Render each chart
+            ringChartsData.forEach(item => {
+                const ctx = document.getElementById(item.id);
+                if (!ctx) return;
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Jumlah', 'Sasaran'],
+                        datasets: [{
+                            label: item.label,
+                            data: [item.jumlah, item.pi_target],
+                            backgroundColor: [item.accentColor, '#e0e0e0'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#000'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: ${context.raw}`;
                                     }
                                 }
                             }
-                        });
-                    @endif
-                @endforeach
-            @endforeach
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endsection

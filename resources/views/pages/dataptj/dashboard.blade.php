@@ -130,12 +130,23 @@
 
                                     <div class="card-body d-flex flex-column p-3">
 
-                                        <!-- VALUE -->
-                                        <div class="text-center mb-1">
-                                            <div class="fw-bold" style="font-size: 1.5rem; color: {{ $accentColor }};">
-                                                {{ $jumlahPaparan }}
+                                        <!-- VALUE OR METER -->
+                                        @if ($pi_target && $pi_target > 0 && is_numeric($jumlah))
+                                            @php
+                                                $progress = min(100, round(($jumlah / $pi_target) * 100));
+                                                $chartId = 'gaugeChart_' . $item->id;
+                                            @endphp
+                                            <div class="my-2" style="height:150px; width:150px; margin:auto;">
+                                                <canvas id="{{ $chartId }}"></canvas>
                                             </div>
-                                        </div>
+                                        @else
+                                            <div class="text-center mb-1">
+                                                <div class="fw-bold"
+                                                    style="font-size: 1.5rem; color: {{ $accentColor }};">
+                                                    {{ $jumlahPaparan }}
+                                                </div>
+                                            </div>
+                                        @endif
 
                                         <!-- INFO TABLE -->
                                         <table class="table table-sm table-borderless mb-1">
@@ -154,9 +165,19 @@
                                                             style="background-color: {{ $accentColor }};">{{ $pi_no }}</span>
                                                     </td>
                                                 </tr>
+                                                @if ($pi_target && $pi_target > 0)
+                                                    <tr>
+                                                        <td class="text-muted">Jumlah</td>
+                                                        <td class="text-end fw-semibold">
+                                                            <span class="badge"
+                                                                style="background-color: {{ $accentColor }};">{{ $jumlahPaparan }}</span>
+                                                        </td>
+                                                    </tr>
+                                                @endif
                                                 <tr>
                                                     <td class="text-muted">Sasaran</td>
-                                                    <td class="text-end fw-semibold"><span class="badge"
+                                                    <td class="text-end fw-semibold">
+                                                        <span class="badge"
                                                             style="background-color: {{ $accentColor }};">{{ $piTargetPaparan }}</span>
                                                     </td>
                                                 </tr>
@@ -205,6 +226,46 @@
             const url = new URL(window.location.href);
             url.searchParams.delete('department_id');
             window.location.href = url.toString();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @foreach ($dataList as $dataItems)
+                @foreach ($dataItems as $item)
+                    @php
+                        $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $currentYear);
+                        $jumlah = $jumlahRecord->jumlah ?? null;
+                        $pi_target = $jumlahRecord->pi_target ?? null;
+                        $accentColor = $departmentColors[$item->department_id] ?? '#6c757d';
+                        $chartId = 'gaugeChart_' . $item->id;
+                        $progress = $pi_target && $pi_target > 0 && is_numeric($jumlah) ? min(100, round(($jumlah / $pi_target) * 100)) : null;
+                    @endphp
+                    @if ($progress !== null)
+                        new Chart(document.getElementById('{{ $chartId }}'), {
+                            type: 'doughnut',
+                            data: {
+                                datasets: [{
+                                    data: [{{ $progress }}, {{ 100 - $progress }}],
+                                    backgroundColor: ['{{ $accentColor }}', '#e0e0e0'],
+                                    borderWidth: 0
+                                }]
+                            },
+                            options: {
+                                cutout: '70%',
+                                responsive: true,
+                                plugins: {
+                                    tooltip: {
+                                        enabled: true
+                                    },
+                                    legend: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        });
+                    @endif
+                @endforeach
+            @endforeach
         });
     </script>
 @endsection

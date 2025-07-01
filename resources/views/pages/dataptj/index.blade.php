@@ -31,17 +31,21 @@
                             <input type="text" name="search" class="form-control rounded" placeholder="Carian..."
                                 value="{{ request('search') }}">
                         </div>
-                        <div>
-                            <select name="department_id" class="form-select rounded">
-                                <option value="">📌 Semua Bahagian</option>
-                                @foreach ($departmentList as $department)
-                                    <option value="{{ $department->id }}"
-                                        {{ request('department_id') == $department->id ? 'selected' : '' }}>
-                                        {{ $department->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        @if ($canFilterDepartments)
+                            <div>
+                                <select name="department_id" class="form-select rounded">
+                                    <option value="">📌 Semua Bahagian</option>
+                                    @foreach ($departmentList as $department)
+                                        <option value="{{ $department->id }}"
+                                            {{ request('department_id') == $department->id ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @else
+                            <input type="hidden" name="department_id" value="{{ request('department_id') }}">
+                        @endif
                         <div>
                             <input type="hidden" name="perPage" value="{{ request('perPage', 10) }}">
                             <button type="button" class="btn btn-secondary rounded" id="resetButton">Reset</button>
@@ -247,32 +251,47 @@
         </div>
     @endforeach
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('searchFilterForm');
-            const searchInput = form.querySelector('input[name="search"]');
-            const departmentSelect = form.querySelector('select[name="department_id"]');
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('searchFilterForm');
+    const searchInput = form.querySelector('input[name="search"]');
+    const departmentInput = form.querySelector('input[name="department_id"], select[name="department_id"]');
 
-            // Debounce for search input
-            let debounceTimeout;
-            searchInput.addEventListener('input', function() {
-                clearTimeout(debounceTimeout);
-                debounceTimeout = setTimeout(() => {
-                    form.submit();
-                }, 500); // waits 500ms after typing stops
-            });
+    // Debounce for search input
+    let debounceTimeout;
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            form.submit();
+        }, 500);
+    });
 
-            // Instant submit on department change
-            departmentSelect.addEventListener('change', function() {
-                form.submit();
-            });
-
-            // Reset button
-            document.getElementById('resetButton').addEventListener('click', function() {
-                window.location.href = "{{ route('dataptj') }}";
-            });
+    // Instant submit on department change
+    if (departmentInput.tagName.toLowerCase() === 'select') {
+        departmentInput.addEventListener('change', function() {
+            form.submit();
         });
-    </script>
+    }
+
+    // Reset button
+    document.getElementById('resetButton').addEventListener('click', function() {
+        searchInput.value = '';
+
+        @if ($canFilterDepartments)
+            // Clear department filter for Admin/Superadmin
+            if (departmentInput.tagName.toLowerCase() === 'select') {
+                departmentInput.value = '';
+            }
+        @else
+            // For normal user, keep their own department ID
+            departmentInput.value = "{{ $userDepartmentId }}";
+        @endif
+
+        form.submit();
+    });
+});
+</script>
+
 
     <!--end page wrapper -->
 @endsection

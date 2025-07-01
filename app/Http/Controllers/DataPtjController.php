@@ -24,7 +24,6 @@ class DataPtjController extends Controller
         $departmentId = $request->input('department_id');
 
         $tahunList = Tahun::orderBy('tahun', 'asc')->get();
-        $departmentList = Department::orderBy('name')->get();
 
         $query = DataPtj::query();
 
@@ -40,6 +39,12 @@ class DataPtjController extends Controller
             $query->where('nama_data', 'LIKE', "%$search%");
         }
 
+        $canFilterDepartments = $user->hasAnyRole(['Superadmin', 'Admin']);
+
+        $departmentList = $canFilterDepartments
+            ? Department::orderBy('name')->get()
+            : collect();
+
         $dataptjList = $query->latest()->paginate($perPage);
 
         return view('pages.dataptj.index', [
@@ -49,6 +54,8 @@ class DataPtjController extends Controller
             'departmentList' => $departmentList,
             'selectedDepartment' => $departmentId,
             'search' => $search,
+            'canFilterDepartments' => $canFilterDepartments,
+            'userDepartmentId' => $user->department_id,
         ]);
     }
 

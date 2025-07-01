@@ -165,6 +165,13 @@
                                                             style="background-color: {{ $accentColor }};">{{ $pi_no }}</span>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td class="text-muted">Sasaran</td>
+                                                    <td class="text-end fw-semibold">
+                                                        <span class="badge"
+                                                            style="background-color: {{ $accentColor }};">{{ $piTargetPaparan }}</span>
+                                                    </td>
+                                                </tr>
                                                 @if ($pi_target && $pi_target > 0)
                                                     <tr>
                                                         <td class="text-muted">Jumlah</td>
@@ -174,13 +181,6 @@
                                                         </td>
                                                     </tr>
                                                 @endif
-                                                <tr>
-                                                    <td class="text-muted">Sasaran</td>
-                                                    <td class="text-end fw-semibold">
-                                                        <span class="badge"
-                                                            style="background-color: {{ $accentColor }};">{{ $piTargetPaparan }}</span>
-                                                    </td>
-                                                </tr>
                                                 <tr>
                                                     <td class="text-muted">Kemaskini</td>
                                                     <td class="text-end fw-semibold">

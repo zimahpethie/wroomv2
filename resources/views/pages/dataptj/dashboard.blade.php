@@ -8,6 +8,7 @@
             <h2 class="fw-bold text-primary mb-3 mb-md-0" style="font-size: 1.8rem;">
                 DATA WAR ROOM DASHBOARD
             </h2>
+            @hasanyrole('Superadmin|Admin')
             <form id="dashboardFilter" action="{{ route('dataptj.dashboard') }}" method="GET"
                 class="d-flex flex-row flex-wrap align-items-center gap-2">
                 <div>
@@ -28,6 +29,7 @@
                     </button>
                 </div>
             </form>
+            @endhasanyrole
         </div>
 
         @php

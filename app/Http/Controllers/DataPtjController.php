@@ -67,9 +67,9 @@ class DataPtjController extends Controller
             ->withCount('jumlahs');
 
         // Hanya Superadmin/Admin boleh tengok semua department
-        // if (!$user->hasAnyRole(['Superadmin', 'Admin'])) {
-        //     $query->where('department_id', $user->department_id);
-        // }
+        if (!$user->hasAnyRole(['Superadmin', 'Admin'])) {
+            $query->where('department_id', $user->department_id);
+        }
 
         // Jika ada filter department_id
         if ($request->has('department_id') && $request->department_id != '') {

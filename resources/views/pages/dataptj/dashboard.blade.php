@@ -9,26 +9,26 @@
                 DATA WAR ROOM DASHBOARD
             </h2>
             @hasanyrole('Superadmin|Admin')
-            <form id="dashboardFilter" action="{{ route('dataptj.dashboard') }}" method="GET"
-                class="d-flex flex-row flex-wrap align-items-center gap-2">
-                <div>
-                    <select name="department_id" class="form-select form-select-sm rounded-pill shadow-sm"
-                        onchange="this.form.submit()">
-                        <option value="">📌 Semua Bahagian</option>
-                        @foreach ($departmentList as $department)
-                            <option value="{{ $department->id }}"
-                                {{ $selectedDepartment == $department->id ? 'selected' : '' }}>
-                                {{ $department->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <button id="resetButton" type="button" class="btn btn-sm btn-outline-secondary rounded-pill">
-                        Reset
-                    </button>
-                </div>
-            </form>
+                <form id="dashboardFilter" action="{{ route('dataptj.dashboard') }}" method="GET"
+                    class="d-flex flex-row flex-wrap align-items-center gap-2">
+                    <div>
+                        <select name="department_id" class="form-select form-select-sm rounded-pill shadow-sm"
+                            onchange="this.form.submit()">
+                            <option value="">📌 Semua Bahagian</option>
+                            @foreach ($departmentList as $department)
+                                <option value="{{ $department->id }}"
+                                    {{ $selectedDepartment == $department->id ? 'selected' : '' }}>
+                                    {{ $department->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <button id="resetButton" type="button" class="btn btn-sm btn-outline-secondary rounded-pill">
+                            Reset
+                        </button>
+                    </div>
+                </form>
             @endhasanyrole
         </div>
 
@@ -138,7 +138,7 @@
                                                 $progress = min(100, round(($jumlah / $pi_target) * 100));
                                                 $chartId = 'gaugeChart_' . $item->id;
                                             @endphp
-                                            <div class="my-2" style="height:200px; width:200px; margin:auto;">
+                                            <div class="my-2" style="width: 100%; max-width: 400px; margin:auto;">
                                                 <canvas id="{{ $chartId }}"></canvas>
                                             </div>
                                         @else
@@ -262,36 +262,77 @@
                 if (!ctx) return;
 
                 new Chart(ctx, {
-                    type: 'doughnut',
+                    type: 'bar',
                     data: {
                         labels: ['Pencapaian', 'Sasaran'],
                         datasets: [{
                             label: item.label,
                             data: [item.jumlah, item.pi_target],
-                            backgroundColor: [item.accentColor, '#e0e0e0'],
-                            borderWidth: 0
+                            backgroundColor: [
+                                item.accentColor,
+                                '#e0e0e0'
+                            ],
+                            borderColor: [
+                                item.accentColor,
+                                '#e0e0e0'
+                            ],
+                            borderWidth: 1
                         }]
                     },
                     options: {
                         responsive: true,
-                        cutout: '60%',
+                        layout: {
+                            padding: {
+                                top: 20
+                            }
+                        },
                         plugins: {
+                            title: {
+                                display: false,
+                                text: item.label,
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#000'
+                            },
                             legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: '#000'
-                                }
+                                display: false
                             },
                             tooltip: {
+                                enabled: true,
                                 callbacks: {
-                                    label: function(context) {
-                                        return `${context.label}: ${context.raw}`;
+                                    label: function(tooltipItem) {
+                                        return `${tooltipItem.label}: ${tooltipItem.raw}`;
                                     }
                                 }
                             }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
                         }
-                    }
+                    },
+                    plugins: [{
+                        afterDraw: function(chart) {
+                            var ctx = chart.ctx;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            ctx.fillStyle = '#000';
+                            ctx.font = 'bold 12px Arial';
+                            chart.data.datasets.forEach((dataset, i) => {
+                                var meta = chart.getDatasetMeta(i);
+                                meta.data.forEach((bar, index) => {
+                                    var data = dataset.data[index];
+                                    ctx.fillText(data, bar.x, bar.y -
+                                        5);
+                                });
+                            });
+                        }
+                    }]
                 });
+
             });
         });
     </script>

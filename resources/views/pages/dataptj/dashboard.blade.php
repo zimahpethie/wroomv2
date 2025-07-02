@@ -269,12 +269,12 @@
                             label: item.label,
                             data: [item.pi_target, item.jumlah],
                             backgroundColor: [
-                                item.accentColor,
-                                '#e0e0e0'
+                                '#e0e0e0',
+                                item.accentColor
                             ],
                             borderColor: [
-                                item.accentColor,
-                                '#e0e0e0'
+                                '#e0e0e0',
+                                item.accentColor
                             ],
                             borderWidth: 1
                         }]

@@ -92,6 +92,7 @@ class DataPtjController extends Controller
 
         // Senarai department tetap semua untuk butang filter
         $departmentList = Department::orderBy('name')->get();
+        $currentYear = now()->year;
 
         return view('pages.dataptj.dashboard', [
             'dataList' => $dataList,
@@ -99,6 +100,7 @@ class DataPtjController extends Controller
             'selectedDepartment' => $request->department_id,
             'totalCount' => $totalCount,
             'departmentCounts' => $departmentCounts,
+            'currentYear' => $currentYear,
         ]);
     }
 

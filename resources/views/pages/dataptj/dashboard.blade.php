@@ -5,8 +5,8 @@
 
         <!-- PAGE TITLE + FILTER INLINE -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
-            <h2 class="fw-bold text-primary mb-3 mb-md-0" style="font-size: 1.8rem;">
-                DATA WAR ROOM DASHBOARD
+            <h2 class="fw-bold text-primary mb-3 mb-md-0 d-flex align-items-center flex-wrap" style="font-size: 1.8rem;">
+                DATA WAR ROOM {{ $currentYear }}
             </h2>
             @hasanyrole('Superadmin|Admin')
                 <form id="dashboardFilter" action="{{ route('dataptj.dashboard') }}" method="GET"

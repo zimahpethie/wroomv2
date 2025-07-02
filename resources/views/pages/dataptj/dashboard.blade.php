@@ -174,7 +174,7 @@
                                                 </tr>
                                                 @if ($pi_target && $pi_target > 0)
                                                     <tr>
-                                                        <td class="text-muted">Jumlah</td>
+                                                        <td class="text-muted">Pencapaian</td>
                                                         <td class="text-end fw-semibold">
                                                             <span class="badge"
                                                                 style="background-color: {{ $accentColor }};">{{ $jumlahPaparan }}</span>
@@ -262,7 +262,7 @@
                 new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Jumlah', 'Sasaran'],
+                        labels: ['Pencapaian', 'Sasaran'],
                         datasets: [{
                             label: item.label,
                             data: [item.jumlah, item.pi_target],

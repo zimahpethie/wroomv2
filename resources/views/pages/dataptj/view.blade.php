@@ -131,8 +131,8 @@
                                                         <td class="text-center fw-semibold">{{ $tahun->tahun }}</td>
                                                         <td class="text-center">{{ $jumlah->is_kpi ? 'Ya' : '-' }}</td>
                                                         <td class="text-center">{{ $jumlah->pi_no ?? '-' }}</td>
-                                                        <td class="text-end fw-semibold">{{ $sasaranPaparan }}</td>
-                                                        <td class="text-end fw-semibold">{{ $jumlahPaparan }}</td>
+                                                        <td class="text-center fw-semibold">{{ $sasaranPaparan }}</td>
+                                                        <td class="text-center fw-semibold">{{ $jumlahPaparan }}</td>
                                                     </tr>
                                                 @endif
                                             @endforeach

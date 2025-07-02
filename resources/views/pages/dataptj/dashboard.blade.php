@@ -122,10 +122,10 @@
                                     style="border-left: 4px solid {{ $accentColor }}; background-color: #fff; border-bottom-right-radius: 0.75rem; border-bottom-left-radius: 0.75rem;">
 
                                     <!-- COMPACT HEADER -->
-                                    <div class="d-flex align-items-center justify-content-center text-center px-2"
-                                        style="min-height: 50px; max-height: 60px; background-color: {{ $accentColor }}33; white-space: normal;">
-                                        <h6 class="fw-bold text-uppercase mb-0"
-                                            style="line-height: 1.2; font-size: 0.85rem; color: {{ $accentColor }};">
+                                    <div class="d-flex align-items-center justify-content-center text-center px-2 py-2"
+                                        style="background-color: {{ $accentColor }}33;">
+                                        <h6 class="fw-bold text-uppercase mb-0 text-wrap text-break"
+                                            style="font-size: clamp(0.75rem, 2.5vw, 1rem); color: {{ $accentColor }};">
                                             {{ $item->nama_data ?? '-' }}
                                         </h6>
                                     </div>
@@ -264,10 +264,10 @@
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['Pencapaian', 'Sasaran'],
+                        labels: ['Sasaran', 'Pencapaian'],
                         datasets: [{
                             label: item.label,
-                            data: [item.jumlah, item.pi_target],
+                            data: [item.pi_target, item.jumlah],
                             backgroundColor: [
                                 item.accentColor,
                                 '#e0e0e0'

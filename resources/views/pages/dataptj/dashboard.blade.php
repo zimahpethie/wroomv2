@@ -173,13 +173,11 @@
                                                     <td class="fw-semibold small">{{ $piTargetPaparan }}
                                                     </td>
                                                 </tr>
-                                                @if ($pi_target && $pi_target > 0)
-                                                    <tr>
-                                                        <td class="text-muted">Pencapaian</td>
-                                                        <td class="fw-semibold small">{{ $jumlahPaparan }}
-                                                        </td>
-                                                    </tr>
-                                                @endif
+                                                <tr>
+                                                    <td class="text-muted">Pencapaian</td>
+                                                    <td class="fw-semibold small">{{ $jumlahPaparan }}
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <td class="text-muted">Kemaskini</td>
                                                     <td class="fw-semibold small">
@@ -236,6 +234,7 @@
                             $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $selectedYear);
                             $jumlah = isset($jumlahRecord->jumlah) ? $jumlahRecord->jumlah : 'null';
                             $pi_target = isset($jumlahRecord->pi_target) ? $jumlahRecord->pi_target : 'null';
+                            $jenis = $item->jenis_nilai ?? 'Bilangan';
                             $accentColor = $departmentColors[$item->department_id] ?? '#6c757d';
                             $chartId = 'barChart_' . $item->id;
                         @endphp {
@@ -243,11 +242,24 @@
                             label: @json($item->nama_data ?? '-'),
                             jumlah: {{ $jumlah }},
                             pi_target: {{ $pi_target }},
+                            jenis: @json($jenis),
                             accentColor: '{{ $accentColor }}'
                         },
                     @endforeach
                 @endforeach
             ];
+
+            // Function to format value
+            function formatValue(value, jenis) {
+                if (value === null) return '-';
+                if (jenis === 'Peratus') {
+                    return value + ' %';
+                } else if (jenis === 'Mata Wang') {
+                    return 'RM ' + Number(value).toFixed(2);
+                } else {
+                    return Number(value).toFixed(0);
+                }
+            }
 
             // Render each chart
             barChartsData.forEach(item => {
@@ -296,7 +308,13 @@
                                 enabled: true,
                                 callbacks: {
                                     label: function(tooltipItem) {
-                                        return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                                        const itemData = barChartsData.find(d => d.id ===
+                                            tooltipItem.chart.canvas.id);
+                                        let value = tooltipItem.raw;
+                                        if (itemData) {
+                                            value = formatValue(value, itemData.jenis);
+                                        }
+                                        return `${tooltipItem.label}: ${value}`;
                                     }
                                 }
                             }
@@ -317,12 +335,21 @@
                             ctx.textBaseline = 'bottom';
                             ctx.fillStyle = '#000';
                             ctx.font = 'bold 12px Arial';
+
+                            const itemData = barChartsData.find(d => d.id === chart
+                                .canvas.id);
+
                             chart.data.datasets.forEach((dataset, i) => {
                                 var meta = chart.getDatasetMeta(i);
                                 meta.data.forEach((bar, index) => {
                                     var data = dataset.data[index];
-                                    ctx.fillText(data, bar.x, bar.y -
-                                        5);
+                                    let formatted = data;
+                                    if (itemData) {
+                                        formatted = formatValue(data,
+                                            itemData.jenis);
+                                    }
+                                    ctx.fillText(formatted, bar.x, bar
+                                        .y - 5);
                                 });
                             });
                         }
@@ -332,4 +359,5 @@
             });
         });
     </script>
+
 @endsection

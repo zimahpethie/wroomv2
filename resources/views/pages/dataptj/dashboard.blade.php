@@ -156,7 +156,7 @@
                                         </div>
 
                                         <!-- INFO TABLE -->
-                                        <table class="table table-sm table-bordered mb-1">
+                                        <table class="table table-sm table-bordered table-striped mb-1">
                                             <tbody>
                                                 <tr>
                                                     <td class="text-muted">Tahun</td>

@@ -133,25 +133,21 @@
                                     <div class="card-body d-flex flex-column p-3">
 
                                         <!-- VALUE OR METER -->
-                                        @if ($pi_target && $pi_target > 0 && is_numeric($jumlah))
-                                            @php
+                                        @php
+                                            if (is_numeric($pi_target) && $pi_target > 0 && is_numeric($jumlah)) {
                                                 $progress = min(100, round(($jumlah / $pi_target) * 100));
-                                                $chartId = 'gaugeChart_' . $item->id;
-                                            @endphp
-                                            <div class="my-2" style="width: 100%; max-width: 400px; margin:auto;">
-                                                <canvas id="{{ $chartId }}"></canvas>
-                                            </div>
-                                        @else
-                                            <div class="text-center mb-1">
-                                                <div class="fw-bold"
-                                                    style="font-size: 1.5rem; color: {{ $accentColor }};">
-                                                    {{ $jumlahPaparan }}
-                                                </div>
-                                            </div>
-                                        @endif
+                                            } else {
+                                                $progress = 0;
+                                            }
+                                            $chartId = 'barChart_' . $item->id;
+                                        @endphp
+
+                                        <div class="my-2" style="width: 100%; max-width: 400px; margin:auto;">
+                                            <canvas id="{{ $chartId }}"></canvas>
+                                        </div>
 
                                         <!-- INFO TABLE -->
-                                        <table class="table table-sm table-borderless mb-1">
+                                        <table class="table table-sm table-bordered mb-1">
                                             <tbody>
                                                 <tr>
                                                     <td class="text-muted">Tahun</td>
@@ -185,11 +181,9 @@
                                                 @endif
                                                 <tr>
                                                     <td class="text-muted">Kemaskini</td>
-                                                    <td class="text-end fw-semibold">
-                                                        <span class="badge"
-                                                            style="background-color: {{ $accentColor }};">
-                                                            {{ $item->updated_at ? $item->updated_at->format('d/m/Y H:i') : ($item->created_at ? $item->created_at->format('d/m/Y H:i') : '-') }}
-                                                        </span>
+                                                    <td class="text-end small fw-semibold">
+                                                        {{ $item->updated_at ? $item->updated_at->format('d/m/Y H:i') : ($item->created_at ? $item->created_at->format('d/m/Y H:i') : '-') }}
+
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -227,37 +221,34 @@
         document.getElementById('resetButton').addEventListener('click', function() {
             const url = new URL(window.location.href);
             url.searchParams.delete('department_id');
-            window.location.href = url.toString();
+            window.location.href = url.toStbar();
         });
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Build array of data
-            const ringChartsData = [
+            const barChartsData = [
                 @foreach ($dataList as $dataItems)
                     @foreach ($dataItems as $item)
                         @php
                             $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $currentYear);
-                            $jumlah = $jumlahRecord->jumlah ?? null;
-                            $pi_target = $jumlahRecord->pi_target ?? null;
+                            $jumlah = isset($jumlahRecord->jumlah) ? $jumlahRecord->jumlah : 'null';
+                            $pi_target = isset($jumlahRecord->pi_target) ? $jumlahRecord->pi_target : 'null';
                             $accentColor = $departmentColors[$item->department_id] ?? '#6c757d';
-                            $chartId = 'gaugeChart_' . $item->id;
-                        @endphp
-                        @if ($jumlah !== null && $pi_target !== null && $pi_target > 0)
-                            {
-                                id: '{{ $chartId }}',
-                                label: @json($item->nama_data ?? '-'),
-                                jumlah: {{ $jumlah }},
-                                pi_target: {{ $pi_target }},
-                                accentColor: '{{ $accentColor }}'
-                            },
-                        @endif
+                            $chartId = 'barChart_' . $item->id;
+                        @endphp {
+                            id: '{{ $chartId }}',
+                            label: @json($item->nama_data ?? '-'),
+                            jumlah: {{ $jumlah }},
+                            pi_target: {{ $pi_target }},
+                            accentColor: '{{ $accentColor }}'
+                        },
                     @endforeach
                 @endforeach
             ];
 
             // Render each chart
-            ringChartsData.forEach(item => {
+            barChartsData.forEach(item => {
                 const ctx = document.getElementById(item.id);
                 if (!ctx) return;
 
@@ -310,7 +301,10 @@
                         },
                         scales: {
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
                             }
                         }
                     },

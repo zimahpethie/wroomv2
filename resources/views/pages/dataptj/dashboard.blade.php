@@ -160,37 +160,29 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="text-muted">Tahun</td>
-                                                    <td class="text-end fw-semibold">
-                                                        <span class="badge"
-                                                            style="background-color: {{ $accentColor }};">{{ $selectedYear }}</span>
+                                                    <td class="fw-semibold small">{{ $selectedYear }}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-muted">PI No</td>
-                                                    <td class="text-end fw-semibold">
-                                                        <span class="badge"
-                                                            style="background-color: {{ $accentColor }};">{{ $pi_no }}</span>
+                                                    <td class="fw-semibold small">{{ $pi_no }}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-muted">Sasaran</td>
-                                                    <td class="text-end fw-semibold">
-                                                        <span class="badge"
-                                                            style="background-color: {{ $accentColor }};">{{ $piTargetPaparan }}</span>
+                                                    <td class="fw-semibold small">{{ $piTargetPaparan }}
                                                     </td>
                                                 </tr>
                                                 @if ($pi_target && $pi_target > 0)
                                                     <tr>
                                                         <td class="text-muted">Pencapaian</td>
-                                                        <td class="text-end fw-semibold">
-                                                            <span class="badge"
-                                                                style="background-color: {{ $accentColor }};">{{ $jumlahPaparan }}</span>
+                                                        <td class="fw-semibold small">{{ $jumlahPaparan }}
                                                         </td>
                                                     </tr>
                                                 @endif
                                                 <tr>
                                                     <td class="text-muted">Kemaskini</td>
-                                                    <td class="text-end small fw-semibold">
+                                                    <td class="fw-semibold small">
                                                         {{ $item->updated_at ? $item->updated_at->format('d/m/Y H:i') : ($item->created_at ? $item->created_at->format('d/m/Y H:i') : '-') }}
 
                                                     </td>

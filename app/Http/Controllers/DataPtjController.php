@@ -62,9 +62,18 @@ class DataPtjController extends Controller
     public function dashboard(Request $request)
     {
         $user = User::find(auth()->id());
+        $selectedYear = $request->input('year', now()->year);
 
-        $query = DataPtj::with(['department', 'jumlahs.tahun'])
-            ->withCount('jumlahs');
+        $query = DataPtj::with([
+            'department',
+            'jumlahs' => function ($q) use ($selectedYear) {
+                $q->whereHas('tahun', function ($tq) use ($selectedYear) {
+                    $tq->where('tahun', $selectedYear);
+                });
+            },
+            'jumlahs.tahun'
+        ]);
+
 
         // Hanya Superadmin/Admin boleh tengok semua department
         if (!$user->hasAnyRole(['Superadmin', 'Admin'])) {
@@ -75,6 +84,10 @@ class DataPtjController extends Controller
         if ($request->has('department_id') && $request->department_id != '') {
             $query->where('department_id', $request->department_id);
         }
+
+        $query->whereHas('jumlahs.tahun', function ($q) use ($selectedYear) {
+            $q->where('tahun', $selectedYear);
+        });
 
         $dataList = $query->get()->groupBy('department.name');
 
@@ -92,7 +105,7 @@ class DataPtjController extends Controller
 
         // Senarai department tetap semua untuk butang filter
         $departmentList = Department::orderBy('name')->get();
-        $currentYear = now()->year;
+        $selectedYear = $request->input('year', now()->year);
 
         return view('pages.dataptj.dashboard', [
             'dataList' => $dataList,
@@ -100,7 +113,8 @@ class DataPtjController extends Controller
             'selectedDepartment' => $request->department_id,
             'totalCount' => $totalCount,
             'departmentCounts' => $departmentCounts,
-            'currentYear' => $currentYear,
+            'selectedYear' => $selectedYear,
+            'tahunList' => Tahun::orderBy('tahun')->get(),
         ]);
     }
 

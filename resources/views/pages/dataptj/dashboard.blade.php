@@ -6,11 +6,21 @@
         <!-- PAGE TITLE + FILTER INLINE -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
             <h2 class="fw-bold text-primary mb-3 mb-md-0 d-flex align-items-center flex-wrap" style="font-size: 1.8rem;">
-                DATA WAR ROOM {{ $currentYear }}
+                DATA WAR ROOM {{ $selectedYear }}
             </h2>
             @hasanyrole('Superadmin|Admin')
                 <form id="dashboardFilter" action="{{ route('dataptj.dashboard') }}" method="GET"
                     class="d-flex flex-row flex-wrap align-items-center gap-2">
+                    <div>
+                        <select name="year" class="form-select form-select-sm rounded-pill shadow-sm"
+                            onchange="this.form.submit()">
+                            @foreach ($tahunList as $tahun)
+                                <option value="{{ $tahun->tahun }}" {{ $selectedYear == $tahun->tahun ? 'selected' : '' }}>
+                                    📅 {{ $tahun->tahun }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div>
                         <select name="department_id" class="form-select form-select-sm rounded-pill shadow-sm"
                             onchange="this.form.submit()">
@@ -33,7 +43,6 @@
         </div>
 
         @php
-            $currentYear = now()->year;
             $colorPalette = [
                 '#1565C0', // Vivid Blue
                 '#2E7D32', // Strong Green
@@ -78,7 +87,7 @@
                 <div class="row g-4">
                     @foreach ($dataItems as $item)
                         @php
-                            $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $currentYear);
+                            $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $selectedYear);
                             $jumlah = $jumlahRecord->jumlah ?? null;
                             $pi_no = $jumlahRecord->pi_no ?? '-';
                             $pi_target = $jumlahRecord->pi_target ?? null;
@@ -153,7 +162,7 @@
                                                     <td class="text-muted">Tahun</td>
                                                     <td class="text-end fw-semibold">
                                                         <span class="badge"
-                                                            style="background-color: {{ $accentColor }};">{{ $currentYear }}</span>
+                                                            style="background-color: {{ $accentColor }};">{{ $selectedYear }}</span>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -221,7 +230,8 @@
         document.getElementById('resetButton').addEventListener('click', function() {
             const url = new URL(window.location.href);
             url.searchParams.delete('department_id');
-            window.location.href = url.toStbar();
+            url.searchParams.delete('year');
+            window.location.href = url.toString();
         });
     </script>
     <script>
@@ -231,7 +241,7 @@
                 @foreach ($dataList as $dataItems)
                     @foreach ($dataItems as $item)
                         @php
-                            $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $currentYear);
+                            $jumlahRecord = $item->jumlahs->firstWhere('tahun.tahun', $selectedYear);
                             $jumlah = isset($jumlahRecord->jumlah) ? $jumlahRecord->jumlah : 'null';
                             $pi_target = isset($jumlahRecord->pi_target) ? $jumlahRecord->pi_target : 'null';
                             $accentColor = $departmentColors[$item->department_id] ?? '#6c757d';

@@ -447,7 +447,7 @@ class DataPtjController extends Controller
 
         $this->authorizeDataAccess($dataptj);
 
-        $dataptj->delete();
+        $dataptj->forceDelete();
 
         return redirect()->route('dataptj')->with('success', 'Maklumat berjaya dihapuskan');
     }

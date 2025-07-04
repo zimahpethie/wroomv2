@@ -44,20 +44,20 @@
 
         @php
             $colorPalette = [
+                '#283593', // Navy Blue - dark
+                '#6A1B9A', // Royal Purple - dark
+                '#2E7D32', // Dark Green
+                '#424242', // Dark Gray
+                '#37474F', // Slate / Blue-Gray
+                '#6D4C41', // Brown
+                '#00897B', // Teal
+                '#00ACC1', // Cyan / Turquoise
                 '#1565C0', // Vivid Blue
-                '#2E7D32', // Strong Green
+                '#AD1457', // Bold Pink
                 '#C62828', // Bold Red
                 '#EF6C00', // Bold Orange
                 '#F9A825', // Strong Yellow
-                '#AD1457', // Bold Pink
-                '#6A1B9A', // Royal Purple
-                '#00897B', // Teal
-                '#00ACC1', // Cyan / Turquoise
-                '#6D4C41', // Brown
-                '#283593', // Navy Blue
-                '#9E9D24', // Olive/Lime
-                '#424242', // Dark Gray
-                '#37474F', // Slate / Blue-Gray
+                '#9E9D24', // Olive / Lime
             ];
 
             $departmentColors = [];
@@ -251,7 +251,7 @@
 
             // Function to format value
             function formatValue(value, jenis) {
-                if (value === null) return '-';
+                if (value === null) return null;
                 if (jenis === 'Peratus') {
                     return value + ' %';
                 } else if (jenis === 'Mata Wang') {

@@ -44,20 +44,20 @@
 
         @php
             $colorPalette = [
-                '#283593', // Navy Blue - dark
-                '#6A1B9A', // Royal Purple - dark
-                '#2E7D32', // Dark Green
-                '#424242', // Dark Gray
-                '#37474F', // Slate / Blue-Gray
-                '#6D4C41', // Brown
-                '#00897B', // Teal
-                '#00ACC1', // Cyan / Turquoise
                 '#1565C0', // Vivid Blue
-                '#AD1457', // Bold Pink
+                '#2E7D32', // Strong Green
                 '#C62828', // Bold Red
                 '#EF6C00', // Bold Orange
                 '#F9A825', // Strong Yellow
-                '#9E9D24', // Olive / Lime
+                '#AD1457', // Bold Pink
+                '#6A1B9A', // Royal Purple
+                '#00897B', // Teal
+                '#00ACC1', // Cyan / Turquoise
+                '#6D4C41', // Brown
+                '#283593', // Navy Blue
+                '#9E9D24', // Olive/Lime
+                '#424242', // Dark Gray
+                '#37474F', // Slate / Blue-Gray
             ];
 
             $departmentColors = [];
@@ -156,38 +156,40 @@
                                         </div>
 
                                         <!-- INFO TABLE -->
-                                        <table class="table table-sm table-bordered table-striped mb-1">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="text-muted">Tahun</td>
-                                                    <td class="fw-semibold small">{{ $selectedYear }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-muted">PI No</td>
-                                                    <td class="fw-semibold small">{{ $pi_no }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-muted">Sasaran</td>
-                                                    <td class="fw-semibold small">{{ $piTargetPaparan }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-muted">Pencapaian</td>
-                                                    <td class="fw-semibold small">{{ $jumlahPaparan }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-muted">Kemaskini</td>
-                                                    <td class="fw-semibold small">
-                                                        {{ $item->updated_at ? $item->updated_at->format('d/m/Y H:i') : ($item->created_at ? $item->created_at->format('d/m/Y H:i') : '-') }}
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered table-striped mb-1">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-muted">Tahun</td>
+                                                        <td class="fw-semibold small">{{ $selectedYear }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-muted">PI No</td>
+                                                        <td class="fw-semibold small">{{ $pi_no }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-muted">Sasaran</td>
+                                                        <td class="fw-semibold small">{{ $piTargetPaparan }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-muted">Pencapaian</td>
+                                                        <td class="fw-semibold small">{{ $jumlahPaparan }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-muted">Kemaskini</td>
+                                                        <td class="fw-semibold small">
+                                                            {{ $item->updated_at ? $item->updated_at->format('d/m/Y H:i') : ($item->created_at ? $item->created_at->format('d/m/Y H:i') : '-') }}
 
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
                                         <!-- BUTTONS -->
                                         <div class="mt-2 d-flex flex-nowrap justify-content-center gap-3">
                                             @if (!empty($item->doc_link))
@@ -212,7 +214,7 @@
                 </div>
             </div>
         @empty
-            <div class="alert alert-warning text-center">Tiada data dijumpai.</div>
+            <div class="alert alert-secondary text-center">Tiada rekod.</div>
         @endforelse
     </div>
 

@@ -63,7 +63,9 @@
                         @if (count($jenisdataptjList) > 0)
                             @foreach ($jenisdataptjList as $jenisdataptj)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        {{ ($jenisdataptjList->currentPage() - 1) * $jenisdataptjList->perPage() + $loop->iteration }}
+                                    </td>
                                     <td>{{ $jenisdataptj->department->name }}</td>
                                     <td>{{ ucfirst($jenisdataptj->name) }}</td>
                                     <td>

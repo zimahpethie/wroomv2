@@ -28,12 +28,12 @@
                     <form action="{{ route('dataptj') }}" method="GET" id="searchFilterForm"
                         class="d-flex flex-wrap gap-2 align-items-center">
                         <div>
-                            <input type="text" name="search" class="form-control rounded" placeholder="Carian..."
+                            <input type="text" name="search" class="form-control form-select-sm rounded" placeholder="Carian..."
                                 value="{{ request('search') }}">
                         </div>
                         @if ($canFilterDepartments)
                             <div>
-                                <select name="department_id" class="form-select rounded">
+                                <select name="department_id" class="form-select form-select-sm  rounded">
                                     <option value="">📌 Semua Bahagian</option>
                                     @foreach ($departmentList as $department)
                                         <option value="{{ $department->id }}"
@@ -48,7 +48,7 @@
                         @endif
                         <div>
                             <input type="hidden" name="perPage" value="{{ request('perPage', 10) }}">
-                            <button type="button" class="btn btn-secondary rounded" id="resetButton">Reset</button>
+                            <button type="button" class="btn btn-secondary btn-sm rounded" id="resetButton">Reset</button>
                         </div>
                     </form>
                 </div>
@@ -72,7 +72,9 @@
                     <tbody>
                         @forelse ($dataptjList as $dataptj)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="text-center">
+                                        {{ ($dataptjList->currentPage() - 1) * $dataptjList->perPage() + $loop->iteration }}
+                                    </td>
                                 <td>{{ $dataptj->department->name }}</td>
                                 <td>{{ $dataptj->nama_data ?? '-' }}</td>
                                 <td class="text-center">

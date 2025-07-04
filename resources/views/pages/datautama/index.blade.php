@@ -61,7 +61,9 @@
                     <tbody>
                         @forelse ($datautamaList as $datautama)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="text-center">
+                                        {{ ($datautamaList->currentPage() - 1) * $datautamaList->perPage() + $loop->iteration }}
+                                    </td>
                                 <td>{{ $datautama->department->name }}</td>
                                 <td>{{ $datautama->jenisDataPtj->name ?? '-' }}</td>
                                 <td class="text-center">

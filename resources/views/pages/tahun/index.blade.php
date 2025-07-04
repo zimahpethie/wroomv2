@@ -63,7 +63,9 @@
                     @if (count($tahunList) > 0)
                     @foreach ($tahunList as $tahun)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>
+                                        {{ ($tahunList->currentPage() - 1) * $tahunList->perPage() + $loop->iteration }}
+                                    </td>
                         <td>{{ $tahun->tahun }}</td>
                         <td>
                             @if ($tahun->publish_status == 'Aktif')

@@ -8,7 +8,7 @@
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a>
                     </li>
-                    <li class="breadcrumb-item"><a href="{{ route('datautama') }}"></i>Senarai Data JKEN</a>
+                    <li class="breadcrumb-item"><a href="{{ route('dataptj') }}"></i>Senarai Data JKEN</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">Senarai Data JKEN Dipadam</li>
                 </ol>
@@ -21,7 +21,7 @@
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-striped text-wrap text-center">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -32,14 +32,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($trashList as $datautama)
+                        @forelse ($trashList as $dataptj)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $datautama->department->name }}</td>
-                                <td>{{ $datautama->jenisDataPtj->name ?? '-' }}</td>
                                 <td class="text-center">
-                                    @if (!empty($datautama->doc_link))
-                                        <a href="{{ $datautama->doc_link }}" target="_blank" title="Pautan dokumen">
+                                        {{ ($trashList->currentPage() - 1) * $trashList->perPage() + $loop->iteration }}
+                                    </td>
+                                <td>{{ $dataptj->department->name }}</td>
+                                <td>{{ $dataptj->nama_data ?? '-' }}</td>
+                                <td class="text-center">
+                                    @if (!empty($dataptj->doc_link))
+                                        <a href="{{ $dataptj->doc_link }}" target="_blank" title="Shared Folder">
                                             <i class='bx bxs-folder-open' style="font-size: 1.2rem; color: #007bff;"></i>
                                         </a>
                                     @else
@@ -47,20 +49,16 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <div class="d-flex justify-content-center gap-1 flex-wrap">
-                                        <a href="{{ route('datautama.edit', $datautama->id) }}" class="btn btn-info btn-sm"
-                                            title="Kemaskini">
-                                            <i class="bx bxs-edit"></i>
-                                        </a>
-                                        <a href="{{ route('datautama.show', $datautama->id) }}"
-                                            class="btn btn-primary btn-sm" title="Papar">
-                                            <i class="bx bx-show"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal{{ $datautama->id }}" title="Padam">
-                                            <i class="bx bx-trash"></i>
-                                        </button>
-                                    </div>
+                                    <a href="{{ route('dataptj.restore', $dataptj->id) }}" class="btn btn-success btn-sm"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kembalikan">
+                                        <i class="bx bx-undo"></i>
+                                    </a>
+                                    <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        data-bs-title="Padam">
+                                        <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal{{ $dataptj->id }}"><i
+                                                class="bx bx-trash"></i></span>
+                                    </a>
                                 </td>
                             </tr>
 
@@ -71,7 +69,8 @@
                                         <thead class="table-secondary text-center align-middle">
                                             <tr>
                                                 @foreach ($tahunList as $tahun)
-                                                    <th>{{ $tahun->tahun }}</th>
+                                                    <th style="background-color: #1b2b44; color: #fff">{{ $tahun->tahun }}
+                                                    </th>
                                                 @endforeach
                                             </tr>
                                         </thead>
@@ -79,16 +78,14 @@
                                             <tr>
                                                 @foreach ($tahunList as $tahun)
                                                     @php
-                                                        $jumlah = $datautama->jumlahs->firstWhere(
-                                                            'tahun_id',
-                                                            $tahun->id);
+                                                        $jumlah = $dataptj->jumlahs->firstWhere('tahun_id', $tahun->id);
                                                     @endphp
                                                     <td class="small">
                                                         @php
                                                             $jumlahPaparan = '-';
                                                             $sasaranPaparan = '-';
 
-                                                            $jenis = $datautama->jenis_nilai ?? 'Bilangan';
+                                                            $jenis = $dataptj->jenis_nilai ?? 'Bilangan';
 
                                                             if ($jumlah && !is_null($jumlah->jumlah)) {
                                                                 if ($jenis == 'Peratus') {
@@ -96,6 +93,12 @@
                                                                 } elseif ($jenis == 'Mata Wang') {
                                                                     $jumlahPaparan =
                                                                         'RM ' . number_format($jumlah->jumlah, 2);
+                                                                } elseif ($jenis == 'Bilangan') {
+                                                                    $jumlahPaparan = number_format(
+                                                                        (int) $jumlah->jumlah,
+                                                                        0,
+                                                                        '.',
+                                                                        ',');
                                                                 } else {
                                                                     $jumlahPaparan = $jumlah->jumlah;
                                                                 }
@@ -107,14 +110,20 @@
                                                                 } elseif ($jenis == 'Mata Wang') {
                                                                     $sasaranPaparan =
                                                                         'RM ' . number_format($jumlah->pi_target, 2);
+                                                                } elseif ($jenis == 'Bilangan') {
+                                                                    $sasaranPaparan = number_format(
+                                                                        (int) $jumlah->pi_target,
+                                                                        0,
+                                                                        '.',
+                                                                        ',');
                                                                 } else {
                                                                     $sasaranPaparan = $jumlah->pi_target;
                                                                 }
                                                             }
                                                         @endphp
                                                         @if ($jumlah)
-                                                            <div><strong>KPI (BTU):</strong>
-                                                                {{ $jumlah->is_kpi ? 'Ya' : 'Tidak' }}</div>
+                                                            <div><strong>KPI Universiti (BTU):</strong>
+                                                                {{ $jumlah->is_kpi ? 'Ya' : '-' }}</div>
                                                             <div><strong>PI No.:</strong> {{ $jumlah->pi_no ?? '-' }}</div>
                                                             <div><strong>Sasaran:</strong> {{ $sasaranPaparan }}</div>
                                                             <div><strong>Pencapaian:</strong> {{ $jumlahPaparan }}</div>
@@ -140,7 +149,7 @@
             <div class="mt-3 d-flex justify-content-between">
                 <div class="d-flex align-items-center">
                     <span class="mr-2 mx-1">Jumlah rekod per halaman</span>
-                    <form action="{{ route('datautama') }}" method="GET" id="perPageForm">
+                    <form action="{{ route('dataptj') }}" method="GET" id="perPageForm">
                         <select name="perPage" id="perPage" class="form-select"
                             onchange="document.getElementById('perPageForm').submit()">
                             <option value="10" {{ Request::get('perPage') == '10' ? 'selected' : '' }}>10</option>
@@ -160,8 +169,8 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    @foreach ($trashList as $datautama)
-        <div class="modal fade" id="deleteModal{{ $datautama->id }}" tabindex="-1" aria-labelledby="deleteModalLabel"
+    @foreach ($trashList as $dataptj)
+        <div class="modal fade" id="deleteModal{{ $dataptj->id }}" tabindex="-1" aria-labelledby="deleteModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -170,18 +179,18 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        @isset($datautama)
+                        @isset($dataptj)
                             Adakah anda pasti ingin memadam rekod <span style="font-weight: 600;">
-                                {{ ucfirst($datautama->name) }}</span>?
+                                {{ ucfirst($dataptj->name) }}</span>?
                         @else
                             Tiada rekod
                         @endisset
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        @isset($datautama)
+                        @isset($dataptj)
                             <form class="d-inline" method="POST"
-                                action="{{ route('datautama.forceDelete', $datautama->id) }}">
+                                action="{{ route('dataptj.forceDelete', $dataptj->id) }}">
                                 {{ method_field('delete') }}
                                 {{ csrf_field() }}
                                 <button type="submit" class="btn btn-danger">Padam</button>

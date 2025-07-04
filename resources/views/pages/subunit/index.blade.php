@@ -62,7 +62,9 @@
                     @if (count($subunitList) > 0)
                     @foreach ($subunitList as $subunit)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>
+                                        {{ ($subunitList->currentPage() - 1) * $subunitList->perPage() + $loop->iteration }}
+                                    </td>
                         <td>{{ $subunit->department->name }}</td>
                         <td>{{ ucfirst($subunit->name) }}</td>
                         <td>

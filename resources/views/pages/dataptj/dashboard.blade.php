@@ -62,31 +62,6 @@
 
         </div>
 
-        @php
-            $colorPalette = [
-                '#1565C0', // Vivid Blue
-                '#2E7D32', // Strong Green
-                '#C62828', // Bold Red
-                '#EF6C00', // Bold Orange
-                '#F9A825', // Strong Yellow
-                '#AD1457', // Bold Pink
-                '#6A1B9A', // Royal Purple
-                '#00897B', // Teal
-                '#00ACC1', // Cyan / Turquoise
-                '#6D4C41', // Brown
-                '#283593', // Navy Blue
-                '#9E9D24', // Olive/Lime
-                '#424242', // Dark Gray
-                '#37474F', // Slate / Blue-Gray
-            ];
-
-            $departmentColors = [];
-            foreach ($departmentList as $i => $dept) {
-                $departmentColors[$dept->id] = $colorPalette[$i] ?? '#6c757d';
-            }
-        @endphp
-
-
         @forelse ($dataList as $departmentName => $dataItems)
             @php
                 $deptId = optional($dataItems->first())->department_id ?? null;

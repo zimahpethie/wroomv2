@@ -9,7 +9,7 @@
                 DATA WAR ROOM {{ $selectedYear }}
             </h2>
             @hasanyrole('Superadmin|Admin')
-                <form id="dashboardFilter" action="{{ route('dataptj.dashboard') }}" method="GET"
+                <form id="dashboardFilter" action="{{ route('home') }}" method="GET"
                     class="d-flex flex-row flex-wrap align-items-center gap-2">
                     <div>
                         <select name="year" class="form-select form-select-sm rounded-pill shadow-sm"

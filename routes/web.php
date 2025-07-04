@@ -170,7 +170,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dataptj/trash', 'DataPtjController@trashList')->name('dataptj.trash');
     Route::get('/dataptj/{id}/restore', 'DataPtjController@restore')->name('dataptj.restore');
     Route::delete('/dataptj/{id}/force-delete', 'DataPtjController@forceDelete')->name('dataptj.forceDelete');
-    Route::get('/dataptj/dashboard', 'DataPtjController@dashboard')->name('dataptj.dashboard');
+    // Route::get('/dataptj/dashboard', 'DataPtjController@dashboard')->name('dataptj.dashboard');
 
     //Jenis Data PTJ
     Route::get('jenisdataptj/create', 'JenisDataPtjController@create')->name('jenisdataptj.create');

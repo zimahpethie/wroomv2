@@ -13,11 +13,13 @@
             </ol>
         </nav>
     </div>
+    @role('Superadmin')
     <div class="ms-auto">
         <a href="{{ route('subunit.edit', $subunit->id) }}">
             <button type="button" class="btn btn-primary mt-2 mt-lg-0">Kemaskini Maklumat</button>
         </a>
     </div>
+    @endrole
 </div>
 <!-- End Breadcrumb -->
 

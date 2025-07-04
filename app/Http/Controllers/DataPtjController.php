@@ -103,6 +103,12 @@ class DataPtjController extends Controller
             ->pluck('total', 'department_id')
             ->toArray();
 
+        $canFilterDepartments = $user->hasAnyRole(['Superadmin', 'Admin']);
+
+        $departmentList = $canFilterDepartments
+            ? Department::orderBy('name')->get()
+            : collect();
+
         // Senarai department tetap semua untuk butang filter
         $departmentList = Department::orderBy('name')->get();
         $selectedYear = $request->input('year', now()->year);
@@ -114,6 +120,7 @@ class DataPtjController extends Controller
             'totalCount' => $totalCount,
             'departmentCounts' => $departmentCounts,
             'selectedYear' => $selectedYear,
+            'canFilterDepartments' => $canFilterDepartments,
             'tahunList' => Tahun::orderBy('tahun')->get(),
         ]);
     }

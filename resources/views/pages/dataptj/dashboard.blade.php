@@ -8,38 +8,58 @@
             <h2 class="fw-bold text-primary mb-3 mb-md-0 d-flex align-items-center flex-wrap" style="font-size: 1.8rem;">
                 DATA WAR ROOM {{ $selectedYear }}
             </h2>
-            @hasanyrole('Superadmin|Admin')
-                <form id="dashboardFilter" action="{{ route('home') }}" method="GET"
-                    class="d-flex flex-row flex-wrap align-items-center gap-2">
-                    <div>
-                        <select name="year" class="form-select form-select-sm rounded-pill shadow-sm"
-                            onchange="this.form.submit()">
-                            @foreach ($tahunList as $tahun)
-                                <option value="{{ $tahun->tahun }}" {{ $selectedYear == $tahun->tahun ? 'selected' : '' }}>
-                                    📅 {{ $tahun->tahun }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <select name="department_id" class="form-select form-select-sm rounded-pill shadow-sm"
-                            onchange="this.form.submit()">
-                            <option value="">📌 Semua Bahagian</option>
-                            @foreach ($departmentList as $department)
-                                <option value="{{ $department->id }}"
-                                    {{ $selectedDepartment == $department->id ? 'selected' : '' }}>
-                                    {{ $department->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <button id="resetButton" type="button" class="btn btn-sm btn-outline-secondary rounded-pill">
-                            Reset
-                        </button>
-                    </div>
-                </form>
-            @endhasanyrole
+@if ($canFilterDepartments)
+    <form id="dashboardFilter" action="{{ route('home') }}" method="GET"
+          class="d-flex flex-row flex-wrap align-items-center gap-2">
+        <div>
+            <select name="year" class="form-select form-select-sm rounded-pill shadow-sm"
+                    onchange="this.form.submit()">
+                @foreach ($tahunList as $tahun)
+                    <option value="{{ $tahun->tahun }}" {{ $selectedYear == $tahun->tahun ? 'selected' : '' }}>
+                        📅 {{ $tahun->tahun }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <select name="department_id" class="form-select form-select-sm rounded-pill shadow-sm"
+                    onchange="this.form.submit()">
+                <option value="">📌 Semua Bahagian</option>
+                @foreach ($departmentList as $department)
+                    <option value="{{ $department->id }}"
+                            {{ $selectedDepartment == $department->id ? 'selected' : '' }}>
+                        {{ $department->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <button id="resetButton" type="button" class="btn btn-sm btn-secondary rounded-pill">
+                Reset
+            </button>
+        </div>
+    </form>
+@else
+    <form id="dashboardFilter" action="{{ route('home') }}" method="GET"
+          class="d-flex flex-row flex-wrap align-items-center gap-2">
+        <div>
+            <select name="year" class="form-select form-select-sm rounded-pill shadow-sm"
+                    onchange="this.form.submit()">
+                @foreach ($tahunList as $tahun)
+                    <option value="{{ $tahun->tahun }}" {{ $selectedYear == $tahun->tahun ? 'selected' : '' }}>
+                        📅 {{ $tahun->tahun }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <button id="resetButton" type="button" class="btn btn-sm btn-secondary rounded-pill">
+                Reset
+            </button>
+        </div>
+    </form>
+@endif
+
         </div>
 
         @php

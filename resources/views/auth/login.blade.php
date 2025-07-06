@@ -36,7 +36,7 @@
                                         </div>
                                     @endif
                                     <div class="form-body">
-                                        <form method="POST" action="{{ route('login') }}" class="row g-4">
+                                        <form method="POST" action="{{ route('login') }}" class="row g-3">
                                             {{ csrf_field() }}
                                             <div class="col-12">
                                                 <label for="staff_id" class="form-label">No. Pekerja</label>

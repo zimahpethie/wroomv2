@@ -49,6 +49,18 @@
                     </div>
                 @endcan
             </div>
+            <div class="row mb-3">
+                <div class="col-lg-12 d-flex justify-content-end align-items-center gap-2">
+                    <form action="{{ route('user.import') }}" method="POST" enctype="multipart/form-data"
+                        class="d-flex align-items-center">
+                        {{ csrf_field() }}
+                        <div class="form-group mb-0">
+                            <input type="file" name="file" class="form-control form-control-sm" required>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-info ms-1">Import</button>
+                    </form>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>

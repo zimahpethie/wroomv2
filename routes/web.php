@@ -22,6 +22,8 @@ Route::get('/', function () {
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('/first-time-login', 'Auth\LoginController@showForm')->name('firsttimelogin.form');
+Route::post('/first-time-login', 'Auth\LoginController@sendLink')->name('firsttimelogin.send');
 
 // Password Reset Routes
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -96,6 +98,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/trash', 'UserController@trashList')->name('user.trash');
     Route::get('/user/{id}/restore', 'UserController@restore')->name('user.restore');
     Route::delete('/user/{id}/force-delete', 'UserController@forceDelete')->name('user.forceDelete');
+    Route::get('user/import', 'UserController@importForm')->name('user.importForm');
+    Route::post('user/import', 'UserController@import')->name('user.import');
 
     // User Role Management
     Route::get('user-role', 'UserRoleController@index')->name('user-role');

@@ -112,8 +112,62 @@ class UserController extends Controller
             ->with('success', 'Maklumat berjaya disimpan');
     }
 
+    public function importForm()
+    {
+        return view('pages.user.import');
+    }
 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|mimes:csv,txt'
+        ]);
 
+        $file = $request->file('csv_file');
+        $data = array_map('str_getcsv', file($file));
+
+        // Assumes first row is header
+        $header = array_map('trim', $data[0]);
+        unset($data[0]);
+
+        foreach ($data as $row) {
+            $row = array_combine($header, $row);
+
+            // Validation per row
+            if (empty($row['name']) || empty($row['email']) || empty($row['staff_id'])) {
+                continue;
+            }
+
+            // Skip if staff_id or email already exists
+            if (User::where('staff_id', $row['staff_id'])->exists() || User::where('email', $row['email'])->exists()) {
+                continue;
+            }
+
+            $user = new User();
+            $user->name = $row['name'];
+            $user->staff_id = $row['staff_id'];
+            $user->email = $row['email'];
+            $user->position_id = $row['position_id'] ?? null;
+            $user->campus_id = $row['campus_id'] ?? null;
+            $user->department_id = $row['department_id'] ?? null;
+            $user->office_phone_no = $row['office_phone_no'] ?? null;
+            $user->publish_status = $row['publish_status'] ?? 1;
+            $user->password = null;
+            $user->email_verified_at = null;
+            $user->save();
+
+            // Assign default role if present in CSV
+            if (!empty($row['role_name'])) {
+                $user->assignRole($row['role_name']);
+            }
+
+            // // Send reset link for first time login
+            // $token = Password::broker()->createToken($user);
+            // $user->notify(new ResetPasswordNotification($token, true));
+        }
+
+        return redirect()->route('user')->with('success', 'Import CSV berjaya!');
+    }
 
     /**
      * Display the specified resource.

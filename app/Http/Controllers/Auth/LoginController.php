@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Notifications\ResetPasswordNotification;
+use Illuminate\Support\Facades\Password;
 
 class LoginController extends Controller
 {
@@ -34,7 +36,8 @@ class LoginController extends Controller
             }
 
             return $this->guard()->attempt(
-                $credentials, $request->filled('remember')
+                $credentials,
+                $request->filled('remember')
             );
         }
 
@@ -79,5 +82,37 @@ class LoginController extends Controller
             ->withErrors([
                 $this->username() => trans('auth.failed'),
             ]);
+    }
+
+    public function showForm()
+    {
+        return view('auth.firsttimelogin');
+    }
+
+    public function sendLink(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'Emel tidak didaftarkan dalam sistem. Sila hubungi moderator.'
+            ]);
+        }
+
+        if ($user->email_verified_at) {
+            return back()->withErrors([
+                'email' => 'Akaun anda telah disahkan. Sila log masuk seperti biasa.'
+            ]);
+        }
+
+        // Create reset token and send notification
+        $token = Password::broker()->createToken($user);
+        $user->notify(new ResetPasswordNotification($token, true));
+
+        return back()->with('status', 'Pautan set kata laluan telah dihantar ke emel anda. Sila semak inbox anda.');
     }
 }

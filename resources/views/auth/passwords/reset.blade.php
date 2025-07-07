@@ -50,9 +50,10 @@
 
                                             <div class="col-12">
                                                 <label for="email" class="form-label">Alamat Emel</label>
-                                                <input type="email"
+                                                <input type="email" readonly
                                                     class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
-                                                    id="email" name="email" value="{{ old('email') }}">
+                                                    id="email" name="email"
+                                                    value="{{ old('email', request()->query('email')) }}">
                                                 @if ($errors->has('email'))
                                                     <div class="invalid-feedback">
                                                         @foreach ($errors->get('email') as $error)

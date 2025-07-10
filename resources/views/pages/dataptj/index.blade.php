@@ -106,7 +106,7 @@
 
                             {{-- Sub-row Tahun --}}
                             <tr>
-                                <td colspan="5" class="bg-light">
+                                <td colspan="5">
                                     <table class="table table-sm table-bordered mb-0">
                                         <thead class="table-secondary text-center align-middle">
                                             <tr>

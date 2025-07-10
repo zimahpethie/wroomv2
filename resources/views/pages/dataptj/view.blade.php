@@ -183,7 +183,11 @@
             function formatValue(value, jenis) {
                 if (value === null) return 'null';
                 if (jenis === 'Peratus') {
-                    return value + ' %';
+                    if (Number(value) % 1 === 0) {
+                        return Number(value) + ' %';
+                    } else {
+                        return Number(value) + ' %';
+                    }
                 } else if (jenis === 'Mata Wang') {
                     return 'RM ' + Number(value).toFixed(2);
                 } else if (jenis === 'Bilangan') {

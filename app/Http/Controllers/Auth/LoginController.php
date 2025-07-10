@@ -35,6 +35,10 @@ class LoginController extends Controller
                 return false;
             }
 
+            if (is_null($user->email_verified_at)) {
+                return false;
+            }
+
             return $this->guard()->attempt(
                 $credentials,
                 $request->filled('remember')
@@ -74,6 +78,14 @@ class LoginController extends Controller
                 ->withInput($request->only($this->username(), 'remember'))
                 ->withErrors([
                     $this->username() => 'Akaun anda tidak aktif. Sila hubungi admin sistem.',
+                ]);
+        }
+
+        if ($user && is_null($user->email_verified_at)) {
+            return redirect()->back()
+                ->withInput($request->only($this->username(), 'remember'))
+                ->withErrors([
+                    $this->username() => 'Emel anda belum disahkan. Sila semak inbox anda untuk pautan pengesahan.',
                 ]);
         }
 

@@ -62,7 +62,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-7 text-end">
-                                                <a class="text-secondary" href="{{ route('password.request') }}">Reset Kata Laluan</a> <br> <a href="{{ route('firsttimelogin.form') }}">Pengesahan Akaun</a>
+                                                <a class="text-secondary" href="{{ route('password.request') }}">Reset Kata Laluan</a> <br> <a href="{{ route('firsttimelogin.form') }}">Pengesahan Akaun</a>  | <a href="{{ route('register') }}">Daftar
+                                                    Akaun</a>
                                             </div>
                                             <div class="col-12">
                                                 <div class="d-grid">

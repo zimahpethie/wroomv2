@@ -9,10 +9,13 @@ use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
+use App\Models\EmailVerificationToken;
+use App\Notifications\EmailVerificationNotification;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
@@ -167,6 +170,81 @@ class UserController extends Controller
         }
 
         return redirect()->route('user')->with('success', 'Import CSV berjaya!');
+    }
+
+    public function showPublicRegisterForm()
+    {
+        $departmentList = Department::where('publish_status', 1)->get();
+        $campusList = Campus::where('publish_status', 1)->get();
+        $positionList = Position::where('publish_status', 1)->get();
+
+        return view('auth.register', compact('campusList', 'positionList', 'departmentList'));
+    }
+
+    public function storePublicRegister(Request $request)
+    {
+        $request->validate([
+            'name'     => 'required',
+            'staff_id' => 'required|unique:users,staff_id',
+            'email'    => 'required|email|unique:users,email',
+            'position_id' => 'required',
+            'campus_id' => 'required|exists:campuses,id',
+            'department_id' => 'required|exists:departments,id',
+            'office_phone_no' => 'nullable|string',
+            'password' => 'required|min:8|confirmed',
+        ], [
+            'name.required'     => 'Sila isi nama pengguna',
+            'staff_id.required' => 'Sila isi no. pekerja pengguna',
+            'staff_id.unique' => 'No. pekerja telah wujud',
+            'email.required'    => 'Sila isi emel pengguna',
+            'email.unique'    => 'Emel telah wujud',
+            'position_id.required' => 'Sila isi jawatan pengguna',
+            'campus_id.required' => 'Sila isi kampus pengguna',
+            'department_id.required' => 'Sila isi bahagian/unit pengguna',
+        ]);
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->staff_id = $request->staff_id;
+        $user->email = $request->email;
+        $user->campus_id = $request->campus_id;
+        $user->password = Hash::make($request->password);
+        $user->position_id = $request->position_id;
+        $user->department_id = $request->department_id;
+        $user->publish_status = 1;
+        $user->email_verified_at = null;
+        $user->save();
+
+        $user->assignRole('Pegawai Rekod');
+
+        $token = Str::random(40);
+
+        EmailVerificationToken::updateOrCreate(
+            ['user_id' => $user->id],
+            ['token' => $token]
+        );
+
+        $user->notify(new EmailVerificationNotification($user, $token));
+
+        return view('auth.register-confirm');
+    }
+
+    public function verifyEmail($token)
+    {
+        $record = EmailVerificationToken::where('token', $token)->first();
+
+        if (!$record) {
+            return redirect('/login')->withErrors(['msg' => 'Token tidak sah atau telah luput.']);
+        }
+
+        $user = User::find($record->user_id);
+        $user->email_verified_at = Carbon::now();
+        $user->save();
+
+        // Padam token selepas sah
+        $record->delete();
+
+        return redirect('/login')->with('success', 'Emel anda telah disahkan. Sila log masuk.');
     }
 
     /**

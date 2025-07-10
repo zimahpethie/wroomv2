@@ -66,7 +66,7 @@
                             <th>Pemilik Data</th>
                             <th>Tajuk Data</th>
                             <th>Shared Folder</th>
-                            <th>Tindakan</th>
+                            <th style="width: 18%;">Tindakan</th>
                         </tr>
                     </thead>
                     <tbody>

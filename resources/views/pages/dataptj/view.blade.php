@@ -176,7 +176,22 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var ctx = document.getElementById('jumlahByYearChart').getContext('2d');
+            var jenisNilai = @json($dataptj->jenis_nilai ?? 'Bilangan');
             var dataFromServer = @json($perbandinganByYear);
+
+            // Helper untuk format value
+            function formatValue(value, jenis) {
+                if (value === null) return '-';
+                if (jenis === 'Peratus') {
+                    return value + ' %';
+                } else if (jenis === 'Mata Wang') {
+                    return 'RM ' + Number(value).toFixed(2);
+                } else if (jenis === 'Bilangan') {
+                    return Number(value).toFixed(0);
+                } else {
+                    return value;
+                }
+            }
 
             var labels = Object.keys(dataFromServer);
             var jumlahData = labels.map(year => dataFromServer[year].jumlah);
@@ -257,7 +272,8 @@
                                     ctx.font = 'bold 11px sans-serif';
                                     ctx.textAlign = 'center';
                                     ctx.textBaseline = 'bottom';
-                                    ctx.fillText(value, bar.x, bar.y - 5);
+                                    ctx.fillText(formatValue(value, jenisNilai),
+                                        bar.x, bar.y - 5);
                                 }
                             });
                         });

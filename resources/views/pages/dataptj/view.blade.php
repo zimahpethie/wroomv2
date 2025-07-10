@@ -181,13 +181,15 @@
 
             // Helper untuk format value
             function formatValue(value, jenis) {
-                if (value === null) return '-';
+                if (value === null) return 'null';
                 if (jenis === 'Peratus') {
                     return value + ' %';
                 } else if (jenis === 'Mata Wang') {
                     return 'RM ' + Number(value).toFixed(2);
                 } else if (jenis === 'Bilangan') {
-                    return Number(value).toFixed(0);
+                    return Number(value).toLocaleString('en-US', {
+                        minimumFractionDigits: 0
+                    });
                 } else {
                     return value;
                 }
@@ -267,14 +269,16 @@
                             var meta = chart.getDatasetMeta(i);
                             meta.data.forEach(function(bar, index) {
                                 var value = dataset.data[index];
-                                if (value !== null && value !== 0) {
-                                    ctx.fillStyle = '#000';
-                                    ctx.font = 'bold 11px sans-serif';
-                                    ctx.textAlign = 'center';
-                                    ctx.textBaseline = 'bottom';
-                                    ctx.fillText(formatValue(value, jenisNilai),
-                                        bar.x, bar.y - 5);
-                                }
+                                ctx.fillStyle = '#000';
+                                ctx.font = 'bold 11px sans-serif';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'bottom';
+                                ctx.fillText(
+                                    formatValue(value, jenisNilai),
+                                    bar.x,
+                                    (value !== null && value !== 0) ? bar
+                                    .y - 5 : bar.y + 15
+                                );
                             });
                         });
                     }

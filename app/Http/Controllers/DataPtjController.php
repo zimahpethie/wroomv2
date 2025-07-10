@@ -278,11 +278,14 @@ class DataPtjController extends Controller
         $perbandinganByYear = [];
 
         foreach ($dataptj->jumlahs as $jumlah) {
-            if ($jumlah->tahun && $jumlah->tahun->tahun && $jumlah->jumlah !== null && $jumlah->jumlah != 0) {
+            if ($jumlah->tahun && $jumlah->tahun->tahun && (
+                ($jumlah->jumlah !== null && $jumlah->jumlah != 0) ||
+                ($jumlah->pi_target !== null && $jumlah->pi_target != 0)
+            )) {
                 $tahun = $jumlah->tahun->tahun;
                 $perbandinganByYear[$tahun] = [
-                    'jumlah' => $jumlah->jumlah,
-                    'pi_target' => $jumlah->pi_target ?? 0 // fallback to 0 if null
+                    'jumlah' => $jumlah->jumlah ?? null,
+                    'pi_target' => $jumlah->pi_target ?? null // fallback to 0 if null
                 ];
             }
         }
